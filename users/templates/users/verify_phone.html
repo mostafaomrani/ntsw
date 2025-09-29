@@ -1,0 +1,69 @@
+{% extends "users/base.html" %}
+{% load static %}
+{% block main %}
+    <div class="bg-white rounded shadow">
+        <p class="bg-primary text-white p-2 mb-0 rounded-top section-header">تایید کد اعتبار سنجی</p>
+        <form method="post">
+            {% csrf_token %}
+            <div class="d-grid gap-2 col-6 mx-auto py-5">
+                <p>{{ msg }}</p>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon2">کد اعتبار سنجی</span>
+                    <input type="number"
+                           class="form-control"
+                           placeholder="کد اعتبار سنجی"
+                           aria-label="Recipient's username"
+                           aria-describedby="basic-addon2"
+                           name="verification_code">
+                </div>
+                <a class="btn  btn-danger btn-cinnabar"
+                   id="send-again"
+                   href="{% url 'users:verify_phone' user_uuid %}">ارسال مجدد کد تایید</a>
+                <input type="hidden" value="{{ uuid }}" name="uuid">
+                <button class="btn btn-secondary" disabled>صحت سنجی و ارسال کد اعتبار سنجی به شماره همراه جدید</button>
+                <button class="btn btn-secondary" disabled>اعتبار سنجی شماره همراه جدید از طریق شماره گیری کد (USSD)</button>
+                <div class="d-flex">
+                    {{ request.GET. }}
+                    <a href="{% url 'users:select_verification_mod' user_uuid %}"
+                       class="btn btn-primary btn-maya w-50 me-2">صفحه قبل</a>
+                    <button class="btn btn-primary btn-maya w-50 ms-2" type="submit">تکمیل ثبت نام</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock main %}
+{% block js %}
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const sendButton = document.getElementById("send-again");
+        let timer; // برای ذخیره‌ی تایمر
+        let countdownRequestCode = {{ time_turtling }}; //زمان از ویو دریافت می‌گردد
+        countdownRequestCode = parseInt(countdownRequestCode);
+        function updateTimerDisplay() {
+            const minutes = Math.floor(countdownRequestCode / 60);
+            const seconds = countdownRequestCode % 60;
+            sendButton.textContent = `ارسال مجدد پس از ${minutes}:${seconds.toString().padStart(2, "0")}`;
+        }
+
+        function startTimer() {
+            sendButton.disabled = true; // دکمه را غیرفعال کنید
+            sendButton.classList.add('disabled')
+            updateTimerDisplay(); // مقدار اولیه تایمر را نمایش دهید
+            timer = setInterval(() => {
+                countdownRequestCode--;
+                updateTimerDisplay();
+
+                if (countdownRequestCode <= 0) {
+                    clearInterval(timer);
+                    sendButton.disabled = false; // دکمه را فعال کنید
+                    sendButton.classList.remove('disabled')
+                    sendButton.textContent = "ارسال دوباره کد اعتبار سنجی";
+                }
+            }, 1000);
+        }
+
+        // شروع تایمر هنگام بارگذاری صفحه
+        startTimer();
+    });
+    </script>
+{% endblock js %}

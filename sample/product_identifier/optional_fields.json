@@ -1,0 +1,38 @@
+{
+    "PropertyName1": {
+        "title": "TitleName",
+        "description": "Description",
+        "values": [
+            {
+                "value1": "VALUE",
+                "value_name": "VALUE_NAME"
+            },
+            {
+                "value2": "VALUE",
+                "value_name": "VALUE_NAME"
+            },
+            {
+                "value3": "VALUE",
+                "value_name": "VALUE_NAME"
+            }
+        ]
+    },
+    "PropertyName2": {
+        "title": "TitleName",
+        "description": "Description",
+        "values": [
+            {
+                "value1": "VALUE",
+                "value_name": "VALUE_NAME"
+            },
+            {
+                "value2": "VALUE",
+                "value_name": "VALUE_NAME"
+            },
+            {
+                "value3": "VALUE",
+                "value_name": "VALUE_NAME"
+            }
+        ]
+    }
+}

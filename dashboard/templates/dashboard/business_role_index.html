@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load ui_template_tag %}
+{% block breadcrumbs %}
+    {% breadcrumbs %}
+{% endblock breadcrumbs %}
+{% block main %}
+    <div class="row g-4 mb-3">
+        {% for b in boxes %}
+            {% business_intro_box b.icon b.color_class_suffix b.count b.title b.main_link links=b.links %}
+        {% endfor %}
+    </div>
+    {% include "dashboard/partials/dashboard_alert.html" %}
+{% endblock main %}

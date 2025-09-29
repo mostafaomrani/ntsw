@@ -1,0 +1,834 @@
+{% extends "base.html" %}
+{% load static %}
+{% load date_filters %}
+{% load widget_tweaks %}
+{% load ui_template_tag %}
+
+{% block title %}
+اظهار تولید
+{% endblock title %}
+
+{% block breadcrumbs %}
+{% breadcrumbs 'عملیات تولید' '#' 'اظهار تولید' '#' %}
+{% endblock breadcrumbs %}
+
+{% block page-title %}
+اظهار تولید
+{% endblock page-title %}
+
+{% block main %}
+<link rel='stylesheet' href='https://cdn.datatables.net/2.3.4/css/dataTables.dataTables.css' media='all' />
+
+<div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+    <form id="frmRequestSearch" class="fv-form fv-form-bootstrap" novalidate="novalidate">
+        <div class="row ">
+            <!-- دکمه‌های عملیاتی -->
+            <div class="col-md-12 mb-3 box-bordered-bottom-dashed ">
+                <button class="btn btn-primary me-2" id="NewFactor"><i class="fa fa-plus-square"></i> اظهار تولید
+                    جدید</button>
+                <div class="dropdown d-inline-block me-2">
+                    <button class="btn btn-success dropdown-toggle" type="button" id="ImpotrtFromExcemFile"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa fa-plus-square"></i> ثبت سند با فایل اکسل
+                    </button>
+                    <ul class="dropdown-menu child" aria-labelledby="ImpotrtFromExcemFile">
+                        <li><a class="dropdown-item" href="#" id="ImportExcelProduction"><i
+                                    class="fa fa-file-excel"></i> اظهار تولید</a></li>
+                        <li><a class="dropdown-item" href="#" id="ImportExcelTracking"><i class="fa fa-file-excel"></i>
+                                تولید شناسه رهگیری</a></li>
+                    </ul>
+                </div>
+                <button class="btn btn-primary me-2 hidden" id="Behinyab"><i class="fa fa-plus-square"></i> استعلام از
+                    سامانه بهین یاب</button>
+                <button class="btn btn-warning me-2 hidden" id="ReserveTrackings"><i class="fa fa-plus-square"></i>
+                    تولید شناسه رهگیری</button>
+                <button class="btn btn-success me-2 tooltip-success" id="HelpButton" data-bs-toggle="tooltip"
+                    data-bs-placement="top" title="راهنمای سریع" style="padding: 2px 6px"><i
+                        class="fa fa-info-circle fa-2x" style="margin-left: 0px; font-size: 24px"></i></button>
+            </div>
+            <!-- وضعیت سند -->
+            <div class="col-md-4 mb-3">
+                <div class="input-group">
+                    <span class="input-group-text bg-light">وضعیت سند</span>
+                    <select name="status" data-handler="RegionHandler" data-function="GetAllRequestStatusList"
+                        class="form-control select-status ajaxSelect">
+                        <option value="" selected="selected">انتخاب کنید</option>
+                        <option value="0">در حال پردازش</option>
+                        <option value="1">پیش نویس</option>
+                        <option value="2">ثبت اولیه</option>
+                        <option value="3">در حال استعلام شناسه های رهگیری</option>
+                        <option value="4">عدم تایید شناسه های رهگیری</option>
+                        <option value="6">تایید شناسه های رهگیری</option>
+                        <option value="7">تایید شده</option>
+                        <option value="8">ابطال شده</option>
+                        <option value="9">بروز خطا در سامانه</option>
+                        <option value="10">در حال ثبت در سامانه همتا</option>
+                        <option value="11">عدم تائید توسط همتا</option>
+                        <option value="12">در انتظار سهمیه</option>
+                        <option value="13">تخصیص یافته</option>
+                        <option value="14">منتظر اصلاح شناسه های رهگیری</option>
+                        <option value="15">حذف شده</option>
+                        <option value="16">در حال ثبت نهایی رهگیری</option>
+                        <option value="17">تایید نهایی</option>
+                        <option value="18">تایید نیاز ماشین آلات</option>
+                        <option value="19">در انتظار پرداخت</option>
+                    </select>
+                </div>
+            </div>
+            <!-- نوع سند -->
+            <div class="col-md-4 mb-3">
+                <div class="input-group">
+                    <span class="input-group-text bg-light">نوع سند</span>
+                    <select id="requestType" name="requestType" class="form-control select-status">
+                        <option value="" selected="selected">انتخاب کنید</option>
+                        <option value="1">اظهار تولید</option>
+                        <option value="11">تولید</option>
+                        <option value="13">تولید شناسه رهگیری</option>
+                    </select>
+                </div>
+            </div>
+            <!-- انبار -->
+            <div class="col-md-4 mb-3">
+                <div class="input-group">
+                    <span class="input-group-text bg-light">انبار</span>
+                    <select name="WhereHouse" id="WhereHouse" data-handler="InternalTradeHandler"
+                        data-function="GetRolePlacesByUserRoleIDForContractors_WithTempStore_Direct"
+                        class="form-control ajaxSelect">
+                        <option value="" selected="selected">انتخاب کنید</option>
+                        <option value="46578">انبار موقت</option>
+                        <option value="119883">فرآیند شیمی صدرا (5189151875)</option>
+                    </select>
+                </div>
+            </div>
+            <!-- از تاریخ - تا تاریخ -->
+            <div class="col-md-4 mb-3">
+                <div class="input-group">
+                    <span class="input-group-text bg-light" style="width: 216px !important;">از تاریخ - تا تاریخ</span>
+                    <input type="text" name="fromDate" placeholder="از تاریخ"
+                        class="form-control persianDatePicker1 max-date1 pwt-datepicker-input-element"
+                        style="width: 50%" autocomplete="off">
+                    <input type="text" name="toDate" placeholder="تا تاریخ"
+                        class="form-control persianDatePicker1 max-date1 pwt-datepicker-input-element"
+                        style="width: 50%" autocomplete="off">
+                </div>
+            </div>
+            <!-- متن جستجو -->
+            <div class="col-md-4 mb-3">
+                <div class="input-group">
+                    <span class="input-group-text bg-light">متن جستجو</span>
+                    <input type="text" name="txtSearch" autocomplete="off" class="form-control">
+                </div>
+            </div>
+            <!-- دکمه‌های جستجو و لغو -->
+            <div class="col-md-4 mb-3">
+                <button type="button" name="search" class="btn btn-primary me-2"><i class="fa fa-search"></i>
+                    جستجو</button>
+                <button type="button" id="CancelSearch" name="CancelSearch" class="btn btn-warning me-2"><i
+                        class="fa fa-remove"></i> لغو فیلتر</button>
+            </div>
+        </div>
+
+
+
+
+
+        <!-- جدول نتایج جستجو -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="table-responsive">
+                    <table id="example" class="display">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Position</th>
+                                <th>Office</th>
+                                <th>Age</th>
+                                <th>Start date</th>
+                                <th>Salary</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Tiger Nixon</td>
+                                <td>System Architect</td>
+                                <td>Edinburgh</td>
+                                <td>61</td>
+                                <td>2011-04-25</td>
+                                <td>$320,800</td>
+                            </tr>
+                            <tr>
+                                <td>Garrett Winters</td>
+                                <td>Accountant</td>
+                                <td>Tokyo</td>
+                                <td>63</td>
+                                <td>2011-07-25</td>
+                                <td>$170,750</td>
+                            </tr>
+                            <tr>
+                                <td>Ashton Cox</td>
+                                <td>Junior Technical Author</td>
+                                <td>San Francisco</td>
+                                <td>66</td>
+                                <td>2009-01-12</td>
+                                <td>$86,000</td>
+                            </tr>
+                            <tr>
+                                <td>Cedric Kelly</td>
+                                <td>Senior JavaScript Developer</td>
+                                <td>Edinburgh</td>
+                                <td>22</td>
+                                <td>2012-03-29</td>
+                                <td>$433,060</td>
+                            </tr>
+                            <tr>
+                                <td>Airi Satou</td>
+                                <td>Accountant</td>
+                                <td>Tokyo</td>
+                                <td>33</td>
+                                <td>2008-11-28</td>
+                                <td>$162,700</td>
+                            </tr>
+                            <tr>
+                                <td>Brielle Williamson</td>
+                                <td>Integration Specialist</td>
+                                <td>New York</td>
+                                <td>61</td>
+                                <td>2012-12-02</td>
+                                <td>$372,000</td>
+                            </tr>
+                            <tr>
+                                <td>Herrod Chandler</td>
+                                <td>Sales Assistant</td>
+                                <td>San Francisco</td>
+                                <td>59</td>
+                                <td>2012-08-06</td>
+                                <td>$137,500</td>
+                            </tr>
+                            <tr>
+                                <td>Rhona Davidson</td>
+                                <td>Integration Specialist</td>
+                                <td>Tokyo</td>
+                                <td>55</td>
+                                <td>2010-10-14</td>
+                                <td>$327,900</td>
+                            </tr>
+                            <tr>
+                                <td>Colleen Hurst</td>
+                                <td>JavaScript Developer</td>
+                                <td>San Francisco</td>
+                                <td>39</td>
+                                <td>2009-09-15</td>
+                                <td>$205,500</td>
+                            </tr>
+                            <tr>
+                                <td>Sonya Frost</td>
+                                <td>Software Engineer</td>
+                                <td>Edinburgh</td>
+                                <td>23</td>
+                                <td>2008-12-13</td>
+                                <td>$103,600</td>
+                            </tr>
+                            <tr>
+                                <td>Jena Gaines</td>
+                                <td>Office Manager</td>
+                                <td>London</td>
+                                <td>30</td>
+                                <td>2008-12-19</td>
+                                <td>$90,560</td>
+                            </tr>
+                            <tr>
+                                <td>Quinn Flynn</td>
+                                <td>Support Lead</td>
+                                <td>Edinburgh</td>
+                                <td>22</td>
+                                <td>2013-03-03</td>
+                                <td>$342,000</td>
+                            </tr>
+                            <tr>
+                                <td>Charde Marshall</td>
+                                <td>Regional Director</td>
+                                <td>San Francisco</td>
+                                <td>36</td>
+                                <td>2008-10-16</td>
+                                <td>$470,600</td>
+                            </tr>
+                            <tr>
+                                <td>Haley Kennedy</td>
+                                <td>Senior Marketing Designer</td>
+                                <td>London</td>
+                                <td>43</td>
+                                <td>2012-12-18</td>
+                                <td>$313,500</td>
+                            </tr>
+                            <tr>
+                                <td>Tatyana Fitzpatrick</td>
+                                <td>Regional Director</td>
+                                <td>London</td>
+                                <td>19</td>
+                                <td>2010-03-17</td>
+                                <td>$385,750</td>
+                            </tr>
+                            <tr>
+                                <td>Michael Silva</td>
+                                <td>Marketing Designer</td>
+                                <td>London</td>
+                                <td>66</td>
+                                <td>2012-11-27</td>
+                                <td>$198,500</td>
+                            </tr>
+                            <tr>
+                                <td>Paul Byrd</td>
+                                <td>Chief Financial Officer (CFO)</td>
+                                <td>New York</td>
+                                <td>64</td>
+                                <td>2010-06-09</td>
+                                <td>$725,000</td>
+                            </tr>
+                            <tr>
+                                <td>Gloria Little</td>
+                                <td>Systems Administrator</td>
+                                <td>New York</td>
+                                <td>59</td>
+                                <td>2009-04-10</td>
+                                <td>$237,500</td>
+                            </tr>
+                            <tr>
+                                <td>Bradley Greer</td>
+                                <td>Software Engineer</td>
+                                <td>London</td>
+                                <td>41</td>
+                                <td>2012-10-13</td>
+                                <td>$132,000</td>
+                            </tr>
+                            <tr>
+                                <td>Dai Rios</td>
+                                <td>Personnel Lead</td>
+                                <td>Edinburgh</td>
+                                <td>35</td>
+                                <td>2012-09-26</td>
+                                <td>$217,500</td>
+                            </tr>
+                            <tr>
+                                <td>Jenette Caldwell</td>
+                                <td>Development Lead</td>
+                                <td>New York</td>
+                                <td>30</td>
+                                <td>2011-09-03</td>
+                                <td>$345,000</td>
+                            </tr>
+                            <tr>
+                                <td>Yuri Berry</td>
+                                <td>Chief Marketing Officer (CMO)</td>
+                                <td>New York</td>
+                                <td>40</td>
+                                <td>2009-06-25</td>
+                                <td>$675,000</td>
+                            </tr>
+                            <tr>
+                                <td>Caesar Vance</td>
+                                <td>Pre-Sales Support</td>
+                                <td>New York</td>
+                                <td>21</td>
+                                <td>2011-12-12</td>
+                                <td>$106,450</td>
+                            </tr>
+                            <tr>
+                                <td>Doris Wilder</td>
+                                <td>Sales Assistant</td>
+                                <td>Sydney</td>
+                                <td>23</td>
+                                <td>2010-09-20</td>
+                                <td>$85,600</td>
+                            </tr>
+                            <tr>
+                                <td>Angelica Ramos</td>
+                                <td>Chief Executive Officer (CEO)</td>
+                                <td>London</td>
+                                <td>47</td>
+                                <td>2009-10-09</td>
+                                <td>$1,200,000</td>
+                            </tr>
+                            <tr>
+                                <td>Gavin Joyce</td>
+                                <td>Developer</td>
+                                <td>Edinburgh</td>
+                                <td>42</td>
+                                <td>2010-12-22</td>
+                                <td>$92,575</td>
+                            </tr>
+                            <tr>
+                                <td>Jennifer Chang</td>
+                                <td>Regional Director</td>
+                                <td>Singapore</td>
+                                <td>28</td>
+                                <td>2010-11-14</td>
+                                <td>$357,650</td>
+                            </tr>
+                            <tr>
+                                <td>Brenden Wagner</td>
+                                <td>Software Engineer</td>
+                                <td>San Francisco</td>
+                                <td>28</td>
+                                <td>2011-06-07</td>
+                                <td>$206,850</td>
+                            </tr>
+                            <tr>
+                                <td>Fiona Green</td>
+                                <td>Chief Operating Officer (COO)</td>
+                                <td>San Francisco</td>
+                                <td>48</td>
+                                <td>2010-03-11</td>
+                                <td>$850,000</td>
+                            </tr>
+                            <tr>
+                                <td>Shou Itou</td>
+                                <td>Regional Marketing</td>
+                                <td>Tokyo</td>
+                                <td>20</td>
+                                <td>2011-08-14</td>
+                                <td>$163,000</td>
+                            </tr>
+                            <tr>
+                                <td>Michelle House</td>
+                                <td>Integration Specialist</td>
+                                <td>Sydney</td>
+                                <td>37</td>
+                                <td>2011-06-02</td>
+                                <td>$95,400</td>
+                            </tr>
+                            <tr>
+                                <td>Suki Burks</td>
+                                <td>Developer</td>
+                                <td>London</td>
+                                <td>53</td>
+                                <td>2009-10-22</td>
+                                <td>$114,500</td>
+                            </tr>
+                            <tr>
+                                <td>Prescott Bartlett</td>
+                                <td>Technical Author</td>
+                                <td>London</td>
+                                <td>27</td>
+                                <td>2011-05-07</td>
+                                <td>$145,000</td>
+                            </tr>
+                            <tr>
+                                <td>Gavin Cortez</td>
+                                <td>Team Leader</td>
+                                <td>San Francisco</td>
+                                <td>22</td>
+                                <td>2008-10-26</td>
+                                <td>$235,500</td>
+                            </tr>
+                            <tr>
+                                <td>Martena Mccray</td>
+                                <td>Post-Sales support</td>
+                                <td>Edinburgh</td>
+                                <td>46</td>
+                                <td>2011-03-09</td>
+                                <td>$324,050</td>
+                            </tr>
+                            <tr>
+                                <td>Unity Butler</td>
+                                <td>Marketing Designer</td>
+                                <td>San Francisco</td>
+                                <td>47</td>
+                                <td>2009-12-09</td>
+                                <td>$85,675</td>
+                            </tr>
+                            <tr>
+                                <td>Howard Hatfield</td>
+                                <td>Office Manager</td>
+                                <td>San Francisco</td>
+                                <td>51</td>
+                                <td>2008-12-16</td>
+                                <td>$164,500</td>
+                            </tr>
+                            <tr>
+                                <td>Hope Fuentes</td>
+                                <td>Secretary</td>
+                                <td>San Francisco</td>
+                                <td>41</td>
+                                <td>2010-02-12</td>
+                                <td>$109,850</td>
+                            </tr>
+                            <tr>
+                                <td>Vivian Harrell</td>
+                                <td>Financial Controller</td>
+                                <td>San Francisco</td>
+                                <td>62</td>
+                                <td>2009-02-14</td>
+                                <td>$452,500</td>
+                            </tr>
+                            <tr>
+                                <td>Timothy Mooney</td>
+                                <td>Office Manager</td>
+                                <td>London</td>
+                                <td>37</td>
+                                <td>2008-12-11</td>
+                                <td>$136,200</td>
+                            </tr>
+                            <tr>
+                                <td>Jackson Bradshaw</td>
+                                <td>Director</td>
+                                <td>New York</td>
+                                <td>65</td>
+                                <td>2008-09-26</td>
+                                <td>$645,750</td>
+                            </tr>
+                            <tr>
+                                <td>Olivia Liang</td>
+                                <td>Support Engineer</td>
+                                <td>Singapore</td>
+                                <td>64</td>
+                                <td>2011-02-03</td>
+                                <td>$234,500</td>
+                            </tr>
+                            <tr>
+                                <td>Bruno Nash</td>
+                                <td>Software Engineer</td>
+                                <td>London</td>
+                                <td>38</td>
+                                <td>2011-05-03</td>
+                                <td>$163,500</td>
+                            </tr>
+                            <tr>
+                                <td>Sakura Yamamoto</td>
+                                <td>Support Engineer</td>
+                                <td>Tokyo</td>
+                                <td>37</td>
+                                <td>2009-08-19</td>
+                                <td>$139,575</td>
+                            </tr>
+                            <tr>
+                                <td>Thor Walton</td>
+                                <td>Developer</td>
+                                <td>New York</td>
+                                <td>61</td>
+                                <td>2013-08-11</td>
+                                <td>$98,540</td>
+                            </tr>
+                            <tr>
+                                <td>Finn Camacho</td>
+                                <td>Support Engineer</td>
+                                <td>San Francisco</td>
+                                <td>47</td>
+                                <td>2009-07-07</td>
+                                <td>$87,500</td>
+                            </tr>
+                            <tr>
+                                <td>Serge Baldwin</td>
+                                <td>Data Coordinator</td>
+                                <td>Singapore</td>
+                                <td>64</td>
+                                <td>2012-04-09</td>
+                                <td>$138,575</td>
+                            </tr>
+                            <tr>
+                                <td>Zenaida Frank</td>
+                                <td>Software Engineer</td>
+                                <td>New York</td>
+                                <td>63</td>
+                                <td>2010-01-04</td>
+                                <td>$125,250</td>
+                            </tr>
+                            <tr>
+                                <td>Zorita Serrano</td>
+                                <td>Software Engineer</td>
+                                <td>San Francisco</td>
+                                <td>56</td>
+                                <td>2012-06-01</td>
+                                <td>$115,000</td>
+                            </tr>
+                            <tr>
+                                <td>Jennifer Acosta</td>
+                                <td>Junior JavaScript Developer</td>
+                                <td>Edinburgh</td>
+                                <td>43</td>
+                                <td>2013-02-01</td>
+                                <td>$75,650</td>
+                            </tr>
+                            <tr>
+                                <td>Cara Stevens</td>
+                                <td>Sales Assistant</td>
+                                <td>New York</td>
+                                <td>46</td>
+                                <td>2011-12-06</td>
+                                <td>$145,600</td>
+                            </tr>
+                            <tr>
+                                <td>Hermione Butler</td>
+                                <td>Regional Director</td>
+                                <td>London</td>
+                                <td>47</td>
+                                <td>2011-03-21</td>
+                                <td>$356,250</td>
+                            </tr>
+                            <tr>
+                                <td>Lael Greer</td>
+                                <td>Systems Administrator</td>
+                                <td>London</td>
+                                <td>21</td>
+                                <td>2009-02-27</td>
+                                <td>$103,500</td>
+                            </tr>
+                            <tr>
+                                <td>Jonas Alexander</td>
+                                <td>Developer</td>
+                                <td>San Francisco</td>
+                                <td>30</td>
+                                <td>2010-07-14</td>
+                                <td>$86,500</td>
+                            </tr>
+                            <tr>
+                                <td>Shad Decker</td>
+                                <td>Regional Director</td>
+                                <td>Edinburgh</td>
+                                <td>51</td>
+                                <td>2008-11-13</td>
+                                <td>$183,000</td>
+                            </tr>
+                            <tr>
+                                <td>Michael Bruce</td>
+                                <td>JavaScript Developer</td>
+                                <td>Singapore</td>
+                                <td>29</td>
+                                <td>2011-06-27</td>
+                                <td>$183,000</td>
+                            </tr>
+                            <tr>
+                                <td>Donna Snider</td>
+                                <td>Customer Support</td>
+                                <td>New York</td>
+                                <td>27</td>
+                                <td>2011-01-25</td>
+                                <td>$112,000</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Name</th>
+                                <th>Position</th>
+                                <th>Office</th>
+                                <th>Age</th>
+                                <th>Start date</th>
+                                <th>Salary</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+    </form>
+</div>
+
+<style>
+    .input-group-text.bg-light {
+        width: 120px;
+    }
+
+    .btn-purple-csm {
+        background-color: #6f42c1 !important;
+        color: #fff;
+    }
+
+    .btn-purple-csm:hover {
+        background-color: #5a32a3 !important;
+    }
+
+    .bg-themeprimary {
+        background-color: #024158 !important;
+        color: white;
+    }
+
+    .card.border-primary {
+        border-color: #024158 !important;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .mb-3 {
+        margin-bottom: 1rem !important;
+    }
+
+    .me-2 {
+        margin-left: 0.5rem !important;
+    }
+
+    .box-bordered-bottom-dashed {
+        border-bottom: 1px dashed #ccc;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+    }
+
+    .tooltip-success .tooltip-inner {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .hidden {
+        display: none !important;
+    }
+
+    div.dt-container div.dt-layout-row div.dt-layout-cell.dt-layout-start {
+        margin-right: initial !important;
+    }
+
+    div.dt-container div.dt-layout-row div.dt-layout-cell.dt-layout-end {
+        margin-left: initial !important;
+    }
+</style>
+
+{% endblock main %}
+
+{% block js %}
+<!-- بارگذاری jQuery و DataTables -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/2.3.4/js/dataTables.js"></script>
+<!-- بارگذاری Persian Datepicker (در صورت نیاز) -->
+
+
+
+<script>
+    $(document).ready(function () {
+
+
+        // فعال‌سازی Tooltip
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+            new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+
+        // باز کردن خودکار منوی دراپ‌داون با کلیک
+        $('#ImpotrtFromExcemFile').on('click', function () {
+            var $dropdown = $(this).closest('.dropdown');
+            var $menu = $dropdown.find('.dropdown-menu');
+            if ($menu.hasClass('show')) {
+                $menu.removeClass('show');
+            } else {
+                $('.dropdown-menu').removeClass('show');
+                $menu.addClass('show');
+            }
+        });
+
+        // بستن منوها هنگام کلیک خارج از آن‌ها
+        $(document).on('click', function (e) {
+            if (!$(e.target).closest('.dropdown').length) {
+                $('.dropdown-menu').removeClass('show');
+            }
+        });
+
+        // رویداد کلیک برای دکمه جستجو
+        $('button[name="search"]').on('click', function () {
+            alert('جستجو غیرفعال است. لطفاً منطق جستجو را پیاده‌سازی کنید.');
+        });
+
+        // رویداد کلیک برای لغو فیلتر
+        $('#CancelSearch').on('click', function () {
+            $('#frmRequestSearch')[0].reset();
+            $('.persianDatePicker1').persianDatepicker('clear');
+        });
+
+        // رویداد کلیک برای اظهار تولید جدید
+        $('#NewFactor').on('click', function () {
+            alert('اظهار تولید جدید غیرفعال است. لطفاً منطق را پیاده‌سازی کنید.');
+        });
+
+        // رویداد کلیک برای استعلام از سامانه بهین یاب
+        $('#Behinyab').on('click', function () {
+            alert('استعلام از سامانه بهین یاب غیرفعال است. لطفاً منطق را پیاده‌سازی کنید.');
+        });
+
+        // رویداد کلیک برای تولید شناسه رهگیری
+        $('#ReserveTrackings').on('click', function () {
+            alert('تولید شناسه رهگیری غیرفعال است. لطفاً منطق را پیاده‌سازی کنید.');
+        });
+
+        // رویداد کلیک برای راهنمای سریع
+        $('#HelpButton').on('click', function () {
+            alert('راهنمای سریع غیرفعال است. لطفاً منطق startJSHelp را پیاده‌سازی کنید.');
+        });
+
+        // رویداد کلیک برای آیتم‌های منوی دراپ‌داون
+        $('.dropdown-menu a[id^="Import"]').on('click', function (e) {
+            e.preventDefault();
+            $('#excelUploadModal').modal('show');
+            $('#excelUploadModalLabel').text('آپلود فایل اکسل برای ' + $(this).text().trim());
+        });
+
+        // Modal برای آپلود اکسل
+        if (!$('#excelUploadModal').length) {
+            $('body').append(`
+            <div class="modal fade" id="excelUploadModal" tabindex="-1" aria-labelledby="excelUploadModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="excelUploadModalLabel">آپلود فایل اکسل</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="file" id="excelFileInput" accept=".xlsx,.xls" class="form-control">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+                            <button type="button" class="btn btn-primary" id="uploadExcelBtn">آپلود</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `);
+        }
+
+        $('#uploadExcelBtn').on('click', function () {
+            var fileInput = $('#excelFileInput')[0];
+            if (fileInput.files.length > 0) {
+                alert('آپلود فایل غیرفعال است. لطفاً منطق آپلود را پیاده‌سازی کنید.');
+            } else {
+                alert('لطفاً یک فایل انتخاب کنید');
+            }
+        });
+
+
+
+
+        // اینیشیالایز DataTable
+        $('#example').DataTable({
+            paging: true,
+            searching: true,
+            info: true,
+            ordering: false,
+            pageLength: 10,
+            language: {
+                "sEmptyTable": "هیچ داده‌ای در جدول وجود ندارد",
+                "sInfo": "نمایش _START_ تا _END_ از _TOTAL_ رکورد",
+                "sInfoEmpty": "نمایش 0 تا 0 از 0 رکورد",
+                "sInfoFiltered": "(فیلتر شده از _MAX_ رکورد)",
+                "sLengthMenu": "نمایش _MENU_ رکورد",
+                "sLoadingRecords": "در حال بارگذاری...",
+                "sProcessing": "در حال پردازش...",
+                "sSearch": "جستجو:",
+                "sZeroRecords": "رکوردی مطابق جستجوی شما پیدا نشد",
+                "oPaginate": {
+                    "sFirst": "اولین",
+                    "sLast": "آخرین",
+                    "sNext": "بعدی",
+                    "sPrevious": "قبلی"
+                }
+            },
+
+        });
+
+
+
+    });
+</script>
+{% endblock js %}

@@ -1,0 +1,12 @@
+{% load widget_tweaks %}
+<div class="{{ width }}">
+    <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon2">{{ field.label }}
+            {% if required %}<small class="text-danger">*</small>{% endif %}
+        </span>
+        {% render_field field class=control_class  placeholder=placeholder %}
+        <span class="invalid-feedback">
+            {% if invalid_feedback %}{{ invalid_feedback }}{% endif %}
+        </span>
+    </div>
+</div>

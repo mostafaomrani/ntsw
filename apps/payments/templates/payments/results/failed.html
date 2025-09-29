@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+{% load date_filters %}
+{% block title %}
+    خرید موفق
+{% endblock title %}
+{% block style %}
+    <!-- Custom styles for this template -->
+    <style>
+    html,
+body {
+  height: 100%;
+}
+    </style>
+{% endblock style %}
+{% block body_class %}
+    d-flex flex-column align-items-center
+{% endblock body_class %}
+{% block main %}
+    <main class="m-auto">
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-danger">
+                    <h5 class="text-center">پرداخت شما با مشکل مواجه شده است.</h5>
+                    <p>در صورتی که وجه از حساب شما کسر شده است پس از ۷۲ ساعت به حساب شما باز خواهد گشت</p>
+                </div>
+                <div >
+                    <span>خطا:</span><span>{{ error }}</span>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="text-center mt-3">                    
+                    <p>
+                    لطفا دوباره اقدام به خرید نمایید.
+                    </p>
+                    {% comment %} <a href="{% url 'users:home' %}" class="btn btn-qp-primary">خرید دوباره</a> {% endcomment %}
+                    <p>
+                        در صورت نیاز می‌توانید از قسمت تماس با ما با پشتیبانی وب سایت حقوق یار تماس بگیرید.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock main %}

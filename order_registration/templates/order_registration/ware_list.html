@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+{% load static %}
+{% load date_filters %}
+{% load widget_tweaks %}
+{% load date_filters %}
+{% block title %}
+    پرونده ثبت سفارش
+{% endblock title %}
+{% block page-title %}
+    مدیریت پرونده
+{% endblock page-title %}
+{% block head %}
+    <link href="{% static 'selectize-master/css/selectize.css' %}"
+          rel="stylesheet">
+    <link href="{% static 'bootstrap-datepicker/css/bootstrap-datepicker.min.css' %}"
+          rel="stylesheet">
+{% endblock head %}
+{% block main %}
+    <nav class="" aria-label="breadcrumb">
+        <ol class="breadcrumb order-registration-breadcrumb">
+            <li class="breadcrumb-item border-bottom border-top px-4 py-3  processed">
+                <strong class="outline-badge">{% include "order_registration/svg/tick.html" %}</strong>
+                <strong>اطلاعات اصلی</strong>
+            </li>
+            <li class="breadcrumb-item border-bottom border-top px-4 ps-5 py-3 processed"
+                aria-current="page">
+                <strong class="outline-badge">{% include "order_registration/svg/tick.html" %}</strong>
+                <strong>گمرکی و حمل و نقل</strong>
+            </li>
+            <li class="breadcrumb-item border-bottom border-top px-4 ps-5 py-3 processed"
+                aria-current="page">
+                <strong class="outline-badge">{% include "order_registration/svg/tick.html" %}</strong>
+                <strong>مالی و بانکی</strong>
+            </li>
+            <li class="breadcrumb-item border-bottom border-top px-4 ps-5 py-3 active"
+                aria-current="page">
+                <strong class="outline-badge">۴</strong>
+                <strong>کالاهای پرونده</strong>
+            </li>
+            <li class="breadcrumb-item border-bottom border-top px-4 ps-5 py-3"
+                aria-current="page">
+                <strong class="outline-badge">۵</strong>
+                <strong>مستندات پرونده</strong>
+            </li>
+        </ol>
+    </nav>
+    <div class="container-fluid bg-white py-4">
+        <div class="d-md-flex justify-content-start">
+            <div class="me-md-2 mb-3">
+                <button type="button"
+                        class="btn  btn-primary btn-maya"
+                        data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">افزودن کالا</button>
+            </div>
+            <div class="me-md-2 mb-3">
+                <button type="button" class="btn  btn-primary btn-maya">افزودن کالا از طریق اکسل</button>
+            </div>
+            <div class="me-md-2 mb-3">
+                <button href="#"
+                        data-bs-toggle="modal"
+                        data-bs-target="#deleteModal"
+                        class="btn btn-danger btn-cinnabar">حذف کالا</button>
+            </div>
+        </div>
+        <div class="border shadow-sm">
+            <table class="table table-striped table-hover table-bordered text-center"
+                   id="ware-table">
+                <thead class="text-white bg-navy">
+                    <tr>
+                        <th>
+                            <div class="form-check">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       value=""
+                                       id="flexCheckDefault">
+                            </div>
+                        </th>
+                        <th>کد مجازی</th>
+                        <th>کد تعرفه</th>
+                        <th>شرح تعرفه</th>
+                        <th>شرح تجاری</th>
+                        <th>حقوق ورودی</th>
+                        <th>میزان تخفیف (FOC)</th>
+                        <th>اولویت کالایی</th>
+                        <th>وضعیت کالا</th>
+                        <th>سال تولید</th>
+                        <th>تعداد / مقدار</th>
+                        <th>مبلغ FOB</th>
+                        <th>وزن خالص</th>
+                        <th>وزن ناخالص</th>
+                        <th>ویرایش</th>
+                        <th>منشا ارز</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for w in object_list %}
+                        <tr>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           value=""
+                                           id="flexCheckDefault">
+                                </div>
+                            </td>
+                            <td>{{ w.virtual_code }}</td>
+                            <td>{{ w.hs_code }}</td>
+                            <td>{{ w.english_title }}</td>
+                            <td>{{ w.persian_title }}</td>
+                            <td></td>
+                            <td>
+                                {% if w.off %}{{ w.off }}{% endif %}
+                            </td>
+                            <td></td>
+                            <td>{{ w.get_status_display }}</td>
+                            <td>{{ w.manufacture_year }}</td>
+                            <td>{{ w.amount }}</td>
+                            <td>{{ w.fob_price }}</td>
+                            <td>{{ w.net_weight }}</td>
+                            <td>{{ w.gross_weight }}</td>
+                            <td>
+                                <button type="button"
+                                        class="btn  btn-sm btn-primary btn-maya"
+                                        data-bs-toggle="modal"
+                                        data-bs-ware="{{ w.pk }}"
+                                        data-bs-target="#EditModal">ویرایش</button>
+                            </td>
+                            <td></td>
+                            <input type="hidden" value="{{ w.pk }}">
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="d-md-flex justify-content-between align-items-center border border-top">
+                <div class="d-md-flex">
+                    <div class="my-3 mx-2 bg-gray px-2 py-3">
+                        <span>وضعیت پرونده:</span>
+                        <span class="text-danger ps-1">{{ main_data.get_status_display }}</span>
+                    </div>
+                    <div class="my-3 mx-2 bg-gray px-2 py-3">
+                        <span>مجموع ارزش کالاها:</span><span class="ps-1 text-danger">{{ main_data.ware_value_sum }}</span>
+                        <span class="ps-3">مجموع وزن خالص کالاها:</span><span class="ps-1 text-danger">{{ main_data.ware_net_weight_sum }}</span>
+                        <span class="ps-3">مجموع وزن ناخالص کالاها:</span><span class="ps-1 text-danger">{{ main_data.ware_gross_weight_sum }}</span>
+                    </div>
+                </div>
+                <div class="d-md-flex align-items-center">
+                    <div class="my-3 mx-2">
+                        <button type="button" class="btn  btn-primary btn-maya">گزارش گیری منشا ارز</button>
+                    </div>
+                    <div class="my-3 mx-2">
+                        <a href="{% url 'order_registration:main_data_list' %}"
+                           class="btn  btn-primary btn-maya">انصراف</a>
+                    </div>
+                    <div class="my-3 mx-2">
+                        <a href="{% url 'order_registration:update_financial' main_data.financial.pk %}"
+                           class="btn  btn-primary btn-maya">
+                            <i class="fa fa-step-forward" aria-hidden="true"></i>
+                            <span class="ps-1">قبلی</span>
+                        </a>
+                    </div>
+                    <div class="my-3 mx-2">
+                        {% if object_list %}
+                            <a type="button"
+                               class="btn btn-primary btn-maya"
+                               href="{% url 'order_registration:upload_document' main_data.pk %}">بعدی
+                                <i class="fa fa-step-backward" aria-hidden="true"></i></a>
+                        {% else %}
+                            <button type="button"
+                                    class="btn btn-primary btn-maya"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#MessageModal"
+                                    data-bs-tle="اخطار"
+                                    data-bs-content="افزودن کالا الزامی است">
+                                بعدی <i class="fa fa-step-backward" aria-hidden="true"></i>
+                            </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% comment %} register ware Modal {% endcomment %}
+    <div class="modal fade "
+         id="exampleModal"
+         tabindex="-1"
+         aria-labelledby="exampleModalLabel"
+         aria-hidden="true"
+         role="dialog">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable modal-fullscreen-md-down">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-6" id="exampleModalLabel">ثبت کالا</h1>
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="ware-form-container"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% comment %} END CREATE WARE {% endcomment %}
+    {% comment %} DELETE MODAL {% endcomment %}
+    <div class="modal fade"
+         id="deleteModal"
+         tabindex="-1"
+         aria-labelledby="deleteModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="deleteModalLabel">حذف کالا از پرونده</h1>
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>آیا از حذف کالاهای انتخاب شده مطمئن هستید؟</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" id="remove-ware">بله</button>
+                    <button type="button"
+                            class="btn  btn-primary btn-maya"
+                            data-bs-dismiss="modal">انصراف</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% comment %} START EDIT MODAL {% endcomment %}
+    <div class="modal fade "
+         id="EditModal"
+         tabindex="-1"
+         aria-labelledby="EditModalLabel"
+         aria-hidden="true"
+         role="dialog">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable modal-fullscreen-md-down">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-6" id="EditModalLabel">ویرایش کالا</h1>
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="ware-edit-form-container"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% comment %} END EDIT MODAL {% endcomment %}
+{% endblock main %}
+{% block js %}
+    <script>
+        mainDataPK = '{{ main_data.pk }}';
+        bulkDelete = '{% url 'order_registration:ware_bulk_delete' %}'
+    </script>
+    <script src="{% static 'order_registration/ware.js' %}"></script>
+{% endblock js %}

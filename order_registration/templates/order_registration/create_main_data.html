@@ -1,0 +1,272 @@
+{% extends "base.html" %}
+{% load static %}
+{% load date_filters %}
+{% load widget_tweaks %}
+{% load ui_template_tag %}
+{% block title %}
+    پرونده جدید
+{% endblock title %}
+{% block page-title %}
+    پرونده جدید
+{% endblock page-title %}
+{% block breadcrumbs %}
+    {% breadcrumbs 'عملیات تجاری' '#' 'مدیریت پرونده‌ها' 'order_registration:main_data_list' 'پرونده جدید' '#' %}
+{% endblock breadcrumbs %}
+{% block main %}
+    <nav class="" style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
+        <ol class="breadcrumb order-registration-breadcrumb">
+            <li class="breadcrumb-item border-bottom border-top px-4 py-3  active">
+                <strong class="outline-badge">&nbsp;۱&nbsp;</strong>
+                <strong>اطلاعات اصلی</strong>
+            </li>
+            <li class="breadcrumb-item border-bottom border-top px-4 ps-5 py-3"
+                aria-current="page">
+                <strong class="outline-badge">۲</strong>
+                <strong>گمرکی و حمل و نقل</strong>
+            </li>
+            <li class="breadcrumb-item border-bottom border-top px-5 py-3"
+                aria-current="page">
+                <strong class="outline-badge">۳</strong>
+                <strong>مالی و بانکی</strong>
+            </li>
+            <li class="breadcrumb-item border-bottom border-top px-5 py-3"
+                aria-current="page">
+                <strong class="outline-badge">۴</strong>
+                <strong>کالاهای پرونده</strong>
+            </li>
+            <li class="breadcrumb-item border-bottom border-top px-5 py-3"
+                aria-current="page">
+                <strong class="outline-badge">۵</strong>
+                <strong>مستندات پرونده</strong>
+            </li>
+        </ol>
+    </nav>
+    <div class="container-fluid bg-white py-5 ">
+        <div class="row mb-3">
+            <div class="col-12 col-md-3">
+                <label class="visually-hidden" for="specificSizeInputGroupUsername">سطح دسترسی</label>
+                <div class="input-group">
+                    <div class="input-group-text disabled">سطح دسترسی</div>
+                    <input type="text"
+                           class="form-control"
+                           id="specificSizeInputGroupUsername"
+                           placeholder=""
+                           value="کامل"
+                           disabled>
+                </div>
+            </div>
+        </div>
+        <form method="post" class="needs-validation main-data-form" novalidate>
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-12 mb-3 mt-4">
+                    <span class="px-4 py-2  border-start border-navy border-4 bg-white section-title">اطلاعات پرونده</span>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">{{ form.proforma_invoice.label }}<small class="text-danger">*</small></span>
+                            {% render_field form.proforma_invoice class="form-control" %}
+                            <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">{{ form.beneficiary_country.label }}<small class="text-danger">*</small></span>
+                            {% render_field form.beneficiary_country class="form-control p-0" placeholder="جستجو کنید" %}
+                            <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">{{ form.proforma_invoice_issue_date.label }}<small class="text-danger">*</small></span>
+                            {% render_field form.proforma_invoice_issue_date class="form-control" %}
+                            <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">{{ form.proforam_invoice_expire_date.label }}<small class="text-danger">*</small></span>
+                            {% render_field form.proforam_invoice_expire_date class="form-control" %}
+                            <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 mb-3 mt-4">
+                    <span class="px-4 py-2 shadow-sm border-start border-navy border-4 section-title mt-3">اطلاعات حالت ثبت سفارش</span>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">{{ form.order_registration_case.label }}<small class="text-danger">*</small></span>
+                            {% render_field form.order_registration_case class="form-control p-0" placeholder="جستجو کنید" %}
+                            <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 mb-3 mt-4">
+                    <span class="px-4 py-2 bg-white border-start border-navy border-4 section-title">اطلاعات فروشنده خارجی</span>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">{{ form.supplier.label }}<small class="text-danger">*</small></span>
+                            {% render_field form.supplier class="form-control p-0" dir="rtl" %}
+                            <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="d-flex">
+                            <div class="flex-fill">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon2">شناسه فروشنده خارجی<small class="text-danger">*</small></span>
+                                    <select id="seller-identifier" class="form-control p-0" required>
+                                        <option></option>
+                                    </select>
+                                    <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                                </div>
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-primary btn-maya" id="search-seller">جستجو</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 d-none" id="seller-name-container">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">نام فروشنده</span>
+                            <select class="form-control"
+                                    id="seller-name"
+                                    name="related_object_id"
+                                    required>
+                                <option value=""selected disabled>انتخاب کنید...</option>
+                            </select>
+                            <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="row personal-seller">
+                    <div class="col-12 col-md-6 personal-seller">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">نام خانوادگی فروشنده</span>
+                            <input type="text"
+                                   maxlength="50"
+                                   class="form-control"
+                                   id="last-name"
+                                   disabled>
+                            <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 personal-seller">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">کشور محل تولید</span>
+                            <input type="text"
+                                   maxlength="50"
+                                   class="form-control"
+                                   id="produce-country"
+                                   disabled>
+                            <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="row company-seller">
+                    <div class="col-12 col-md-6 company-seller">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">شماره ثبت</span>
+                            <input type="text"
+                                   maxlength="50"
+                                   class="form-control"
+                                   id="registered-number"
+                                   disabled>
+                            <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 company-seller">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">کشور محل ثبت</span>
+                            <input type="text"
+                                   maxlength="50"
+                                   class="form-control"
+                                   id="registered-country"
+                                   disabled>
+                            <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="row company-seller">
+                    <div class="col-12 col-md-6 company-seller">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">آدرس</span>
+                            <input type="text" maxlength="50" class="form-control" id="address" disabled>
+                            <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 company-seller">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">تلفن</span>
+                            <input type="text" maxlength="50" class="form-control" id="phone" disabled>
+                            <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 mb-3 mt-4">
+                    <span class="px-4 py-2 bg-white border-start border-navy border-4 section-title">اطلاعات واحد تولیدی</span>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">نوع واحد تولیدی<small class="text-danger">*</small></span>
+                            {{ form.producer_type }}
+                        </div>
+                    </div>
+                    <div class="w-100"></div>
+                    <div class="col-12 col-md-6" id="producer_type_container">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="producer-type-data-text">شناسه کسب و کار</span>
+                            {% render_field form.producer_type_data class="form-control" %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="d-md-flex justify-content-between align-items-center border border-top">
+                            <div class="d-md-flex">
+                                <div class="my-3 mx-2 bg-gray px-2 py-3">
+                                    <span>وضعیت پرونده:</span>
+                                    <span class="text-danger">پیش نویس</span>
+                                </div>
+                            </div>
+                            <div class="d-md-flex align-items-center">
+                                <div class="my-3 mx-2">
+                                    <button type="button" class="btn btn-forest px-3">
+                                        <i class="fa fa-info" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                                <div class="my-3 mx-2">
+                                    <a class="btn  btn-primary btn-maya"
+                                       href="{% url 'order_registration:main_data_list' %}"
+                                       type="button">انصراف</a>
+                                </div>
+                                <div class="my-3 mx-2">
+                                    <button class="btn  btn-primary btn-maya btn-submit" type="submit">
+                                        <span class="pe-1">بعدی</span><i class="fa fa-step-backward" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock main %}
+{% block js %}
+    <script>
+        personJsonList = '{% url 'supplier:person_json_list' %}';
+        companyJsonList = '{% url 'supplier:company_json_list' %}';
+    </script>
+    <script src="{% static 'order_registration/create_main_data.js' %}"></script>
+{% endblock js %}

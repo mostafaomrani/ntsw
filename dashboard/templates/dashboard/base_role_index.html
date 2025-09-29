@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load date_filters %}
+{% load ui_template_tag %}
+{% block title %}
+    بارگذاری صلاحیت‌ها
+{% endblock title %}
+{% block breadcrumbs %}
+    {% breadcrumbs %}
+{% endblock breadcrumbs %}
+{% block main %}
+
+<div class="dashboard-page">
+    <div class="row mb-3">
+    <!-- کارت 1 -->
+        <div class="col-12 col-lg-4 mb-3">
+            <div class="d-flex align-items-center bg-white rounded shadow-sm overflow-hidden">
+                <!-- آیکون -->
+                <div class="bg-bs text-white d-flex align-items-center justify-content-center px-3 py-4">
+                    <a class="text-white"
+                    href="{% url 'upload_qualifications:business_cards' %}">
+                        <i class="fa fa-user-plus fa-2x"></i>
+                    </a>
+                </div>
+                <!-- متن -->
+                <div class="flex-grow-1 px-3 py-3 d-flex align-items-center justify-content-between">
+                    <h5 class="m-0 text-bs">بارگذاری صلاحیت‌ها</h5>
+                    <div class="databox-state bg-first"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- کارت 2 -->
+        <div class="col-12 col-lg-4 mb-3">
+            <div class="d-flex align-items-center bg-white rounded shadow-sm overflow-hidden">
+                <div class="bg-fg text-white d-flex align-items-center justify-content-center px-3 py-4">
+                    <i class="fa fa-user-plus fa-2x"></i>
+                </div>
+                <div class="flex-grow-1 px-3 py-3 d-flex align-items-center justify-content-between">
+                    <h5 class="m-0 text-fg">معرفی شخصیت حقوقی</h5>
+                    <div class="databox-state bg-twice"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- کارت 3 -->
+        <div class="col-12 col-lg-4 mb-3">
+            <div class="d-flex align-items-center bg-white rounded shadow-sm overflow-hidden">
+                <div class="bg-mb text-white d-flex align-items-center justify-content-center px-3 py-4">
+                    <i class="fa fa-user-plus fa-2x"></i>
+                </div>
+                <div class="flex-grow-1 px-3 py-3 d-flex align-items-center justify-content-between">
+                    <h5 class="m-0 text-mb">اخذ نقش تاجر داخلی</h5>
+                    <div class="databox-state bg-themethird"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include "dashboard/partials/dashboard_alert.html" %}
+</div>
+
+<style>
+.databox-state {
+	height: 24px;
+	width: 24px;
+	-webkit-border-radius: 30%;
+	-webkit-background-clip: padding-box;
+	-moz-border-radius: 30%;
+	-moz-background-clip: padding;
+	border-radius: 30%;
+	background-clip: padding-box;
+	background-color: #e5e5e5;
+	text-align: center;
+	-webkit-box-shadow: 0 0 3px rgba(0,0,0,.2);
+	-moz-box-shadow: 0 0 3px rgba(0,0,0,.2);
+	box-shadow: 0 0 3px rgba(0,0,0,.2);
+	border: 2px solid #fff;
+}
+.bg-first {
+	background-color: #fb6e52 !important;
+}
+.bg-twice {
+	background-color: #54a73d !important;
+}
+.bg-themethird {
+	background-color: #5db2ff !important;
+}
+.dashboard-page {
+	padding: 20px;
+}
+</style>
+
+{% endblock main %}

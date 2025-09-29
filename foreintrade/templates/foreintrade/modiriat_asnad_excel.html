@@ -1,0 +1,327 @@
+{% extends "base.html" %}
+{% load static %}
+{% load date_filters %}
+{% load widget_tweaks %}
+{% load ui_template_tag %}
+
+{% block title %}
+مدیریت اسناد اکسل
+{% endblock title %}
+
+{% block breadcrumbs %}
+{% breadcrumbs 'عملیات تجارت داخلی' '#' 'مدیریت اسناد اکسل' '#' %}
+{% endblock breadcrumbs %}
+
+{% block page-title %}
+مدیریت اسناد اکسل 
+{% endblock page-title %}
+
+{% block main %}
+<div class="container-fluid">
+    <div class="bg-white p-3 request-main-data">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                <form id="frmSearch" novalidate="novalidate" class="fv-form fv-form-bootstrap">
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="card border-primary">
+                                <div class="card-header bg-primary text-white">
+                                    <h5 class="mb-0"><i class="fa fa-search"></i> نوار ابزار جستجو</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <!-- دسترسی سریع ثبت اسناد از طریق اکسل -->
+                                        <div class="col-md-12 mb-3" id="DV_ShortAccess">
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light" style="font-size: 14px; width: 265px !important">دسترسی سریع ثبت اسناد از طریق اکسل</span>
+                                                <div class="form-control" style="height: 58px; z-index: 10 !important">
+                                                    <!-- اظهار ورود / خروج کالا -->
+                                                    <div class="dropdown me-2">
+                                                        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownInputOutput" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i class="fa fa-download"></i> اظهار ورود / خروج کالا
+                                                        </button>
+                                                        <ul class="dropdown-menu child" aria-labelledby="dropdownInputOutput">
+                                                            <li><a class="dropdown-item" href="#" id="BTN_FirstInventory" modaltype="2"><img src="{% static 'images/excel_icon.png' %}" alt="" class="icon-size"> اظهار ورود کالا</a></li>
+                                                            <li><a class="dropdown-item" href="#" id="BTN_ProductionRecord" modaltype="3"><img src="{% static 'images/excel_icon.png' %}" alt="" class="icon-size"> اظهار تولید کالا</a></li>
+                                                            <li><a class="dropdown-item" href="#" id="BTN_ExitOfStuffs" modaltype="9"><img src="{% static 'images/excel_icon.png' %}" alt="" class="icon-size"> اظهار خروج کالا</a></li>
+                                                        </ul>
+                                                    </div>
+                                                    <!-- انتقال مالکیت و مکان -->
+                                                    <div class="dropdown me-2">
+                                                        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownTransfer" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i class="fa fa-download"></i> انتقال مالکیت و مکان
+                                                        </button>
+                                                        <ul class="dropdown-menu child" aria-labelledby="dropdownTransfer">
+                                                            <li><a class="dropdown-item" href="#" id="BTN_SellToMerchande" modaltype="4"><img src="{% static 'images/excel_icon.png' %}" alt="" class="icon-size"> فروش به تاجر</a></li>
+                                                            <li><a class="dropdown-item" href="#" id="BTN_SellToConsumer" modaltype="5"><img src="{% static 'images/excel_icon.png' %}" alt="" class="icon-size"> فروش به مصرف کننده</a></li>
+                                                            <li><a class="dropdown-item" href="#" id="BTN_WherehouseTransfer" modaltype="6"><img src="{% static 'images/excel_icon.png' %}" alt="" class="icon-size"> انتقال مکان</a></li>
+                                                            <li><a class="dropdown-item" href="#" id="BTN_GHA" modaltype="7"><img src="{% static 'images/excel_icon.png' %}" alt="" class="icon-size"> تحویل حق العمل کاری</a></li>
+                                                            <li class="hidden"><a class="dropdown-item" href="#" id="BTN_TaxFactor" modaltype="12"><img src="{% static 'images/excel_icon.png' %}" alt="" class="icon-size"> فاکتور مالیاتی</a></li>
+                                                        </ul>
+                                                    </div>
+                                                    <!-- اسناد شناسه رهگیری -->
+                                                    <div class="dropdown me-2">
+                                                        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownTracking" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i class="fa fa-download"></i> اسناد شناسه رهگیری
+                                                        </button>
+                                                        <ul class="dropdown-menu child" aria-labelledby="dropdownTracking">
+                                                            <li><a class="dropdown-item" href="#" id="BTN_SellToMerchandeTracking" modaltype="8"><img src="{% static 'images/excel_icon.png' %}" alt="" class="icon-size"> فروش به تاجر اقلام دیجیتال(ماینر)</a></li>
+                                                            <li class="hidden"><a class="dropdown-item" href="#" id="BTN_TrackingClothingSell" modaltype="11"><img src="{% static 'images/excel_icon.png' %}" alt="" class="icon-size"> فروش پوشاک رهگیری دار</a></li>
+                                                            <li><a class="dropdown-item" href="#" id="BTN_HomeApp" modaltype="10"><img src="{% static 'images/excel_icon.png' %}" alt="" class="icon-size"> فروش به مصرف کننده رهگیری دار</a></li>
+                                                        </ul>
+                                                    </div>
+                                                    <!-- اظهار ورود/تولید کالاهای رهگیری دار -->
+                                                    <div class="dropdown me-2">
+                                                        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownTrackingItems" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i class="fa fa-download"></i> اظهار ورود/تولید کالاهای رهگیری دار
+                                                        </button>
+                                                        <ul class="dropdown-menu child" aria-labelledby="dropdownTrackingItems">
+                                                            <li><a class="dropdown-item" href="#" id="BTN_SimCard" modaltype="1"><img src="{% static 'images/excel_icon.png' %}" alt="" class="icon-size"> اقلام سیم کارت خور</a></li>
+                                                            <li><a class="dropdown-item" href="#" id="BTN_Car" modaltype="2"><img src="{% static 'images/excel_icon.png' %}" alt="" class="icon-size"> خودرو سواری</a></li>
+                                                            <li><a class="dropdown-item" href="#" id="BTN_HomeDigitalApp" modaltype="3"><img src="{% static 'images/excel_icon.png' %}" alt="" class="icon-size"> لوازم خانگی</a></li>
+                                                            <li><a class="dropdown-item" href="#" id="BTN_DigitalApp" modaltype="4"><img src="{% static 'images/excel_icon.png' %}" alt="" class="icon-size"> اقلام دیجیتال</a></li>
+                                                            <li><a class="dropdown-item" href="#" id="BTN_TrackingSpares" modaltype="5"><img src="{% static 'images/excel_icon.png' %}" alt="" class="icon-size"> لوازم یدکی مشمول رهگیری</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- از تاریخ - تا تاریخ -->
+                                        <div class="col-md-4 mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light">از تاریخ - تا تاریخ</span>
+                                                <input type="text" name="txtStartDate" id="txtStartDate" autocomplete="off" placeholder="از تاریخ" class="persianDatePicker form-control pwt-datepicker-input-element" style="width: 50%">
+                                                <input type="text" name="txtEndDate" id="txtEndDate" autocomplete="off" placeholder="تا تاریخ" class="persianDatePicker form-control pwt-datepicker-input-element" style="width: 50%">
+                                            </div>
+                                        </div>
+                                        <!-- نوع سند -->
+                                        <div class="col-md-4 mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light">نوع سند</span>
+                                                <select id="cmbDocsType" name="cmbDocsType" class="form-control">
+                                                    <option value="">انتخاب کنید</option>
+                                                    <option value="1">اظهار ورود کالا</option>
+                                                    <option value="2">اظهار تولید</option>
+                                                    <option value="3">اظهار خروج کالا</option>
+                                                    <option value="4">فروش به تاجر</option>
+                                                    <option value="7">حق العمل کاری</option>
+                                                    <option value="8">فاکتور الکترونیک</option>
+                                                    <option value="9">خرده فروشی</option>
+                                                    <option value="11">انتقال مکان</option>
+                                                    <option value="12">فروش به مصرف کننده رهگیری دار</option>
+                                                    <option value="13">تعیین وضعیت اسناد ورودی</option>
+                                                    <option value="14">تعیین وضعیت اسناد خروجی</option>
+                                                    <option value="17">استعلام فروش به تاجر</option>
+                                                    <option value="18">استعلام فروش به مصرف کننده</option>
+                                                    <option value="19">استعلام تحویل حق العمل کاری</option>
+                                                    <option value="20">استعلام فروش به مصرف کننده رهگیری دار</option>
+                                                    <option value="21">استعلام اظهار ورود کالا</option>
+                                                    <option value="22">استعلام اظهار خروج کالا</option>
+                                                    <option value="23">استعلام وضعیت نقش</option>
+                                                    <option value="24">صورتحساب مالیاتی</option>
+                                                    <option value="25">استعلام خرده فروشی پوشاک</option>
+                                                    <option value="26">خرده فروشی پوشاک</option>
+                                                    <option value="29">انتقال مالکیت و مکان طلا</option>
+                                                    <option value="30">استعلام انتقال مالکیت و مکان طلا</option>
+                                                    <option value="31">ارسال موجودی روغن موتور توسط ادمین</option>
+                                                    <option value="33">اظهار تولید/ورود کالاهای رهگیری دار</option>
+                                                    <option value="34">استعلام اظهار برآورد کالا</option>
+                                                    <option value="35">اظهار برآورد کالا</option>
+                                                    <option value="36">تبدیل خلوص طلا (عیار)</option>
+                                                    <option value="38">افزودن شماره مالیاتی به اسناد</option>
+                                                    <option value="39">اظهار خروج کالاهای رهگیری دار</option>
+                                                    <option value="40">استعلام اظهار خروج کالاهای رهگیری دار</option>
+                                                    <option value="41">استعلام سند با فایل اکسل</option>
+                                                    <option value="42">نامشخص</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <!-- وضعیت -->
+                                        <div class="col-md-4 mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light">وضعیت</span>
+                                                <select id="cmbDocsStatus" name="cmbDocsStatus" class="form-control select-status">
+                                                    <option value="">انتخاب کنید</option>
+                                                    <option value="0">نامشخص</option>
+                                                    <option value="1">در حال پردازش</option>
+                                                    <option value="2">تایید شده</option>
+                                                    <option value="3">دارای خطا</option>
+                                                    <option value="4">عدم تایید</option>
+                                                    <option value="5">عملیات ناموفق</option>
+                                                    <option value="7">در انتظار پردازش</option>
+                                                    <option value="9">ثبت در سامانه رهگیری</option>
+                                                    <option value="10">لغو شده توسط کاربر</option>
+                                                    <option value="11">لغو شده توسط ادمین</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <!-- شماره پیگیری -->
+                                        <div class="col-md-3 mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light">شماره پیگیری</span>
+                                                <input type="number" id="SearchTerm" min="0" name="SearchTerm" autocomplete="off" class="form-control" data-fv-field="SearchTerm">
+                                            </div>
+                                            <small style="display: none;" class="help-block" data-fv-validator="greaterThan" data-fv-for="SearchTerm" data-fv-result="NOT_VALIDATED">لطفا مقدار بزرگتر یا مساوی با 0 وارد فرمایید</small>
+                                            <small style="display: none;" class="help-block" data-fv-validator="integer" data-fv-for="SearchTerm" data-fv-result="NOT_VALIDATED">لطفا یک عدد صحیح وارد فرمایید</small>
+                                        </div>
+                                        <!-- دکمه‌های جستجو و لغو -->
+                                        <div class="col-md-3 mb-3">
+                                            <div class="input-group">
+                                                <button type="button" id="btnSearch" name="btnSearch" class="btn btn-primary me-2"><i class="fa fa-search"></i> جستجو</button>
+                                                <button type="button" id="btnCancellSearch" name="btnCancellSearch" class="btn btn-warning"><i class="fa fa-remove"></i> لغو فیلتر</button>
+                                            </div>
+                                        </div>
+                                        <!-- پیام هشدار -->
+                                        <div class="col-md-12 mb-3">
+                                            <div class="alert alert-warning border-primary" style="background-color: #f6e8a8; margin-bottom: 0;">
+                                                <p style="font-size: 15px">
+                                                    <strong><i class="fa fa-circle" style="color: #024158;"></i></strong>&nbsp;&nbsp;
+                                                    توجه: در صورتی که فایل اکسل دارای خطا باشد، تنها ردیف‌هایی که دارای خطا هستند اصلاح شده و مجددا بارگذاری شود و اسناد بدون خطا از فایل اکسل اولیه حذف شود
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .input-group {
+	flex-wrap: initial;
+}
+.input-group-text.bg-light {
+    width: 120px;
+}
+.btn-purple-csm {
+    background-color: #6f42c1 !important;
+    color: #fff;
+}
+.btn-purple-csm:hover {
+    background-color: #5a32a3 !important;
+}
+.bg-themeprimary {
+    background-color: #024158 !important;
+    color: white;
+}
+.card.border-primary {
+    border-color: #024158 !important;
+}
+.alert.border-primary {
+    border-left: 4px solid #024158 !important;
+}
+.hidden {
+    display: none;
+}
+.mb-3 {
+    margin-bottom: 1rem !important;
+}
+.me-2 {
+    margin-left: 0.5rem !important;
+}
+.dropdown-menu {
+    min-width: 100%;
+    text-align: right;
+}
+.dropdown-menu.child {
+    z-index: 1000;
+}
+.icon-size {
+    width: 20px;
+    height: 20px;
+    margin-left: 5px;
+}
+.form-control {
+	display: flex;
+}
+</style>
+
+{% endblock main %}
+
+{% block js %}
+<!-- بارگذاری jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- بارگذاری Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    // مدیریت Persian DatePicker
+
+    // باز کردن خودکار منوی دراپ‌داون با کلیک
+    $('.dropdown-toggle').on('click', function() {
+        var $dropdown = $(this).closest('.dropdown');
+        var $menu = $dropdown.find('.dropdown-menu');
+        if ($menu.hasClass('show')) {
+            $menu.removeClass('show');
+        } else {
+            $('.dropdown-menu').removeClass('show');
+            $menu.addClass('show');
+        }
+    });
+
+    // بستن منوها هنگام کلیک خارج از آن‌ها
+    $(document).on('click', function(e) {
+        if (!$(e.target).closest('.dropdown').length) {
+            $('.dropdown-menu').removeClass('show');
+        }
+    });
+
+    // رویداد کلیک برای آیتم‌های منوی دراپ‌داون
+    $('#DV_ShortAccess a[id^="BTN_"]').on('click', function(e) {
+        e.preventDefault();
+        var modalType = $(this).attr('modaltype');
+        $('#excelUploadModal').modal('show');
+        $('#excelUploadModalLabel').text('آپلود فایل اکسل برای ' + $(this).text().trim());
+    });
+
+    // رویداد کلیک برای دکمه جستجو
+    $('button[name="btnSearch"]').on('click', function() {
+        alert('جستجو غیرفعال است. لطفاً منطق جستجو را پیاده‌سازی کنید.');
+    });
+
+    // رویداد کلیک برای لغو فیلتر
+    $('button[name="btnCancellSearch"]').on('click', function() {
+        $('#frmSearch')[0].reset();
+        $('.persianDatePicker').persianDatepicker('clear');
+    });
+
+    // Modal برای آپلود اکسل
+    if (!$('#excelUploadModal').length) {
+        $('body').append(`
+            <div class="modal fade" id="excelUploadModal" tabindex="-1" aria-labelledby="excelUploadModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="excelUploadModalLabel">آپلود فایل اکسل</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="file" id="excelFileInput" accept=".xlsx,.xls" class="form-control">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+                            <button type="button" class="btn btn-primary" id="uploadExcelBtn">آپلود</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `);
+    }
+
+    $('#uploadExcelBtn').on('click', function() {
+        var fileInput = $('#excelFileInput')[0];
+        if (fileInput.files.length > 0) {
+            alert('آپلود فایل غیرفعال است. لطفاً منطق آپلود را پیاده‌سازی کنید.');
+        } else {
+            alert('لطفاً یک فایل انتخاب کنید');
+        }
+    });
+});
+</script>
+{% endblock js %}

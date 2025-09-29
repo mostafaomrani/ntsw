@@ -1,0 +1,406 @@
+<a href="{% url 'dashboard:business_role_dashboard' %}"
+   class="d-flex align-items-center link-body-emphasis text-decoration-none border-bottom text-black border-bottom py-2 ps-3 mt-5 border-top">
+    <i class="menu-icon fa fa-home"></i>
+    <span class="ps-2">صفحه اصلی</span></a>
+<ul class="list-unstyled ps-0">
+    <li class="mb-1 border-bottom">
+        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed ps-3"
+                data-bs-toggle="collapse"
+                data-bs-target="#home-collapse"
+                aria-expanded="false">
+            <i class="menu-icon fa fa-bar-chart-o"></i>
+            <span class="sidebar-button-text ps-2">عملیات پایه</span>
+        </button>
+        <div class="collapse dropdown-container" id="home-collapse">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
+                <li class="saidbar-dropdown-item">
+                    <a href="{% url 'upload_qualifications:business_cards' %}"
+                       class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">مدیریت نمایندگان</span></a>
+                </li>
+                <li class="saidbar-dropdown-item">
+                    <a href="#"
+                       class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">مدیریت کارتابل</span></a>
+                </li>
+                <li class="saidbar-dropdown-item">
+                    <a href="#"
+                       class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">بارگذاری صلاحیت‌ها</span></a>
+                </li>
+            </ul>
+        </div>
+    </li>
+    <li class="mb-1 border-bottom">
+        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed ps-3"
+                data-bs-toggle="collapse"
+                data-bs-target="#dashboard-collapse"
+                aria-expanded="false">
+            <i class="menu-icon fa fa-cubes"></i>
+            <span class="sidebar-button-text ps-2">عملیات شناسه کالا</span>
+        </button>
+        <div class="collapse dropdown-container" id="dashboard-collapse">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
+                <li class="saidbar-dropdown-item">
+                    <a href="#"
+                       class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">ثبت کالای جدید</span></a>
+                </li>
+                <li class="saidbar-dropdown-item">
+                    <a href="#"
+                       class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">فهرست کالاهای وارداتی</span></a>
+                </li>
+                <li class="saidbar-dropdown-item">
+                    <a href="#"
+                       class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">درخواست‌های در گردش</span></a>
+                </li>
+                <li class="saidbar-dropdown-item">
+                    <a href="#"
+                       class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">جستجوی کالا</span></a>
+                </li>
+            </ul>
+        </div>
+    </li>
+    <li class="mb-1 border-bottom">
+        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed ps-3"
+                data-bs-toggle="collapse"
+                data-bs-target="#business-collapse"
+                aria-expanded="false">
+            <i class="menu-icon fa fa-refresh"></i>
+            <span class="sidebar-button-text ps-2">عملیات تجارت خارجی</span>
+        </button>
+        <div class="collapse dropdown-container" id="business-collapse">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
+                <li class="saidbar-dropdown-item">
+                    <a href="#"
+                       class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">مدیریت گواهی بازرسی (IC)</span></a>
+                </li>
+                <li class="saidbar-dropdown-item">
+                    <a href="{% url 'supplier:supplier_list' %}"
+                       class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">مدیریت فروشندگان خارجی</span></a>
+                </li>
+                <li class="saidbar-dropdown-item">
+                    <a href="{% url 'order_registration:main_data_list' %}"
+                       class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">مدیریت پرونده ثبت سفارش</span></a>
+                </li>
+                <li class="saidbar-dropdown-item">
+                    <ul class="list-unstyled ps-0">
+                        <li class="mb-1">
+                            <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed ps-3"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#test-collapse"
+                                    aria-expanded="false">
+                                <span class="sidebar-button-text ps-2"></span>مدیریت مجوزها</span>
+                            </button>
+                            <div class="collapse ps-4" id="test-collapse">
+                                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
+                                    <li class="">
+                                        <a href="{% url 'upload_qualifications:business_cards' %}"
+                                           class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text"><small><small>مدیریت مجوز سیستمی سابقه واردات</small></small></span></a>
+                                    </li>
+                                    <li class="">
+                                        <a href="#"
+                                           class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text"><small><small>مدیریت ثبت سفارش با حالت بدون سابقه تا سقف ۵۰۰هزار</small></small></span></a>
+                                    </li>
+                                    <li class="">
+                                        <a href="#"
+                                           class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text"><small><small>مدیریت مجوز سیستمی سهمیه واردات</small></small></span></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <li class="saidbar-dropdown-item">
+                    <a href="#"
+                       class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text"><small><small>کالاهای دارای تاییدیه خدمات پس از فروش</small></small></span></a>
+                </li>
+            </ul>
+        </div>
+    </li>
+    <li class="mb-1 border-bottom">
+        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed ps-3"
+                data-bs-toggle="collapse"
+                data-bs-target="#currency"
+                aria-expanded="false">
+            <i class="menu-icon fa fa-money"></i>
+            <span class="sidebar-button-text ps-2">عملیات ارزی</span>
+        </button>
+        <div class="collapse dropdown-container" id="currency">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
+                <li class="saidbar-dropdown-item">
+                    <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#currencyAllocation"
+                            aria-expanded="false">تخصیص ارز</button>
+                    <div class="collapse" id="currencyAllocation">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
+                            <li>
+                                <a href="{% url 'currency_allocation:requests' %}"
+                                   class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">درخواست تخصیص ارز</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="saidbar-dropdown-item">
+                    <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#currencyDeal"
+                            aria-expanded="false">معامله ارز</button>
+                    <div class="collapse ps-3" id="currencyDeal">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
+                            <li>
+                                <a href="{% url 'currency_allocation:requests' %}"
+                                   class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">خرید ارز</span></a>
+                            </li>
+                            <li>
+                                <a href="{% url 'currency_allocation:requests' %}"
+                                   class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">فروش ارز</span></a>
+                            </li>
+                            <li>
+                                <a href="{% url 'currency_allocation:requests' %}"
+                                   class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">واگذاری پروانه و تهاتر ارزی</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="saidbar-dropdown-item">
+                    <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#currencyOriginDetection"
+                            aria-expanded="false">تعیین منشا ارز</button>
+                    <div class="collapse ps-3" id="currencyOriginDetection">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
+                            <li>
+                                <a href="{% url 'currency_origin_determining:banking_list' %}"
+                                   class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">منشا ارز بانکی</span></a>
+                            </li>
+                            <li>
+                                <a href="{% url 'currency_origin_determining:without_currency_transfer_list' %}"
+                                   class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">منشا ارز بدون انتقال ارز</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="saidbar-dropdown-item">
+                    <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#undertaking"
+                            aria-expanded="false">رفع تعهد ارزی</button>
+                    <div class="collapse ps-3" id="undertaking">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
+                            <li>
+                                <a href="{% url 'currency_origin_determining:banking_list' %}"
+                                   class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">خلاصه وضعیت تعهدات وارداتی</span></a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                   class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">آمار تعهدات صادراتی</span></a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                   class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">آمار تعهدات صادراتی</span></a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                   class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">درگاه ثبت ریالی</span></a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                   class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text"><small><small>مدیریت مصارف کوتاژهای صادراتی</small></small></span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </li>
+    <li class="mb-1 border-bottom">
+        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed ps-3"
+                data-bs-toggle="collapse"
+                data-bs-target="#logestic"
+                aria-expanded="false">
+            <i class="menu-icon fa fa-edit"></i>
+            <span class="sidebar-button-text ps-2">عملیات لجستیک خارجی</span>
+        </button>
+        <div class="collapse dropdown-container" id="logestic">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
+                <li class="saidbar-dropdown-item">
+                    <a href="#"
+                       class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">مدیریت بارنامه‌ها</span></a>
+                </li>
+                <li class="saidbar-dropdown-item">
+                    <a href="#"
+                       class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">نمایش اطلاعات قبوض انبار</span></a>
+                </li>
+            </ul>
+        </div>
+    </li>
+    <li class="mb-1 border-bottom">
+        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed ps-3"
+                data-bs-toggle="collapse"
+                data-bs-target="#l2"
+                aria-expanded="false">
+            <i class="menu-icon fa fa-edit"></i>
+            <span class="sidebar-button-text ps-2">عملیات شناسه رهگیری</span>
+        </button>
+        <div class="collapse dropdown-container" id="l2">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
+                <li class="saidbar-dropdown-item">
+                    <a href="#"
+                       class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">استعلام تجهیزات دارای سیم کارت</span></a>
+                </li>
+            </ul>
+        </div>
+    </li>
+    <li class="mb-1 border-bottom">
+        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed ps-3"
+                data-bs-toggle="collapse"
+                data-bs-target="#custom-operation-collapse"
+                aria-expanded="false">
+            <i style="color: rgb(38, 38, 38)"
+               class="menu-icon fa fa-check"
+               aria-hidden="true"></i>
+            <span class="sidebar-button-text ps-2"></span>عملیات گمرکی</span>
+        </button>
+        <div class="collapse dropdown-container" id="custom-operation-collapse">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
+                <li class="saidbar-dropdown-item">
+                    <ul class="list-unstyled ps-0">
+                        <li class="mb-1">
+                            <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed ps-3"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#import-collapse"
+                                    aria-expanded="false">
+                                <span class="sidebar-button-text ps-2"></span>واردات</span>
+                            </button>
+                            <div class="collapse ps-4" id="import-collapse">
+                                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
+                                    <li class="">
+                                        <a href="{% url 'upload_qualifications:business_cards' %}"
+                                           class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">مدیریت اظهارنامه واردات</span></a>
+                                    </li>
+                                    <li class="">
+                                        <a href="#"
+                                           class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">مشاهده سابقه واردات کالا</span></a>
+                                    </li>
+                                    <li class="">
+                                        <a href="#"
+                                           class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">مدیریت اظهارنامه واردات جدید</span></a>
+                                    </li>
+                                    <li class="">
+                                        <a href="#"
+                                           class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text"><small><small>مدیریت درخواست‌های حمل یکسره</small></small></span></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <li class="saidbar-dropdown-item">
+                    <ul class="list-unstyled ps-0">
+                        <li class="mb-1">
+                            <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed ps-3"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#export-collapse"
+                                    aria-expanded="false">
+                                <span class="sidebar-button-text ps-2"></span>صادرات</span>
+                            </button>
+                            <div class="collapse ps-4" id="export-collapse">
+                                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
+                                    <li class="">
+                                        <a href="{% url 'upload_qualifications:business_cards' %}"
+                                           class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">مدیریت اظهارنامه صادرات</span></a>
+                                    </li>
+                                    <li class="">
+                                        <a href="#"
+                                           class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">مدیریت مجوزهای صادرات</span></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <li class="saidbar-dropdown-item">
+                    <a href="#"
+                       class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">مدیریت اظهارنامه گمرکی</span></a>
+                </li>
+                <li class="saidbar-dropdown-item">
+                    <a href="#"
+                       class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">مدیریت مجوزهای ترخیص</span></a>
+                </li>
+            </ul>
+        </div>
+    </li>
+    <li class="mb-1 border-bottom">
+        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed ps-3"
+                data-bs-toggle="collapse"
+                data-bs-target="#financial-collapse"
+                aria-expanded="false">
+            <i class="menu-icon fa fa-bar-chart-o"></i>
+            <span class="sidebar-button-text ps-2">عملیات رتبه بندی و مالی</span>
+        </button>
+        <div class="collapse dropdown-container" id="financial-collapse">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
+                <li class="saidbar-dropdown-item">
+                    <a href="{% url 'upload_qualifications:business_cards' %}"
+                       class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">مالیات علی الحساب</span></a>
+                </li>
+                <li class="saidbar-dropdown-item">
+                    <a href="#"
+                       class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">مدیریت رتبه‌بندی</span></a>
+                </li>
+                <li class="saidbar-dropdown-item">
+                    <a href="#"
+                       class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">استفاده مجدد از سقف واردات</span></a>
+                </li>
+                <li class="saidbar-dropdown-item">
+                    <a href="#"
+                       class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text"><small>استفاده مجدد از سقف واردات</small></span></a>
+                </li>
+                <li class="saidbar-dropdown-item">
+                    <a href="#"
+                       class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">مدیریت صورت‌های مالی</span></a>
+                </li>
+            </ul>
+        </div>
+    </li>
+    <li class="mb-1 border-bottom">
+        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed ps-3"
+                data-bs-toggle="collapse"
+                data-bs-target="#o-collapse"
+                aria-expanded="false">
+            <i class="menu-icon fa fa-cubes"></i>
+            <span class="sidebar-button-text ps-2">سامانه عملیات ۱۲۴</span>
+        </button>
+        <div class="collapse dropdown-container" id="o-collapse">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
+                <li class="saidbar-dropdown-item">
+                    <a href="{% url 'upload_qualifications:business_cards' %}"
+                       class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">اعلام قیمت کالا و خدمات</span></a>
+                </li>
+            </ul>
+        </div>
+    </li>
+    <li class="mb-1 border-bottom">
+        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed ps-3"
+                data-bs-toggle="collapse"
+                data-bs-target="#insurance-collapse"
+                aria-expanded="false">
+            <i class="menu-icon fa fa-shield"></i>
+            <span class="sidebar-button-text ps-2">عملیات بیمه نامه</span>
+        </button>
+        <div class="collapse dropdown-container" id="insurance-collapse">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
+                <li class="saidbar-dropdown-item">
+                    <a href="{% url 'upload_qualifications:business_cards' %}"
+                       class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">مدیریت بیمه‌نامه واردات</span></a>
+                </li>
+                <li class="saidbar-dropdown-item">
+                    <a href="#"
+                       class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">مشاهده بیمه‌نامه‌های تجاری</span></a>
+                </li>
+                <li class="saidbar-dropdown-item">
+                    <a href="#"
+                       class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">مدیریت الحاقیه</span></a>
+                </li>
+            </ul>
+        </div>
+    </li>
+</ul>

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load ui_template_tag %}
+{% block title %}
+    معرفی شخصیت حقوقی
+{% endblock title %}
+{% block page-title %}
+    معرفی شخصیت حقوقی
+{% endblock page-title %}
+{% block breadcrumbs %}
+    {% breadcrumbs 'عملیات پایه' '#' 'معرفی شخصیت حقوقی' '#' %}
+{% endblock breadcrumbs %}
+{% block main %}
+    <div class="shadow mt-3 bg-white">
+        <form method="post" class="igtw-195 needs-validation" novalidate>
+            {% csrf_token %}
+            <div class="container-fluid  p-3 mt-3 pt-5">
+                {% include "partials/show_errors.html" %}
+                {% comment %} {{ form.as_p }} {% endcomment %}
+                <div class="row">
+                    {% widget_tweaks_field form.owner_type 'col-12 col-md-6' placeholder="انتخاب کنید..." required=True  control_class='p-0'  invalid_feedback='این فیلد الزامی است' %}
+                    {% widget_tweaks_field form.url 'col-12 col-md-6' %}
+                    {% widget_tweaks_field form.national_identifier 'col-12 col-md-6' required=True  invalid_feedback='این فیلد الزامی است' %}
+                    {% widget_tweaks_field form.fax 'col-12 col-md-6' required=True  invalid_feedback='این فیلد الزامی است' %}
+                    {% widget_tweaks_field form.email 'col-12 col-md-6' required=True  invalid_feedback='این فیلد الزامی است' %}
+                    {% widget_tweaks_field form.phone 'col-12 col-md-6' required=True  invalid_feedback='این فیلد الزامی است' %}
+                    <div class="d-flex justify-content-end">
+                        <div class="me-2">
+                            <button type="submit" class="btn btn-success btn-forest">ثبت اطلاعات شخصیت حقوقی</button>
+                        </div>
+                        <div>
+                            <a href="{% url 'dashboard:base_role_dashboard' %}"
+                               class="btn btn-danger btn-cinnabar">انصراف</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock main %}
+{% block js %}
+    <script>$('#id_owner_type').selectize();</script>
+{% endblock js %}

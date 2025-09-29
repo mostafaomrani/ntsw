@@ -1,0 +1,48 @@
+@import "common";
+
+$media: "";
+%anim-init#{$media} { @include anim-init; }
+
+$app-id: plainmodal;
+$app-content: #{$app-id}-content;
+$app-overlay: #{$app-id}-overlay;
+$app-overlay-hide: #{$app-overlay}-hide;
+$app-overlay-force: #{$app-overlay}-force;
+
+$plainoverlay-app-id: plainoverlay; // COPY from PlainOverlay
+
+$duration: 200ms; // COPY from PlainOverlay
+$overlay-bg: rgba(136, 136, 136, 0.6);
+
+.#{$app-id}.#{$plainoverlay-app-id} {
+  // Disable PlainOverlay style
+  background-color: transparent;
+  cursor: auto;
+}
+
+.#{$app-id} .#{$app-content} {
+  z-index: 9000;
+}
+
+.#{$app-id} .#{$app-overlay} {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: $overlay-bg;
+
+  @extend %anim-init#{$media};
+  transition-property: opacity;
+  transition-duration: $duration;
+  transition-timing-function: linear;
+  opacity: 1;
+
+  &.#{$app-overlay-hide} {
+    opacity: 0;
+  }
+
+  &.#{$app-overlay-force} {
+    transition-property: none; // Disable animation
+  }
+}

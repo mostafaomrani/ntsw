@@ -1,0 +1,19 @@
+{% extends "users/base.html" %}
+{% load static %}
+{% block title %}
+    تایید شماره موبایل
+{% endblock title %}
+{% block main %}
+    <div class="vh-100">
+        <div class="bg-white rounded shadow">
+            <p class="bg-primary text-white p-2 mb-0 rounded-top section-header ">انتخاب روش اعتبار سنجی</p>
+            <div class="d-grid gap-2 col-6 mx-auto py-5">
+                <a class="btn  btn-success btn-forest"
+                   href="{% url 'users:verify_phone' user_uuid %}">صحت سنجی و ارسال کد اعتبار سنجی به شماره تلفن همراه</a>
+                <button class="btn  btn-primary" type="button" disabled>
+                    اعتبار سنجی  شماره همراه جدید از طریق شماره گیری کد (USSD)
+                </button>
+            </div>
+        </div>
+    </div>
+{% endblock main %}

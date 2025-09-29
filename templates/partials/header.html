@@ -1,0 +1,104 @@
+{% load static %}
+<header class="container-fluid"
+        style="background-color: rgb(2, 65, 88)"
+        id="main-header">
+    <div class="d-flex justify-content-between align-items-center py-2">
+        <div>
+            <ul class="list-inline mb-0">
+                <li class="list-inline-item">
+                    <img src="{% static 'images/logo.png' %}" height="40px">
+                </li>
+                <li class="list-inline-item">
+                    <img src="{% static 'images/iran-ntsw-demo.webp' %}"
+                         alt="دموی سامانه جامع تجارت ایران"
+                         height="40px">
+                </li>
+                <li class="list-inline-item">
+                    <a href="#" class="text-white" aria-label="button" id="menu-toggle pt-1">
+                        <i class="fa fa-bars" aria-hidden="true" style="font-size: 1.25rem"></i>
+                    </a>
+                </li>
+                <li class="list-inline-item">
+                    <span class="text-white">{{ jalali_now }}</span>
+                </li>
+            </ul>
+        </div>
+        <div>
+            <ul class="list-inline text-white m-0">
+                <li class="list-inline-item">
+                    <a href="#" class="text-decoration-none text-white pe-3">
+                        <i class="icon fa fa-cogs"
+                           style="display: inline-block;
+                                  font-size: 1.25rem;
+                                  line-height: 32px"></i>
+                        <span class="pt-1">مدیریت حساب کاربری</span>
+                    </a>
+                </li>
+                <li class="list-inline-item">
+                    <a href="#" class="text-decoration-none text-white pe-3">
+                        <img src="{% static 'images/problem-icon.png' %}"
+                             class="header-image-icon">
+                        <span class="pt-1">ثبت و پیگیری مشکل</span>
+                    </a>
+                </li>
+                <li class="list-inline-item">
+                    <a href="#" class="text-decoration-none text-white">
+                        <img src="{% static 'images/iran-par.jpg' %}" class="header-image-icon">
+                        <span class="pt-1">{{ request.user.get_full_name|default:request.user.username }}</span></a>
+                </li>
+                <li class="list-inline-item">
+                    <a href="#" class="btn text-white">
+                        <i class="fa fa-envelope" style="font-size:1.25rem;" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li class="list-inline-item">
+                    <!-- Button trigger modal -->
+                    <button type="button"
+                            class="btn text-white"
+                            data-bs-toggle="modal"
+                            data-bs-target="#staticBackdrop">
+                        <i class="fa fa-power-off" aria-hidden="true" style="font-size: 1.25rem"></i>
+                    </button>
+                    <!-- Logout Modal -->
+                    <div class="modal fade"
+                         id="staticBackdrop"
+                         data-bs-backdrop="static"
+                         data-bs-keyboard="false"
+                         tabindex="-1"
+                         aria-labelledby="staticBackdropLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                                    <button type="button"
+                                            class="btn-close text-danger"
+                                            data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="post" action="{% url 'users:logout' %}">
+                                        {% csrf_token %}
+                                        <div>
+                                            <i class="fa fa-question-circle"
+                                               aria-hidden="true"
+                                               style="color: rgb(237, 78, 42)"></i>
+                                            <span class="ps-3 text-dark">آیا قصد دارید از سیستم خارج شوید؟</span>
+                                        </div>
+                                        <div class="text-end">
+                                            <button class="btn btn btn-cinnabar" type="submit">خروج</button>
+                                            <button type="button"
+                                                    class="btn btn-light rounded-2px"
+                                                    data-bs-dismiss="modal">انصراف</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% comment %} End logout modal {% endcomment %}
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>

@@ -1,0 +1,155 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" data-bs-theme="auto" dir="rtl">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author"
+              content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+        <title>
+            دموی سامانه جامع تجارت-
+            {% block title %}
+            {% endblock title %}
+        </title>
+        {% block head %}
+        {% endblock head %}
+        <link href="{% static 'font-awesome-4.7.0/css/font-awesome.min.css' %}"
+              rel="stylesheet">
+        <link rel="stylesheet"
+              href="{% static 'bootstrap-5.2.3/css/bootstrap.rtl.css' %}">
+        <link href="{% static 'selectize-master/css/selectize.css' %}"
+              rel="stylesheet">
+        <link href="{% static 'bootstrap-datepicker/css/bootstrap-datepicker.min.css' %}"
+              rel="stylesheet">
+        <link href="{% static 'css/sidebars.css' %}" rel="stylesheet">
+        <link href="{% static 'css/style.css' %}" rel="stylesheet">
+        <script>var mainURL = '{{ protocol}}';
+            mainURL +='{{ request.META.HTTP_HOST }}';
+            console.log(mainURL);
+        </script>
+    </head>
+    <body>
+        {% include "partials/header.html" %}
+        <section class="d-flex flex-nowrap">
+            {% include "partials/sidebar.html" %}
+            <main class="bg-gray flex-fill">
+                <div class="container-fluid mt-3">
+                    <div class="d-md-flex justify-content-between">
+                        <div class="col-lg-8">
+                            {% block breadcrumbs %}
+                            {% endblock breadcrumbs %}
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="input-group mb-3 w-100">
+                                <label class="input-group-text" for="inputGroupSelect01">نقش جاری </label>
+                                <div class="btn-group flex-grow-1">
+                                    <button type="button"
+                                            class="btn btn-light dropdown-toggle border rounded-0 rounded-0 rounded-end  w-100 text-start"
+                                            data-bs-toggle="dropdown"
+                                            aria-expanded="true">
+                                            {{ request.user.active_role.title }}
+                                    </button>
+                                    <ul class="dropdown-menu" style="width: 100%;">
+                                        {% for role in roles_data %}
+                                            <li>
+                                                <a class="dropdown-item" href="{% url 'dashboard:base_role_dashboard' %}?activate={{ role.code }}">
+                                                    {{ role.title }}
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-md-flex justify-content-between mb-3 page-title">
+                        <div class="p-3">
+                            {% block page-title %}
+                            {% endblock page-title %}
+                        </div>
+                        <div>
+                            <ul class="list-inline mb-0">
+                                <li class="list-inline-item">
+                                    <span class="p-3">
+                                        <span>زمان باقی مانده:</span><span class="border rounded bg-light py-1 px-2"
+      id="countdown"
+      data-timeout="{{ session_cookie_age }}">30:00</span>
+                                    </span>
+                                </li>
+                                <li class="list-inline-item">
+                                    <button class="btn text-secondary p-3 btn-f-s" type="button">
+                                        <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+                                    </button>
+                                </li>
+                                <li class="list-inline-item">
+                                    <button class="btn text-secondary p-3 btn-s-t" type="button">
+                                        <i class="fa fa-arrows-h" aria-hidden="true"></i>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid">
+                    {% include "partials/message.html" %}
+                    {% block main %}
+                    {% endblock main %}
+                </div>
+            </main>
+        </section>
+        {% comment %} message modal for use in all page {% endcomment %}
+        <div class="modal fade"
+             id="MessageModal"
+             tabindex="-1"
+             aria-labelledby="MessageModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="MessageModalLabel"></h1>
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">متوجه شدم</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-top" type="button" id="go-top" onclick="topFunction()">
+            <i class="fa fa-arrow-circle-up" aria-hidden="true"></i>
+        </button>
+        <script src="{% static 'bootstrap-5.2.3/js/bootstrap.bundle.js' %}"></script>
+        <script src="{% static 'js/jquery.min.js' %}"></script>
+        <script src="{% static 'overseas_supplier/anseki-plain-modal/plain-modal.min.js' %}"></script>
+        <script src="{% static 'selectize-master/js/selectize.min.js' %}"></script>
+        <script src="{% static 'bootstrap-datepicker/js/bootstrap-datepicker.min.js' %}"></script>
+        <script src="{% static 'bootstrap-datepicker/locales/bootstrap-datepicker.fa.min.js' %}"
+                charset="UTF-8"></script>
+        <script src="{% static 'js/dashboard-main.js' %}"></script>
+        {% block js %}
+        {% endblock js %}
+
+        <script>
+            $("#save_tajer_role").click(function () {
+                $(".show_register_form_tajer").show(); 
+                $(".show_tajer_role_list").hide()
+            });
+
+            $("#show_register_form_tajer_list").click(function () {
+                $(".show_register_form_tajer").hide(); 
+                $(".show_tajer_role_list").show()
+            });
+
+
+            
+        </script>
+
+    </body>
+</html>

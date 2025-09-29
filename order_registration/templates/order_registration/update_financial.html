@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% load static %}
+{% load date_filters %}
+{% load widget_tweaks %}
+{% load date_filters %}
+{% block title %}
+    پرونده ثبت سفارش
+{% endblock title %}
+{% block page-title %}
+    مدیریت پرونده
+{% endblock page-title %}
+{% block head %}
+    <link href="{% static 'selectize-master/css/selectize.css' %}"
+          rel="stylesheet">
+    <link href="{% static 'bootstrap-datepicker/css/bootstrap-datepicker.min.css' %}"
+          rel="stylesheet">
+{% endblock head %}
+{% block main %}
+    <nav class="" aria-label="breadcrumb">
+        <ol class="breadcrumb order-registration-breadcrumb">
+            <li class="breadcrumb-item border-bottom border-top px-4 py-3  processed">
+                <strong class="outline-badge">{% include "order_registration/svg/tick.html" %}</strong>
+                <strong>اطلاعات اصلی</strong>
+            </li>
+            <li class="breadcrumb-item border-bottom border-top px-4 ps-5 py-3 processed"
+                aria-current="page">
+                <strong class="outline-badge">{% include "order_registration/svg/tick.html" %}</strong>
+                <strong>گمرکی و حمل و نقل</strong>
+            </li>
+            <li class="breadcrumb-item border-bottom border-top px-4 ps-5 py-3 active"
+                aria-current="page">
+                <strong class="outline-badge">۳</strong>
+                <strong>مالی و بانکی</strong>
+            </li>
+            <li class="breadcrumb-item border-bottom border-top px-4 ps-5 py-3"
+                aria-current="page">
+                <strong class="outline-badge">۴</strong>
+                <strong>کالاهای پرونده</strong>
+            </li>
+            <li class="breadcrumb-item border-bottom border-top px-4 ps-5 py-3"
+                aria-current="page">
+                <strong class="outline-badge">۵</strong>
+                <strong>مستندات پرونده</strong>
+            </li>
+        </ol>
+    </nav>
+    <div class="container-fluid bg-white py-5">
+        <form method="post" class="needs-validation financial-form" novalidate>
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-12 mb-3 pt-3">
+                    <span class="px-4 py-2 border-start border-navy border-4 bg-white text-center section-title">اطلاعات مالی و بانکی</span>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">{{ form.proforma_amount.label }}</span>
+                            {% render_field form.proforma_amount class="form-control" %}
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">{{ form.currency_type.label }}*</span>
+                            {% render_field form.currency_type class="form-control p-0" placeholder="جستجو کنید" %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">{{ form.off_amount.label }}</span>
+                            {% render_field form.off_amount class="form-control p-0" %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">{{ form.currency_operation_type.label }}*</span>
+                            {% render_field form.currency_operation_type class="form-control p-0" placeholder="جستجو کنید" dir="rtl" %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="bank-container">
+                    <div class="col-12 col-md-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">{{ form.bank.label }}*</span>
+                            {% render_field form.bank class="form-control p-0" dir="rtl" placeholder="جستجو کنید" %}
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">{{ form.bank_branch.label }}*</span>
+                            {% render_field form.bank_branch class="form-control p-0" placeholder="جستجو کنید" %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">{{ form.curency_supply.label }}*</span>
+                            {% render_field form.curency_supply class="form-control p-0" placeholder="جستجو کنید" %}
+                        </div>
+                    </div>
+                </div>
+                {% if form.shipping_price %}
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon2">{{ form.shipping_price.label }}</span>
+                                {% render_field form.shipping_price class="form-control" %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">{{ form.other_price.label }}</span>
+                            {% render_field form.other_price class="form-control" %}
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">{{ form.payment_type.label }}</span>
+                            {% render_field form.payment_type class="form-control p-0" placeholder="جستجو کنید" %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="d-md-flex justify-content-between align-items-center border border-top">
+                            <div class="d-md-flex">
+                                <div class="my-3 mx-2 bg-gray px-2 py-3">
+                                    <span>وضعیت پرونده:</span>
+                                    <span class="text-danger">پیش نویس</span>
+                                </div>
+                            </div>
+                            <div class="d-md-flex align-items-center">
+                                <div class="my-3 mx-2">
+                                    <a class="btn  btn-primary btn-maya"
+                                       href="{% url 'order_registration:main_data_list' %}"
+                                       type="button">انصراف</a>
+                                </div>
+                                <div class="my-3 mx-2">
+                                    <a class="btn  btn-primary btn-maya"
+                                       type="button"
+                                       href="{% url 'order_registration:update_customs_and_shipping' object.main_data.custom_and_shipping.pk %}">
+                                        <i class="fa fa-step-forward" aria-hidden="true"></i>
+                                        <span class="ps-1">قبلی</span>
+                                    </a>
+                                </div>
+                                <div class="my-3 mx-2">
+                                    <button class="btn  btn-primary btn-maya" type="submit">
+                                        <span class="pe-1">بعدی</span>
+                                        <i class="fa fa-step-backward" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock main %}
+{% block js %}
+    <script src="{% static 'order_registration/financial.js' %}"></script>
+{% endblock js %}

@@ -1,0 +1,11 @@
+<div class="{% if class %} {{ class }} {% else %} col-12 col-md-6 col-lg-4 {% endif %}">
+    <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon2">{{ label }}</span>
+        <input value="{{ value }}"
+               class="form-control"
+               type="{{ type }}"
+               {{ disabled }}
+               name="{{ name }}"
+               id="{{ input_id }}">
+    </div>
+</div>

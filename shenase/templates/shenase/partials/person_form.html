@@ -1,0 +1,326 @@
+{% load static %}
+{% load widget_tweaks %}
+<form class="row personal-form needs-validation"
+      method="post"
+      id="personal-form"
+      action="{% url 'supplier:create_person' %}"
+      novalidate
+      enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="col-12">
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                <ul>
+                    {% for field in form %}
+                        {% if field.errors %}
+                            <li>
+                                خطاهای :{{ field.label }}
+                                <ul>
+                                    {% for error in field.errors %}<li>{{ error }}</li>{% endfor %}
+                                </ul>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+    <div class="col col-md-6">
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon2">{{ form.first_name.label }}<small class="text-danger">*</small></span>
+            {% render_field form.first_name class="form-control" %}
+            <small class="invalid-feedback">پرکردن این فیلد الزامی است</small>
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon2">{{ form.last_name.label }}<small class="text-danger">*</small></span>
+            {% render_field form.last_name class="form-control" %}
+            <small class="invalid-feedback">پرکردن این فیلد الزامی است</small>
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon2">{{ form.father_name.label }}<small class="text-danger">*</small></span>
+            {% render_field form.father_name class="form-control" %}
+            <small class="invalid-feedback">پرکردن این فیلد الزامی است</small>
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon2">{{ form.mother_name.label }}</span>
+            {% render_field form.mother_name class="form-control" %}
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon2">{{ form.grandfather_name.label }}</span>
+            {% render_field form.grandfather_name class="form-control" %}
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon2">{{ form.country.label }}<small class="text-danger">*</small></span>
+            {% render_field form.country class="form-control p-0"  placeholder="جستجو کنید" %}
+            <small class="invalid-feedback">پرکردن این فیلد الزامی است</small>
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon2">{{ form.city.label }}</span>
+            {% render_field form.city class="form-control" %}
+            <small class="invalid-feedback">پرکردن این فیلد الزامی است</small>
+        </div>
+        <div class="d-flex justify-content-start mb-3">
+            <p class="me-5">جنسیت*</p>
+            {{ form.gender }}
+            <small class="invalid-feedback">پرکردن این فیلد الزامی است</small>
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon2">{{ form.birthday.label }}<small class="text-danger">*</small></span>
+            {% render_field form.birthday class="form-control"  data-date-end-date="0d" %}
+            <small class="invalid-feedback">پرکردن این فیلد الزامی است</small>
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon2">{{ form.nationality.label }}<small class="text-danger">*</small></span>
+            {% render_field form.nationality class="show-top form-control p-0" placeholder="جستجو کنید" %}
+            <small class="invalid-feedback">پرکردن این فیلد الزامی است</small>
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon2">{{ form.maried.label }}<small class="text-danger">*</small></span>
+            {% render_field form.maried class="show-top form-control p-0" placeholder="جستجو کنید" %}
+            <small class="invalid-feedback">پرکردن این فیلد الزامی است</small>
+        </div>
+    </div>
+    <div class="col col-md-6">
+        <div class="d-flex  align-items-center align-items-stretch mb-3 rounded border"
+             style="background:#e9ecef">
+            <div class="align-self-center">
+                <span class="p-2">{{ form.personal_image.label }}</span>
+            </div>
+            <div>
+                <img src="{% static 'images/avatar.png' %}"
+                     class=""
+                     alt="تصویر پرسنل"
+                     id="img-preview"
+                     width="100px"
+                     height="100px">
+            </div>
+            <div class="align-self-center">
+                <label class="btn  btn-primary btn-maya mx-3" role="button">
+                    <i class="fa fa-folder-open"></i>
+                    <span class="ps-1">انتخاب تصویر...</span>
+                    {% render_field form.personal_image class="form-control d-none" id="choose-file" %}
+                </label>
+            </div>
+        </div>
+        <div class="input-group mb-3">
+            <span class="ps-1 shadow-sm border-start border-navy border-4 section-title text-danger">*اندازه تصویر باید کمتر از ۱۰۰ کیلو بایت باشد</span>
+        </div>
+        <div class="input-group mb-3">
+            <span class="px-4 py-2 border-start border-navy border-4 section-title">اطلاعات مدرک شناسایی</span>
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon2">{{ form.document_type.label }}<small class="text-danger">*</small></span>
+            {% render_field form.document_type class="form-control p-0" placeholder="جستجو کنید" %}
+            <small class="invalid-feedback">پرکردن این فیلد الزامی است</small>
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon2">{{ form.document_number.label }}<small class="text-danger">*</small></span>
+            {% render_field form.document_number class="form-control" %}
+            <small class="invalid-feedback">پرکردن این فیلد الزامی است</small>
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon2">{{ form.issue_date.label }}<small class="text-danger">*</small></span>
+            {% render_field form.issue_date class="form-control" data-date-end-date="0d" %}
+            <small class="invalid-feedback">پرکردن این فیلد الزامی است</small>
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon2">{{ form.expire_date.label }}<small class="text-danger">*</small></span>
+            {% render_field form.expire_date class="form-control" %}
+            <small class="invalid-feedback">پرکردن این فیلد الزامی است</small>
+        </div>
+        <button id="person-open-modal" class="btn btn-primary btn-maya" type="button">
+            <i class="fa fa-plus-square" aria-hidden="true"></i>
+            <span class="ps-1">انتخاب تصاویر مدارک</span>
+        </button>
+        <div id="person-document-container" class="bg-white p-4">
+            <div>
+                <div class="d-flex justify-content-between mb-3">
+                    <div>
+                        <h5>انتخاب تصاویر مدارک</h5>
+                    </div>
+                    <div>
+                        <button type="button" class="btn close-mm">
+                            <svg fill-rule="evenodd"
+                                 viewBox="64 64 896 896"
+                                 focusable="false"
+                                 data-icon="close"
+                                 width="1em"
+                                 height="1em"
+                                 fill="currentColor"
+                                 aria-hidden="true">
+                                <path d="M799.86 166.31c.02 0 .04.02.08.06l57.69 57.7c.04.03.05.05.06.08a.12.12 0 010 .06c0 .03-.02.05-.06.09L569.93 512l287.7 287.7c.04.04.05.06.06.09a.12.12 0 010 .07c0 .02-.02.04-.06.08l-57.7 57.69c-.03.04-.05.05-.07.06a.12.12 0 01-.07 0c-.03 0-.05-.02-.09-.06L512 569.93l-287.7 287.7c-.04.04-.06.05-.09.06a.12.12 0 01-.07 0c-.02 0-.04-.02-.08-.06l-57.69-57.7c-.04-.03-.05-.05-.06-.07a.12.12 0 010-.07c0-.03.02-.05.06-.09L454.07 512l-287.7-287.7c-.04-.04-.05-.06-.06-.09a.12.12 0 010-.07c0-.02.02-.04.06-.08l57.7-57.69c.03-.04.05-.05.07-.06a.12.12 0 01.07 0c.03 0 .05.02.09.06L512 454.07l287.7-287.7c.04-.04.06-.05.09-.06a.12.12 0 01.07 0z">
+                                </path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="alert alert-warning">
+                    <p>توجه اندازه هریک از مستندات انتخابی بایستی کمتر از 100 کیلوبایت باشد.</p>
+                    <p>فرمت های قابل قبول: jpg , .jpeg.</p>
+                </div>
+                <div class="d-flex">
+                    <div>{% render_field form.document class="form-control" id="person-document" %}</div>
+                    <div class="ms-2">
+                        <label class="btn  btn-primary btn-maya" for="person-document">انتخاب</label>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end mt-3">
+                    <div class="me-2">
+                        <button class="close-mm btn btn-forest btn-success"
+                                id="person-register-file"
+                                type="button">ثبت</button>
+                    </div>
+                    <div>
+                        <button class="close-mm btn btn-danger btn-cinnabar"
+                                id="person-cancellation-file">انصراف</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="input-group mb-3">
+            {% render_field form.document_flag class="form-check-input" required="" id="person-document-flag" %}
+            <small class="invalid-feedback">انتخاب یک فایل الزامی است.</small>
+        </div>
+    </div>
+    <div class="d-flex justify-content-between">
+        <div>
+            <button type="submit" class="btn  btn-primary btn-maya">ثبت اطلاعات</button>
+            <button type="reset" class="btn  btn-primary btn-maya">خالی کردن مقادیر</button>
+        </div>
+        <div>
+            <button type="button"
+                    class="btn  btn-danger btn-cinnabar"
+                    data-bs-dismiss="modal">بستن</button>
+        </div>
+    </div>
+</form>
+<script>
+$('#id_country, #id_nationality, #id_document_type, #id_maried').selectize({
+create: false,
+});
+$('#id_birthday, #id_issue_date, #id_expire_date').datepicker({
+      todayHighlight: true,
+      language:'fa',
+      autoclose:true,
+      weekStart:7,
+       format: 'yyyy-mm-dd',
+      rtl:true,
+      templates:{
+      leftArrow: '<i class="fa fa-chevron-right" aria-hidden="true"></i>',
+      rightArrow: '<i class="fa fa-chevron-left" aria-hidden="true"></i>'
+      }
+
+});
+function previewUploadingImage(inputId, ImgId) {
+        const chooseFile = document.getElementById(inputId);
+        const imgPreview = document.getElementById(ImgId);
+        chooseFile.addEventListener("change", function () {
+            getImgData();
+        });
+        function getImgData() {
+            const files = chooseFile.files[0];
+            if (files) {
+                const fileReader = new FileReader();
+                fileReader.readAsDataURL(files);
+                fileReader.addEventListener("load", function () {
+                    imgPreview.src = this.result
+                });
+            }
+        }
+    }
+previewUploadingImage('choose-file', 'img-preview')
+
+// اعتبارسنجی فرم
+const pforms = document.querySelectorAll('.needs-validation');
+Array.from(pforms).forEach(form => {
+    form.addEventListener('submit', event => {
+        let isFormValid = true;
+
+        // بررسی اعتبارسنجی پیش‌فرض فرم
+        if (!form.checkValidity()) {
+            isFormValid = false;
+        }
+        // اگر فرم معتبر نباشد، ارسال نشود
+        if (!isFormValid) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        form.querySelectorAll('select.selectized').forEach(select => {
+            const selectizeInstance = $(select)[0].selectize; // دسترسی به نمونه Selectize
+            if (!selectizeInstance) {
+                console.error('Selectize مقداردهی نشده است:', select);
+                return;
+            }
+            validateSelectize(selectizeInstance);
+
+            if (!selectizeInstance.getValue()) {
+                isFormValid = false;
+            }
+            // مثال: دریافت مقدار فعلی
+            console.log('مقدار فعلی:', selectizeInstance.getValue());
+
+        })
+
+        // اضافه کردن کلاس was-validated به فرم
+        form.classList.add('was-validated');
+    }, false);
+});
+
+// تابع اعتبارسنجی
+function validateSelectize(selectizeInstance) {
+    const control = selectizeInstance.$control[0];
+    if (!control || !control.parentElement) {
+        console.error('والد کنترل selectize یافت نشد.', control)
+    }
+    if (!selectizeInstance.getValue() || selectizeInstance.getValue().length === 0) {
+        control.parentElement.classList.add('is-invalid');
+    } else {
+        control.parentElement.classList.remove('is-invalid');
+    }
+}
+// پیدا کردن تمام Selectizeهای موجود
+$('select.selectized').each(function () {
+    const selectizeInstance = this.selectize;
+    if (!selectizeInstance) {
+        console.error('Selectize مقداردهی نشده است:', this);
+        return;
+    }
+    // افزودن رویداد onChange برای اعتبارسنجی
+    selectizeInstance.on('change', function () {
+        validateSelectize(selectizeInstance);
+    });
+
+    // افزودن رویداد onBlur برای اعتبارسنجی
+    selectizeInstance.on('blur', function () {
+        validateSelectize(selectizeInstance);
+    });
+});
+
+document_flag = document.getElementById('person-document-flag');
+document.getElementById('person-register-file').addEventListener('click', e => {
+    const fileInput = document.getElementById('person-document');
+    if (fileInput.files.length > 0) {
+
+        document_flag.checked = true;
+    } else {
+        document_flag.checked = false;
+    }
+});
+document.getElementById('person-cancellation-file').addEventListener('click', e => {
+    console.log('deswlwct');
+    document_flag.checked = false;
+});
+
+
+var personModal = new PlainModal(document.getElementById('person-document-container'));
+    var o = document.getElementById('person-open-modal');
+    o.addEventListener('click',e=>{
+        personModal.open();
+        
+    })
+    document.querySelectorAll('.close-mm').forEach(e => {
+        e.addEventListener('click',e=>{
+            personModal.close();
+        })
+    })
+</script>

@@ -1,0 +1,159 @@
+{% extends "users/base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+{% block title %}
+    ثبت نام
+{% endblock title %}
+{% block head %}
+    <link rel="stylesheet"
+          href="{% static 'persianDatepicker/css/persianDatepicker-default.css' %}">
+{% endblock head %}
+{% block main %}
+    <div class="bg-white rounded shadow">
+        <h4 class="text-white p-2 mb-0 rounded-top section-header">ثبت نام</h4>
+        <form method="post" class="p-4 needs-validation register-form" novalidate>
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-12">{{ form.errors }}</div>
+                <div class="col">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon2">{{ form.national_code.label }}*</span>
+                        {% render_field form.national_code class="form-control" %}
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon2">{{ form.birthday.label }}*</span>
+                        {% render_field form.birthday class="form-control" %}
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon2">{{ form.username.label }}*</span>
+                        {% render_field form.username class="form-control" %}
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon2">{{ form.password1.label }}*</span>
+                        {% render_field form.password1 class="form-control" %}
+                        <button id="toggle-password1"
+                                type="button"
+                                class="toggle-password rounded bg-white border"
+                                aria-label="Show password as plain text. Warning: this will display your password on the screen.">
+                        </button>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon2">{{ form.password2.label }}*</span>
+                        {% render_field form.password2 class="form-control" %}
+                        <button id="toggle-password-repeate"
+                                type="button"
+                                class="toggle-password rounded bg-white border"
+                                aria-label="Show password as plain text. Warning: this will display your password on the screen.">
+                        </button>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon2">{{ form.mobile.label }}*</span>
+                        {% render_field form.mobile class="form-control"  placeholder="مثال: 09121111111" %}
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="{{ form.phone.auto_id }}">{{ form.phone.label }}*</span>
+                        {% render_field form.phone class="form-control"  placeholder="مثال:02188888888" %}
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="{{ form.postal_code.auto_id }}">{{ form.postal_code.label }}*</span>
+                        {% render_field form.postal_code class="form-control" %}
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="{{ form.email.auto_id }}">{{ form.email.label }}</span>
+                        {% render_field form.email class="form-control" %}
+                    </div>
+                    <div class="form-check">
+                        {% render_field form.use_2fa class="form-check-input" %}
+                        <label class="form-check-label" for="{{ form.use_2fa.auto_id }}">{{ form.use_2fa.label }}</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <p>تصویر پرسنلی</p>
+                    <div>
+                        <div class="w-50">
+                            <img src="{% static 'images/avatar.png' %}"
+                                 class="img-fluid rounded-top"
+                                 alt="تصویر پرسنل"
+                                 id="img-preview"
+                                 width="100%"
+                                 height="100%%">
+                            <label class="btn  btn-primary btn-maya w-100 rounded-0 rounded-bottom"
+                                   role="button">
+                                <span style="font-size:1.3rem !important;"><i class="fa fa-folder-open"></i> انتخاب تصویر...</span>
+                                {% render_field form.avatar class="hidden-image-input d-none" id="choose-file" %}
+                            </label>
+                        </div>
+                    </div>
+                    <p>
+                        <small>اندازه تصویر بایستی کمتر از ۲۰۰KB باشد</small>
+                    </p>
+                </div>
+            </div>
+            <div class="d-flex justify-content-between mt-5">
+                <div>
+                    <a href="{% url 'users:login' %}" class="btn btn-light">بازگشت</a>
+                </div>
+                <div>
+                    <button type="submit"
+                            class="btn  btn-primary btn-maya"
+                            style="font-size:1.1rem">
+                        <i class="btn-label fa fa-step-backward btn-submit"
+                           style="border-left: 1px solid rgb(83, 160, 230);
+                                  border-radius: 2px 0px 0px 2px"></i>
+                        ذخیره اطلاعات و ادامه
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock main %}
+{% block js %}
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'persianDatepicker/js/persianDatepicker.min.js' %}"></script>
+    <script>
+	//show user avatar after select file
+        const chooseFile = document.getElementById("choose-file");
+        const imgPreview = document.getElementById("img-preview");
+        chooseFile.addEventListener("change", function () {
+            getImgData();
+            console.log('ok');
+          });
+          function getImgData() {
+            const files = chooseFile.files[0];
+            if (files) {
+                console.log('alert ok');
+              const fileReader = new FileReader();
+              fileReader.readAsDataURL(files);
+              fileReader.addEventListener("load", function () {
+                imgPreview.src = this.result
+              });    
+            }
+          }
+
+
+		const forms = document.querySelectorAll('.needs-validation')
+		// validate form with bootstrap
+		Array.from(forms).forEach(form => {
+		form.addEventListener('submit', event => {
+		if (!form.checkValidity()) {
+		
+			event.preventDefault()
+			event.stopPropagation()
+		}
+		form.classList.add('was-validated')
+		}, false)
+	})
+
+
+	/*آپدیت فیلد نام کاربری موقع تغییر کد ملی*/
+	const nationalCode = document.getElementById('id_national_code');
+	nationalCode.addEventListener('change',e=>{
+	document.getElementById('id_username').value = e.target.value;
+	})
+	
+	//create persian date picker
+	  $("#id_birthday").persianDatepicker();
+    </script>
+{% endblock js %}

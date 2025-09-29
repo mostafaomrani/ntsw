@@ -1,0 +1,73 @@
+{
+  "name": "plain-modal",
+  "version": "1.0.34",
+  "title": "PlainModal",
+  "description": "The simple library for customizable modal window.",
+  "keywords": [
+    "modal",
+    "popup",
+    "dialog",
+    "draggable",
+    "drag",
+    "ui",
+    "simple",
+    "customizable",
+    "window"
+  ],
+  "main": "plain-modal.min.js",
+  "module": "plain-modal.esm.js",
+  "jsnext:main": "plain-modal.esm.js",
+  "files": [
+    "plain-modal?(-limit)?(-debug).@(min.js|esm.js)",
+    "bower.json"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.14.3",
+    "@babel/preset-env": "^7.14.2",
+    "anim-event": "^1.0.17",
+    "autoprefixer": "^10.2.6",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-loader": "^7.1.5",
+    "cross-env": "^7.0.3",
+    "cssprefix": "^2.0.17",
+    "fibers": "^5.0.0",
+    "jasmine-core": "^3.7.1",
+    "log4js": "^6.4.0",
+    "m-class-list": "^1.1.10",
+    "node-static-alias": "^1.1.2",
+    "plain-draggable": "^2.5.14",
+    "plain-overlay": "^1.4.17",
+    "pointer-event": "^1.0.2",
+    "post-compile-webpack-plugin": "^0.1.2",
+    "postcss": "^8.3.0",
+    "postcss-loader": "^4.3.0",
+    "pre-proc": "^1.0.2",
+    "pre-proc-loader": "^3.0.3",
+    "sass": "^1.34.0",
+    "sass-loader": "^10.2.0",
+    "skeleton-loader": "^2.0.0",
+    "stats-filelist": "^1.0.1",
+    "test-page-loader": "^1.0.8",
+    "timed-transition": "^1.5.4",
+    "webpack": "^4.46.0",
+    "webpack-cli": "^3.3.12"
+  },
+  "scripts": {
+    "build": "cross-env NODE_ENV=production webpack --verbose",
+    "dev": "webpack --verbose",
+    "build-limit": "cross-env EDITION=limit NODE_ENV=production webpack --verbose",
+    "dev-limit": "cross-env EDITION=limit webpack --verbose",
+    "test": "node ./test/httpd"
+  },
+  "homepage": "https://anseki.github.io/plain-modal/",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/anseki/plain-modal.git"
+  },
+  "bugs": "https://github.com/anseki/plain-modal/issues",
+  "license": "MIT",
+  "author": {
+    "name": "anseki",
+    "url": "https://github.com/anseki"
+  }
+}

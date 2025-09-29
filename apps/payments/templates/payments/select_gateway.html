@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+    انتخاب درگاه پرداخت
+{% endblock title %}
+{% block style %}
+    <!-- Custom styles for this template -->
+    <style>
+    html,
+body {
+  height: 100%;
+}
+    </style>
+{% endblock style %}
+{% block body_class %}
+    d-flex flex-column align-items-center
+{% endblock body_class %}
+{% block main %}
+    <main class="m-auto">
+        {% csrf_token %}
+        {% comment %} <img class="mb-4" src="../assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"> {% endcomment %}
+        <h1 class="h3 mb-3 fw-normal">انتخاب درگاه پرداخت</h1>
+        <p>با کلیک روی نام درگاه به درگاه پرداخت منتقل خواهید شد.</p>
+        <div>
+            {% for p in payments %}
+                {% if p.enabled %}
+                    <div class="d-flex flex-column content-justify-center position-relative">
+                        <form action="{% url p.url %}" method="post">
+                            {% csrf_token %}
+                            <button class="btn btn-outline-secondary">
+                                <img src="{% static p.logo %}"
+                                     alt="{{ p.display_name }}"
+                                     style="max-width: 100px">
+                                     <br>
+                                <span>زرین‌پال</span>
+                            </button>
+                        </form>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </main>
+{% endblock main %}

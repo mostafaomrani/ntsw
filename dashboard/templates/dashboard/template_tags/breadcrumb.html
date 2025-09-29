@@ -1,0 +1,17 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="/" class=""><i class="fa fa-home"></i> خانه</a>
+        </li>
+        {% for item in breadcrumb_list %}
+            {% if forloop.last %}
+                <li class="breadcrumb-item active" aria-current="page">{{ item.text }}</li>
+            {% else %}
+                <li class="breadcrumb-item">
+                    <a href="{{ item.url }}"
+                       class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ item.text }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ol>
+</nav>

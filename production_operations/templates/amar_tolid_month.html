@@ -1,0 +1,255 @@
+{% extends "base.html" %}
+{% load static %}
+{% load date_filters %}
+{% load widget_tweaks %}
+{% load ui_template_tag %}
+
+{% block title %}
+ارسال آمار تولید ماهانه
+{% endblock title %}
+
+{% block breadcrumbs %}
+{% breadcrumbs 'عملیات تولید' '#' 'ارسال آمار تولید ماهانه' '#' %}
+{% endblock breadcrumbs %}
+
+{% block page-title %}
+ارسال آمار تولید ماهانه
+{% endblock page-title %}
+
+{% block main %}
+
+   <div class="bg-white p-3 request-main-data">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                <form id="frmRequestSearch" class="fv-form fv-form-bootstrap" novalidate="novalidate">
+                    
+                    <div class="row">
+                                        <!-- دکمه افزودن جدید -->
+                                        <div class="col-md-12 mb-3 box-bordered-bottom-dashed">
+                                            <div class="dropdown d-inline-block me-2">
+                                                <button class="btn btn-success dropdown-toggle" type="button" id="AddNewDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="fa fa-plus"></i> افزودن جدید
+                                                </button>
+                                                <ul class="dropdown-menu child" aria-labelledby="AddNewDropdown">
+                                                    <li><a class="dropdown-item" href="/Users/InternalTradeSendProductionStatisticNew.aspx" id="NewProduction"><i class="fa fa-plus-square"></i> اظهار تولید جدید</a></li>
+                                                    <li><a class="dropdown-item" href="#" id="ImportExcel"><i class="fa fa-file-excel"></i> ثبت سند با فایل اکسل</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <!-- سال -->
+                                        <div class="col-md-4 mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light">سال</span>
+                                                <select id="yearFilter" name="yearFilter" class="form-control select-status">
+                                                    <option value="" selected="selected">همه</option>
+                                                    <option value="1404">1404</option>
+                                                    <option value="1403">1403</option>
+                                                    <option value="1402">1402</option>
+                                                    <option value="1401">1401</option>
+                                                    <option value="1400">1400</option>
+                                                    <option value="1399">1399</option>
+                                                    <option value="1398">1398</option>
+                                                    <option value="1397">1397</option>
+                                                    <option value="1396">1396</option>
+                                                    <option value="1395">1395</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <!-- ماه -->
+                                        <div class="col-md-4 mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light">ماه</span>
+                                                <select id="monthFilter" name="monthFilter" class="form-control select-status">
+                                                    <option value="" selected="selected">همه</option>
+                                                    <option value="1">فروردین</option>
+                                                    <option value="2">اردیبهشت</option>
+                                                    <option value="3">خرداد</option>
+                                                    <option value="4">تیر</option>
+                                                    <option value="5">مرداد</option>
+                                                    <option value="6">شهریور</option>
+                                                    <option value="7">مهر</option>
+                                                    <option value="8">آبان</option>
+                                                    <option value="9">آذر</option>
+                                                    <option value="10">دی</option>
+                                                    <option value="11">بهمن</option>
+                                                    <option value="12">اسفند</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <!-- از تاریخ - تا تاریخ -->
+                                        <div class="col-md-4 mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light">از تاریخ - تا تاریخ</span>
+                                                <input type="text" id="startDate" placeholder="از تاریخ" autocomplete="off" style="width: 50%" name="startDate" class="persianDatePicker1 form-control max-date1 pwt-datepicker-input-element">
+                                                <input type="text" id="endDate" placeholder="تا تاریخ" autocomplete="off" style="width: 50%" name="endDate" class="persianDatePicker1 form-control max-date1 pwt-datepicker-input-element">
+                                            </div>
+                                        </div>
+                                        <!-- وضعیت -->
+                                        <div class="col-md-4 mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light">وضعیت</span>
+                                                <select id="status" name="status" class="form-control select-status">
+                                                    <option value="" selected="selected">همه</option>
+                                                    <option value="5">ثبت اولیه</option>
+                                                    <option value="3">ابطال شده</option>
+                                                    <option value="2">عدم تایید</option>
+                                                    <option value="4">در حال بررسی</option>
+                                                    <option value="1">تایید شده</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <!-- شماره درخواست/شماره رهگیری -->
+                                        <div class="col-md-4 mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light" style="width: 200px !important;">شماره درخواست/شماره رهگیری</span>
+                                                <input type="text" name="requestedNumber" id="requestedNumber" class="form-control" value="">
+                                            </div>
+                                        </div>
+                                        <!-- دکمه‌های جستجو و لغو -->
+                                        <div class="col-md-4 mb-3">
+                                            <button type="button" id="btnSearch" name="btnSearch" class="btn btn-primary me-2"><i class="fa fa-search"></i> جستجو</button>
+                                            <button type="reset" id="btnSearchLeft" name="btnSearchLeft" class="btn btn-warning me-2"><i class="fa fa-remove"></i> لغو فیلتر</button>
+                                        </div>
+                                    </div>
+                                    
+                </form>
+            </div>
+        </div>
+    </div>
+<style>
+.input-group-text.bg-light {
+    width: 120px;
+}
+.btn-purple-csm {
+    background-color: #6f42c1 !important;
+    color: #fff;
+}
+.btn-purple-csm:hover {
+    background-color: #5a32a3 !important;
+}
+.bg-themeprimary {
+    background-color: #024158 !important;
+    color: white;
+}
+.card.border-primary {
+    border-color: #024158 !important;
+}
+.hidden {
+    display: none;
+}
+.mb-3 {
+    margin-bottom: 1rem !important;
+}
+.me-2 {
+    margin-left: 0.5rem !important;
+}
+.box-bordered-bottom-dashed {
+    border-bottom: 1px dashed #ccc;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+</style>
+
+
+
+{% endblock main %}
+
+
+{% block js %}
+<!-- بارگذاری jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- بارگذاری Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- بارگذاری Persian Datepicker -->
+<script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    // مدیریت Persian DatePicker
+    $('.persianDatePicker1').each(function() {
+        $(this).persianDatepicker({
+            format: 'YYYY/MM/DD',
+            autoClose: true,
+            toolbox: {
+                calendarSwitch: {
+                    enabled: false
+                }
+            }
+        });
+    });
+
+    // باز کردن خودکار منوی دراپ‌داون با کلیک
+    $('#AddNewDropdown').on('click', function() {
+        var $dropdown = $(this).closest('.dropdown');
+        var $menu = $dropdown.find('.dropdown-menu');
+        if ($menu.hasClass('show')) {
+            $menu.removeClass('show');
+        } else {
+            $('.dropdown-menu').removeClass('show');
+            $menu.addClass('show');
+        }
+    });
+
+    // بستن منوها هنگام کلیک خارج از آن‌ها
+    $(document).on('click', function(e) {
+        if (!$(e.target).closest('.dropdown').length) {
+            $('.dropdown-menu').removeClass('show');
+        }
+    });
+
+    // رویداد کلیک برای دکمه جستجو
+    $('#btnSearch').on('click', function() {
+        alert('جستجو غیرفعال است. لطفاً منطق جستجو را پیاده‌سازی کنید.');
+    });
+
+    // رویداد کلیک برای لغو فیلتر
+    $('#btnSearchLeft').on('click', function() {
+        $('#frmRequestSearch')[0].reset();
+        $('.persianDatePicker1').persianDatepicker('clear');
+    });
+
+    // رویداد کلیک برای آیتم‌های منوی دراپ‌داون
+    $('.dropdown-menu a[id="NewProduction"]').on('click', function(e) {
+        // لینک اصلی حفظ شده است
+    });
+
+    $('.dropdown-menu a[id="ImportExcel"]').on('click', function(e) {
+        e.preventDefault();
+        $('#excelUploadModal').modal('show');
+        $('#excelUploadModalLabel').text('آپلود فایل اکسل برای ثبت سند');
+    });
+
+    // Modal برای آپلود اکسل
+    if (!$('#excelUploadModal').length) {
+        $('body').append(`
+            <div class="modal fade" id="excelUploadModal" tabindex="-1" aria-labelledby="excelUploadModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="excelUploadModalLabel">آپلود فایل اکسل</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="file" id="excelFileInput" accept=".xlsx,.xls" class="form-control">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+                            <button type="button" class="btn btn-primary" id="uploadExcelBtn">آپلود</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `);
+    }
+
+    $('#uploadExcelBtn').on('click', function() {
+        var fileInput = $('#excelFileInput')[0];
+        if (fileInput.files.length > 0) {
+            alert('آپلود فایل غیرفعال است. لطفاً منطق آپلود را پیاده‌سازی کنید.');
+        } else {
+            alert('لطفاً یک فایل انتخاب کنید');
+        }
+    });
+});
+</script>
+{% endblock js %}

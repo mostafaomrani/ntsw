@@ -1,0 +1,38 @@
+<div class="col-12 col-lg-4">
+    <div class="d-flex align-items-center bg-white rounded shadow-sm">
+        <div class="flex-shrink-0 text-white p-3 h-100 bg-{{ color_class_suffix }} position-relative">
+            <a href="{{ main_link }}" class="text-white stretched-link">
+                <i class="fa {{ icon }} fa-w-20 fa-3x"></i>
+            </a>
+        </div>
+        <div class="flex-grow-1 text-{{ color_class_suffix }} ms-2">
+            <div class="d-flex justify-content-between">
+                <span class="text-{{ color_class_suffix }}">
+                    <small>{{ count }}</small>
+                </span>
+                <div class="dropdown me-2">
+                    <button class="btn p-0 px-1 text-white bg-{{ color_class_suffix }}"
+                            type="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                    {% if links %}
+                        <ul class="dropdown-menu">
+                            {% for l in links %}
+                                <li>
+                                    <a class="dropdown-item" href="{{ l.0 }}">{{ l.1 }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+            <div>
+                <p class="m-0 text-{{ color_class_suffix }}">
+                    <small class="smaller">{{ title }}</small>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

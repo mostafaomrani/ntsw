@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% load static %}
+{% load date_filters %}
+{% load ui_template_tag %}
+{% block breadcrumbs %}
+    {% breadcrumbs 'عملیات ارزی' '#' 'تخصیص ارز' '#' 'درخواست تخصیص ارز' '#' %}
+{% endblock breadcrumbs %}
+{% block title %}
+    پرونده ثبت سفارش
+{% endblock title %}
+{% block page-title %}
+    درخواست تخصیص ارز
+{% endblock page-title %}
+{% block head %}
+    <link href="{% static 'selectize-master/css/selectize.css' %}"
+          rel="stylesheet">
+    <link href="{% static 'bootstrap-datepicker/css/bootstrap-datepicker.min.css' %}"
+          rel="stylesheet">
+{% endblock head %}
+{% block main %}
+    <div class="container-fluid bg-white py-4">
+        <div class="row igtw-185">
+            {% input_box 'شماره پرونده' old_currency_request.main_data.identifier disabled=True div_with='col-12 col-md-4' %}
+            {% input_box 'شماره ثبت سفارش' old_currency_request.main_data.registrations_number disabled=True div_with='col-12 col-md-4' %}
+            {% input_box 'شماره ردیف' old_currency_request.row disabled=True div_with='col-12 col-md-4' %}
+            {% input_box 'مبلغ به ارز ثبت سفارش' old_currency_request.request_amount_by_main_data_currency disabled=True div_with='col-12 col-md-4' %}
+            {% input_box 'ارز ثبت سفارش' old_currency_request.main_data.financial.currency_type disabled=True div_with='col-12 col-md-4' %}
+            {% input_box 'مبلغ تامین به ارز ثبت سفارش' '-' disabled=True div_with='col-12 col-md-4' %}
+            {% input_box 'مبلغ درخواست ارز' old_currency_request.request_amount disabled=True div_with='col-12 col-md-4' %}
+            {% input_box 'ارز درخواست' old_currency_request.currency disabled=True div_with='col-12 col-md-4' %}
+            {% input_box 'مبلغ تامین به ارز درخواست' '-' disabled=True div_with='col-12 col-md-4' %}
+            <div class="col-12 col-lg-7 mx-auto">
+                <form method="post" class="row mt-5">
+                    {% csrf_token %}
+                    {% widget_tweaks_field form.current_currency_request 'col-12' required=True %}
+                    {% widget_tweaks_field form.new_currency_request 'col-12' required=True %}
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-maya">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                            <span class="ps-1">افزودن</span>
+                        </button>
+                    </div>
+                </form>
+                <table class="table table-striped table-hover table-bordered text-center table-responsive mt-4 d-table">
+                    <thead class="text-white bg-navy">
+                        <tr class="bg-navy">
+                            <th>مبلغ درخواست</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for d in decomposition %}
+                            <tr>
+                                <td>{{ d.request_amount }}</td>
+                                <td>
+                                    <!-- Button trigger modal -->
+                                    <button type="button"
+                                            class="btn btn-danger"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#delete-modal-{{ d.pk }}">حذف</button>
+                                    <!-- Modal -->
+                                    <div class="modal fade"
+                                         id="delete-modal-{{ d.pk }}"
+                                         tabindex="-1"
+                                         aria-labelledby="delete-modal-{{ d.pk }}Label"
+                                         aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="delete-modal-{{ d.pk }}Label">حذف تجزیه ارز</h1>
+                                                    <button type="button"
+                                                            class="btn-close"
+                                                            data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">آیا از حذف تجزیه انتخاب شده مطمئن هستید؟</div>
+                                                <div class="modal-footer">
+                                                    <form method="post" action="{% url 'currency_allocation:delete' d.pk %}">
+                                                        {% csrf_token %}
+                                                        <button class="btn btn-secondary rounded-2px" type="submit">بله</button>
+                                                        <button type="button"
+                                                                class="btn  btn-primary btn-maya"
+                                                                data-bs-dismiss="modal">انصراف</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% if not decomposition %}
+                    <div class="m-5 mt-2 text-center" id="empty-table-alert">
+                        <p class="mt-3">
+                            <small class="pt-3">موردی یافت نشد</small>
+                        </p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="d-md-flex justify-content-end">
+            <div class="mt-2 me-2">
+                <a href="{% url 'currency_allocation:requests' %}"
+                   class="btn btn-primary btn-maya">
+                    <i class="fa fa-arrow-right"></i>
+                    <span class="ps-1">انصراف</span>
+                </a>
+            </div>
+            <div class="mt-2">
+                <a href="{% url 'currency_allocation:requests' %}"
+                   class="btn btn-success btn-forest">
+                    <i class="fa fa-check" aria-hidden="true"></i>
+                    <span class="ps-1">تجزیه</span>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock main %}

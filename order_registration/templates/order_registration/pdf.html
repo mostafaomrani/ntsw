@@ -1,0 +1,433 @@
+{% load static %}
+{% load date_filters %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+    <head>
+        <meta charset="UTF-8">
+        <title>اطلاعات ثبت سفارش‍</title>
+        <style>
+        @page {
+            size: A4; /* اندازه صفحه A4 */
+            margin:0.2cm ; /* حاشیه‌های صفحه */
+        }
+        body {
+            font-family: 'B Nazanin', Arial, sans-serif;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding:0;
+            font-size:12px;
+        }
+        .container {
+            width: 100%;
+            padding: 0
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+
+        }                
+        th, td {
+            padding: 8px;
+            text-align: right;
+        }
+        .border-end-0 {
+            border-left:none !important;
+        }
+        .border-start-0 {
+            border-right:none !important;
+        }
+        .text-end {
+            text-align:left !important;
+        }
+        span {
+            padding-left:0.2rem;
+        }
+        strong {
+            font-weight:500;
+        }
+        .section-title {
+            border-right:3px solid #024158;
+            display: inline-block;
+            padding:0.2rem;
+            margin-top:0.1rem;
+            margin-bottom:0.1rem;
+        }
+        .navy-table th{
+            background:#024158;
+            color:white;
+            text-align:center;
+        }
+        .navy-table, .navy-table td,.navy-table th {
+            text-align:center;
+        }
+
+
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <table>
+                <tbody>
+                    <tr>
+                        <td class="border-end-0">
+                            <img src="{{ image_path }}"
+                                 style="height: 80;
+                                        width: 200;
+                                        float:inline-start">
+                        </td>
+                        <td class="border-start-0 text-end">{{ jalali_now }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table>
+                <tr>
+                    <td>
+                        <span class="section-title">مشخصات کلی</span>
+                    </td>
+                </tr>
+            </table>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>
+                            <span>شماره پرونده:</span>
+                            <strong>{{ main_data.identifier }}</strong>
+                        </td>
+                        <td>
+                            <span>شماره پیش فاکتور:</span>
+                            <strong>{{ main_data.proforma_invoice }}</strong>
+                        </td>
+                        <td>
+                            <span>شماره ثبت نام:</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span>نام متقاضی:</span><strong>{{ main_data.user.get_full_name }}</strong>
+                        </td>
+                        <td>
+                            <span>کد ملی/شناسه ملی:</span><strong>{{ main_data.user.national_code }}</strong>
+                        </td>
+                        <td>
+                            <span>کد اقتصادی</span><strong></strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span>تاریخ صدور:</span><strong>{{ main_data.created_at|to_jalali }}</strong>
+                        </td>
+                        <td>
+                            <span>تاریخ اعتبار:</span><strong>{{ main_data.proforam_invoice_expire_date|date:"Y/m/d" }}</strong>
+                        </td>
+                        <td>
+                            <span>کشور ذینفع:</span><strong>{{ main_data.beneficiary_country.name }}</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span>شناسه فروشنده خارجی:</span><strong>{{ main_data.related_object }}</strong>
+                        </td>
+                        <td>
+                            <span>فروشنده خارجی:</span><strong>{{ main_data.related_object.name }}</strong>
+                        </td>
+                        <td>
+                            <span>تلفن فروشنده خارجی:</span><strong>{{ main_data.related_object.phone }}</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span>سطح دسترسی:</span><strong>{{ main_data.get_permission_display }}</strong>
+                        </td>
+                        <td>
+                            <span>نوع کالای وارداتی</span><strong>{{ main_data. }}</strong>
+                        </td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+            <table>
+                <tr>
+                    <td>
+                        <span class="section-title">اطلاعات ثبت سفارش</span>
+                    </td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td>
+                        <span>شماره ثبت سفارش:</span><strong>{{ main_data.registrations_number }}</strong>
+                    </td>
+                    <td>
+                        <span>تاریخ صدور ثبت سفارش:</span><strong>{{ main_data.created_at|to_jalali }}</strong>
+                    </td>
+                    <td>
+                        <span>تاریخ اعتبار ثبت سفارش:</span><strong>{{ main_data.expire_date|to_jalali }}</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span>نوع واردات:</span><strong>کارت بازرگانی</strong>
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td>
+                        <span class="section-title">اطلاعات گمرکی</span>
+                    </td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td>
+                        <span>نوع قرارداد:</span><strong>{{ main_data.custom_and_shipping.incoterms }}</strong>
+                    </td>
+                    <td>
+                        <span>مرز ورودی:</span><strong>{{ main_data.custom_and_shipping.entrance_edges_str }}</strong>
+                    </td>
+                    <td>
+                        <span>روش حمل:</span><strong>{{ main_data.custom_and_shipping.shipping_type_str }}</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span>ناوگان حمل و نقل:</span><strong>{{ main_data.custom_and_shipping.get_shipping_nationality_display }}</strong>
+                    </td>
+                    <td>
+                        <span>حمل به دفعات:</span><strong>{{ main_data.custom_and_shipping.shipping_period_str }}</strong>
+                    </td>
+                    <td>
+                        <span>محل بارگیری:</span><strong>{{ main_data.custom_and_shipping.loading_location }}</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span>کشورهای مبدا حمل:</span><strong>{{ main_data.custom_and_shipping.origin_country }}</strong>
+                    </td>
+                    <td>
+                        <span>گمرک مقصد:</span><strong>{{ main_data.custom_and_shipping.destination_custom_str }}</strong>
+                    </td>
+                    <td></td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td>
+                        <span class="section-title">اطلاعات مالی و بانکی</span>
+                    </td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td>
+                        <span>مبلغ کل پرونده:</span><strong>{{ main_data.total_price }}</strong>
+                    </td>
+                    <td>
+                        <span>نوع عملیات ارزی:</span><strong>{{ main_data.financial.get_currency_operation_type_display }}</strong>
+                    </td>
+                    <td>
+                        <span>نوع ارز:</span><strong>{{ main_data.financial.currency_type }}</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span>تامین ارز:</span><strong>{{ main_data.financial.curency_supply_str }}</strong>
+                    </td>
+                    <td>
+                        <span>سایر هزینه‌ها:</span><strong>
+                            {% if  main_data.financial.other_price %}
+                                {{ main_data.financial.other_price }}
+                            {% else %}
+                                0
+                            {% endif %}
+                        </strong>
+                    </td>
+                    <td>
+                        <span>هزینه حمل:</span><strong>
+                            {% if  main_data.financial.shipping_price %}
+                                {{ main_data.financial.shipping_price }}
+                            {% else %}
+                                0
+                            {% endif %}
+                        </strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span>نوع پرداخت:</span><strong>{{ main_data.financial.get_payment_type_display }}</strong>
+                    </td>
+                    <td>
+                        <span>شعبه بانک:</span><strong>{{ main_data.financial.bank_branch.title }}</strong>
+                    </td>
+                    <td></td>
+                </tr>
+            </table>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>
+                            <p class="section-title">مشخصات کالای ثبت شده</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="navy-table">
+                <thead>
+                    <tr>
+                        <th>ردیف</th>
+                        <th>کد تعرفه</th>
+                        <th>حقوق ورودی</th>
+                        <th>کارخانه سازنده</th>
+                        <th>وضعیت کالا</th>
+                        <th>سال تولید</th>
+                        <th>وزن خالص</th>
+                        <th>وزن ناخالص</th>
+                        <th>تعداد / مقدار</th>
+                        <th>مبلغ FOB</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for w in main_data.ware_set.all %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ w.hs_code }}</td>
+                            <td></td>
+                            <td>{{ w.producer_name }}</td>
+                            <td>{{ w.get_status_display }}</td>
+                            <td>{{ w.manufacture_year }}</td>
+                            <td>{{ w.net_weight }}</td>
+                            <td>{{ w.gross_weight }}</td>
+                            <td>{{ w.amount }}</td>
+                            <td>{{ w.fob_price }}</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td colspan="9">
+                                <span>شرح تجاری:</span><span>{{ w.persian_title }}</span>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <p class="section-title">سازمان‌های مجوز دهنده</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <table class="navy-table">
+                <thead>
+                    <tr>
+                        <th>ردیف</th>
+                        <th>کد درخواست</th>
+                        <th>سازمان مجوز دهنده</th>
+                        <th>کد تعرفه</th>
+                        <th>وضعیت</th>
+                        <th>توضیحات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% comment %} <tr> {% endcomment %}
+                    {% comment %} <td>۱</td> {% endcomment %}
+                    {% comment %} <td>0</td> {% endcomment %}
+                    {% comment %} <td>سازمان صنعت، معدن و تجارت استان- تخصیص ارز</td> {% endcomment %}
+                    {% comment %} <td></td> {% endcomment %}
+                    {% comment %} <td>تایید شده</td> {% endcomment %}
+                    {% comment %} <td></td> {% endcomment %}
+                    {% comment %} </tr> {% endcomment %}
+                    {% for w in main_data.ware_set.all %}
+                        <tr>
+                            <td>۱</td>
+                            <td>0</td>
+                            <td>وزارت بهداشت، درمان و آموزش پزشکی</td>
+                            <td></td>
+                            <td>تایید شده</td>
+                            <td>Approve</td>
+                        </tr>
+                        <tr>
+                            <td>۲</td>
+                            <td>۰</td>
+                            <td>وزارت جهاد- تخصیص ارز</td>
+                            <td></td>
+                            <td>تایید شده</td>
+                            <td>
+                                سامانه متمرکز مجوزهای تجارت خارجي وزارت جهاد کشاورزی ثبت سفارش بلامانع
+                                است. در صورت عدم ثبت سفارش تخصیص و تامین ارز در مهلت زمانی مقرر
+                                امکان ویرایش پرونده و تمدید مجوزها وجود نخواهد داشت.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>۳</td>
+                            <td>0</td>
+                            <td>وزارت جهاد کشاورزی</td>
+                            <td></td>
+                            <td>تایید شده</td>
+                            <td>
+                                سامانه متمرکز مجوزهای تجارت خارجي وزارت جهاد کشاورزی ثبت سفارش بلامانع
+                                است. در صورت عدم ثبت سفارش تخصیص و تامین ارز در مهلت زمانی مقرر
+                                امکان ویرایش پرونده و تمدید مجوزها وجود نخواهد داشت.
+                            </td>
+                        </tr>
+                        {% comment %} <tr> {% endcomment %}
+                        {% comment %} <td>۴</td> {% endcomment %}
+                        {% comment %} <td>0</td> {% endcomment %}
+                        {% comment %} <td>مجوز کنترل سیستمی سهمیه واردات</td> {% endcomment %}
+                        {% comment %} <td></td> {% endcomment %}
+                        {% comment %} <td>تایید شده</td> {% endcomment %}
+                        {% comment %} <td></td> {% endcomment %}
+                        {% comment %} </tr> {% endcomment %}
+                        {% comment %} <tr> {% endcomment %}
+                        {% comment %} <td>۵</td> {% endcomment %}
+                        {% comment %} <td>0</td> {% endcomment %}
+                        {% comment %} <td>مجوز کنترل سیستمی سابقه واردات</td> {% endcomment %}
+                        {% comment %} <td></td> {% endcomment %}
+                        {% comment %} <td>تایید شده</td> {% endcomment %}
+                        {% comment %} <td></td> {% endcomment %}
+                        {% comment %} </tr> {% endcomment %}
+                        {% comment %} <tr> {% endcomment %}
+                        {% comment %} <td>۶</td> {% endcomment %}
+                        {% comment %} <td>0</td> {% endcomment %}
+                        {% comment %} <td>مجوز عدم ساخت</td> {% endcomment %}
+                        {% comment %} <td></td> {% endcomment %}
+                        {% comment %} <td>تایید شده</td> {% endcomment %}
+                        {% comment %} <td></td> {% endcomment %}
+                        {% comment %} </tr> {% endcomment %}
+                        {% comment %} <tr> {% endcomment %}
+                        {% comment %} <td>۷</td> {% endcomment %}
+                        {% comment %} <td>0</td> {% endcomment %}
+                        {% comment %} <td>بررسی سهمیه واحدهای تولیدی</td> {% endcomment %}
+                        {% comment %} <td></td> {% endcomment %}
+                        {% comment %} <td>تایید شده</td> {% endcomment %}
+                        {% comment %} <td></td> {% endcomment %}
+                        {% comment %} </tr> {% endcomment %}
+                        {% comment %} <tr> {% endcomment %}
+                        {% comment %} <td>۸</td> {% endcomment %}
+                        {% comment %} <td>0</td> {% endcomment %}
+                        {% comment %} <td>بررسی سیستمی سهمیه تعرفه‌های ماشین‌آلات</td> {% endcomment %}
+                        {% comment %} <td></td> {% endcomment %}
+                        {% comment %} <td>تایید شده</td> {% endcomment %}
+                        {% comment %} <td></td> {% endcomment %}
+                        {% comment %} </tr> {% endcomment %}
+                        <tr>
+                            <td></td>
+                            <td colspan="5">
+                                <span>شرح تجاری:</span><span>{{ w.persian_title }}</span>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

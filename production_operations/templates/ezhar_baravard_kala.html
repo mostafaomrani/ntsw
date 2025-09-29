@@ -1,0 +1,330 @@
+{% extends "base.html" %}
+{% load static %}
+{% load date_filters %}
+{% load widget_tweaks %}
+{% load ui_template_tag %}
+
+{% block title %}
+اظهار برآورد کالا
+{% endblock title %}
+
+{% block breadcrumbs %}
+{% breadcrumbs 'عملیات تولید' '#' 'اظهار برآورد کالا' '#' %}
+{% endblock breadcrumbs %}
+
+{% block page-title %}
+اظهار برآورد کالا
+{% endblock page-title %}
+
+{% block main %}
+<div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+    <form id="frmSearchProductRevenue" class="fv-form fv-form-bootstrap" novalidate="novalidate">
+        <div class="row">
+            <!-- دکمه‌های عملیاتی -->
+            <div class="col-md-12 mb-3 box-bordered-bottom-dashed">
+                <button type="button" class="btn btn-primary me-2" id="BtnNew" name="BtnNew"><i
+                        class="fa fa-plus-square"></i> ثبت اظهار جدید</button>
+                <div class="dropdown d-inline-block me-2">
+                    <button class="btn btn-success dropdown-toggle" type="button" id="ImpotrtFromExcemFile"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa fa-plus-square"></i> ثبت سند با فایل اکسل
+                    </button>
+                    <ul class="dropdown-menu child" aria-labelledby="ImpotrtFromExcemFile">
+                        <li><a class="dropdown-item" href="#" id="ImportExcelProduction"><i
+                                    class="fa fa-file-excel"></i> اظهار تولید جدید</a></li>
+                        <li><a class="dropdown-item" href="#" id="ImportExcelDocument"><i class="fa fa-file-excel"></i>
+                                ثبت سند با فایل اکسل</a></li>
+                    </ul>
+                </div>
+                <button class="btn btn-purple me-2" id="btnCopyLastYearSellsToNewYear"><i class="fa fa-plus-square"></i>
+                    ثبت اسناد مشابه سال قبل</button>
+                <button class="btn btn-warning me-2" id="btnProductionPlanSellsFinalConfirmation"><i
+                        class="fa fa-check-square"></i> بررسی و تایید سیستمی اسناد</button>
+                <button class="btn btn-primary me-2" id="btnRecalculateQuota"><i class="fa fa-repeat"></i> محاسبه و
+                    ارسال مجدد سهمیه</button>
+            </div>
+            <!-- وضعیت سند -->
+            <div class="col-md-4 mb-3">
+                <div class="input-group">
+                    <span class="input-group-text bg-light">وضعیت سند</span>
+                    <select id="statusId" name="statusId" class="form-control select-status">
+                        <option value="0" selected="selected">همه</option>
+                        <option value="8">پیش نویس</option>
+                        <option value="7">ثبت اولیه</option>
+                        <option value="4">تایید شده</option>
+                        <option value="6">ابطال شده</option>
+                        <option value="16">تایید نهایی</option>
+                        <option value="17">تایید نیاز ماشین آلات</option>
+                    </select>
+                </div>
+            </div>
+            <!-- نوع سند -->
+            <div class="col-md-4 mb-3">
+                <div class="input-group">
+                    <span class="input-group-text bg-light">نوع سند</span>
+                    <select id="DocType" name="DocType" class="form-control select-status">
+                        <option value="">همه</option>
+                        <option value="23">برنامه تولید</option>
+                        <option value="24">برنامه تولید (افزایش ظرفیت با توسعه ماشین آلات)</option>
+                        <option value="53">برآورد صادرات</option>
+                        <option value="55">نیاز ماشین آلات تولیدی</option>
+                        <option value="56">نیاز اجزا و قطعات</option>
+                        <option value="58">نیاز ماشین آلات معدنی و راهسازی</option>
+                        <option value="59">نیاز سهمیه اتوبوس</option>
+                        <option value="60">نیاز ماشین آلات کشاورزی و ساختمانی</option>
+                    </select>
+                </div>
+            </div>
+            <!-- از تاریخ - تا تاریخ -->
+            <div class="col-md-4 mb-3">
+                <div class="input-group">
+                    <span class="input-group-text bg-light">از تاریخ - تا تاریخ</span>
+                    <input type="text" id="startDate" placeholder="از تاریخ" autocomplete="off" style="width: 50%"
+                        name="startDate" class="persianDatePicker1 form-control max-date1 pwt-datepicker-input-element">
+                    <input type="text" id="endDate" placeholder="تا تاریخ" autocomplete="off" style="width: 50%"
+                        name="endDate" class="persianDatePicker1 form-control max-date1 pwt-datepicker-input-element">
+                </div>
+            </div>
+            <!-- سال -->
+            <div class="col-md-4 mb-3">
+                <div class="input-group">
+                    <span class="input-group-text bg-light">سال</span>
+                    <select id="yearFilter" name="yearFilter" class="form-control select-status">
+                        <option value="" selected="selected">همه</option>
+                        <option value="1404">1404</option>
+                        <option value="1403">1403</option>
+                    </select>
+                </div>
+            </div>
+            <!-- ماه -->
+            <div class="col-md-4 mb-3">
+                <div class="input-group">
+                    <span class="input-group-text bg-light">ماه</span>
+                    <select id="monthFilter" name="monthFilter" class="form-control select-status">
+                        <option value="" selected="selected">همه</option>
+                        <option value="1">فروردین</option>
+                        <option value="2">اردیبهشت</option>
+                        <option value="3">خرداد</option>
+                        <option value="4">تیر</option>
+                        <option value="5">مرداد</option>
+                        <option value="6">شهریور</option>
+                        <option value="7">مهر</option>
+                        <option value="8">آبان</option>
+                        <option value="9">آذر</option>
+                        <option value="10">دی</option>
+                        <option value="11">بهمن</option>
+                        <option value="12">اسفند</option>
+                    </select>
+                </div>
+            </div>
+            <!-- شماره سند -->
+            <div class="col-md-4 mb-3">
+                <div class="input-group">
+                    <span class="input-group-text bg-light">شماره سند</span>
+                    <input id="searchTerm" type="text" class="form-control search-box only-number" maxlength="10">
+                </div>
+            </div>
+            <!-- دکمه‌های جستجو و لغو -->
+            <div class="col-md-12 mb-4">
+                <button type="button" id="btnSearch" name="btnSearch" class="btn btn-primary me-2"><i
+                        class="fa fa-search"></i> جستجو</button>
+                <button type="button" id="btnSearchLeft" name="btnSearchLeft" class="btn btn-warning me-2"><i
+                        class="fa fa-remove"></i> لغو فیلتر</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<style>
+    .input-group-text.bg-light {
+        width: 120px;
+    }
+
+    .btn-purple {
+        background-color: #6f42c1 !important;
+        color: #fff;
+    }
+
+    .btn-purple:hover {
+        background-color: #5a32a3 !important;
+    }
+
+    .btn-purple-csm {
+        background-color: #6f42c1 !important;
+        color: #fff;
+    }
+
+    .btn-purple-csm:hover {
+        background-color: #5a32a3 !important;
+    }
+
+    .bg-themeprimary {
+        background-color: #024158 !important;
+        color: white;
+    }
+
+    .card.border-primary {
+        border-color: #024158 !important;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .mb-3 {
+        margin-bottom: 1rem !important;
+    }
+
+    .me-2 {
+        margin-left: 0.5rem !important;
+    }
+
+    .box-bordered-bottom-dashed {
+        border-bottom: 1px dashed #ccc;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+    }
+
+    .only-number {
+        /* محدود کردن ورودی به اعداد */
+        -webkit-appearance: none;
+        -moz-appearance: textfield;
+    }
+
+    .only-number::-webkit-outer-spin-button,
+    .only-number::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    .col-md-12.mb-4 {
+	display: flex;
+	justify-content: end;
+}
+</style>
+
+
+
+
+{% endblock main %}
+
+
+{% block js %}
+<!-- بارگذاری jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- بارگذاری Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- بارگذاری Persian Datepicker -->
+<script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        // مدیریت Persian DatePicker
+        $('.persianDatePicker1').each(function () {
+            $(this).persianDatepicker({
+                format: 'YYYY/MM/DD',
+                autoClose: true,
+                toolbox: {
+                    calendarSwitch: {
+                        enabled: false
+                    }
+                }
+            });
+        });
+
+        // محدود کردن ورودی شماره سند به اعداد
+        $('.only-number').on('input', function () {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+
+        // باز کردن خودکار منوی دراپ‌داون با کلیک
+        $('#ImpotrtFromExcemFile').on('click', function () {
+            var $dropdown = $(this).closest('.dropdown');
+            var $menu = $dropdown.find('.dropdown-menu');
+            if ($menu.hasClass('show')) {
+                $menu.removeClass('show');
+            } else {
+                $('.dropdown-menu').removeClass('show');
+                $menu.addClass('show');
+            }
+        });
+
+        // بستن منوها هنگام کلیک خارج از آن‌ها
+        $(document).on('click', function (e) {
+            if (!$(e.target).closest('.dropdown').length) {
+                $('.dropdown-menu').removeClass('show');
+            }
+        });
+
+        // رویداد کلیک برای دکمه جستجو
+        $('#btnSearch').on('click', function () {
+            alert('جستجو غیرفعال است. لطفاً منطق جستجو را پیاده‌سازی کنید.');
+        });
+
+        // رویداد کلیک برای لغو فیلتر
+        $('#btnSearchLeft').on('click', function () {
+            $('#frmSearchProductRevenue')[0].reset();
+            $('.persianDatePicker1').persianDatepicker('clear');
+        });
+
+        // رویداد کلیک برای ثبت اظهار جدید
+        $('#BtnNew').on('click', function () {
+            alert('ثبت اظهار جدید غیرفعال است. لطفاً منطق را پیاده‌سازی کنید.');
+        });
+
+        // رویداد کلیک برای ثبت اسناد مشابه سال قبل
+        $('#btnCopyLastYearSellsToNewYear').on('click', function () {
+            alert('ثبت اسناد مشابه سال قبل غیرفعال است. لطفاً منطق را پیاده‌سازی کنید.');
+        });
+
+        // رویداد کلیک برای بررسی و تایید سیستمی اسناد
+        $('#btnProductionPlanSellsFinalConfirmation').on('click', function () {
+            alert('بررسی و تایید سیستمی اسناد غیرفعال است. لطفاً منطق را پیاده‌سازی کنید.');
+        });
+
+        // رویداد کلیک برای محاسبه و ارسال مجدد سهمیه
+        $('#btnRecalculateQuota').on('click', function () {
+            alert('محاسبه و ارسال مجدد سهمیه غیرفعال است. لطفاً منطق را پیاده‌سازی کنید.');
+        });
+
+        // رویداد کلیک برای آیتم‌های منوی دراپ‌داون
+        $('.dropdown-menu a[id^="Import"]').on('click', function (e) {
+            e.preventDefault();
+            $('#excelUploadModal').modal('show');
+            $('#excelUploadModalLabel').text('آپلود فایل اکسل برای ' + $(this).text().trim());
+        });
+
+        // Modal برای آپلود اکسل
+        if (!$('#excelUploadModal').length) {
+            $('body').append(`
+            <div class="modal fade" id="excelUploadModal" tabindex="-1" aria-labelledby="excelUploadModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="excelUploadModalLabel">آپلود فایل اکسل</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="file" id="excelFileInput" accept=".xlsx,.xls" class="form-control">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+                            <button type="button" class="btn btn-primary" id="uploadExcelBtn">آپلود</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `);
+        }
+
+        $('#uploadExcelBtn').on('click', function () {
+            var fileInput = $('#excelFileInput')[0];
+            if (fileInput.files.length > 0) {
+                alert('آپلود فایل غیرفعال است. لطفاً منطق آپلود را پیاده‌سازی کنید.');
+            } else {
+                alert('لطفاً یک فایل انتخاب کنید');
+            }
+        });
+    });
+</script>
+{% endblock js %}

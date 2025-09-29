@@ -1,0 +1,614 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load ui_template_tag %}
+{% load date_filters %}
+{% block title %}
+بارگذاری صلاحیت‌ها
+{% endblock title %}
+{% block page-title %}
+بارگذاری صلاحیت‌ها
+{% endblock page-title %}
+{% block breadcrumbs %}
+{% breadcrumbs 'عملیات پایه' '#' 'بارگذاری صلاحیت‌ها' '#' %}
+{% endblock breadcrumbs %}
+{% block main %}
+<div class="shadow mt-3">
+    <nav class="nav nav-tabs flex-column flex-sm-row">
+        <a class="flex-sm-fill text-sm-center nav-link {% if not request.GET.active %}active{% endif %}"
+            id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab"
+            aria-controls="pills-home" aria-selected="true">سوابق و جزئیات</a>
+        <a class="flex-sm-fill text-sm-center nav-link {% if request.GET.active %}active{% endif %}"
+            id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab"
+            aria-controls="pills-profile" aria-selected="false" href="#">کارت بازرگانی</a>
+        <a class="flex-sm-fill text-sm-center nav-link" href="#" id="pills-contact-tab" data-bs-toggle="pill"
+            data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-profile"
+            aria-selected="false">استعلام مجوز فعالیت مناطق آزاد و ویژه</a>
+        <a class="flex-sm-fill text-sm-center nav-link" href="#" id="pills-marz-tab" data-bs-toggle="pill"
+            data-bs-target="#pills-marz" type="button" role="tab" aria-controls="pills-marz"
+            aria-selected="false">استعلام مبادلات مرزی و گمرکی</a>
+        <a class="flex-sm-fill text-sm-center nav-link" href="#" id="pills-moredi-tab" data-bs-toggle="pill"
+            data-bs-target="#pills-moredi" type="button" role="tab" aria-controls="pills-moredi"
+            aria-selected="false">استعلام مجوز موردی</a>
+        <a class="flex-sm-fill text-sm-center nav-link" href="#" id="pills-dakheli-tab" data-bs-toggle="pill"
+            data-bs-target="#pills-dakheli" type="button" role="tab" aria-controls="pills-dakheli"
+            aria-selected="false">استعلام تاجر داخلی</a>
+    </nav>
+
+
+
+
+
+    <div class="tab-content bg-white" id="pills-tabContent">
+        <div class="tab-pane fade  {% if not request.GET.active %}show active{% endif %}" id="pills-home"
+            role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
+            <div class="p-3">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-6">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1">تاریخ استعلام از</span>
+                                    <input type="text" class="form-control" aria-describedby="basic-addon1">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1">تاریخ استعلام تا</span>
+                                    <input type="text" class="form-control" aria-describedby="basic-addon1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-6">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1">تاریخ صدور از</span>
+                                    <input type="text" class="form-control" aria-describedby="basic-addon1">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1">تاریخ صدور تا</span>
+                                    <input type="text" class="form-control" aria-describedby="basic-addon1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-6">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1">تاریخ اعتبار از</span>
+                                    <input type="text" class="form-control" aria-describedby="basic-addon1">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1">تاریخ اعتبار تا</span>
+                                    <input type="text" class="form-control" aria-describedby="basic-addon1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-6">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1">نوع استعلام</span>
+                                    <input type="text" class="form-control" aria-describedby="basic-addon1">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1">وضعیت صلاحیت</span>
+                                    <input type="text" class="form-control" aria-describedby="basic-addon1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <button class="btn  btn-primary btn-maya" type="button">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                            جستجو
+                        </button>
+                    </div>
+                </div>
+                <div class="col-12 mt-5">
+                    <div class="pagination"></div>
+                    <table class="table table-striped table-hover table-bordered text-center">
+                        <thead class="text-white" style="background:rgb(2, 65, 88);">
+                            <tr class="bg-themeprimary" role="row">
+                                
+                                <th class="sorting_disabled urlvcodelng" rowspan="1" colspan="1" style="width: 37px;">کد
+                                    نقش کاربر</th>
+                                <th class="sorting_disabled coName" rowspan="1" colspan="1" style="width: 57px;">نام
+                                    واحد تجاری</th>
+                                <th class="sorting_disabled userRoleActivityName" rowspan="1" colspan="1"
+                                    style="width: 57px;">حوزه فعالیت</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 41px;">نوع فعالیت
+                                </th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 80px;">تلفن تماس</th>
+                                <th class="sorting_disabled urlPostalCodeStr" rowspan="1" colspan="1"
+                                    style="width: 41px;">کد پستی</th>
+                                <th class="sorting_disabled coLocation" rowspan="1" colspan="1" style="width: 214px;">
+                                    محل فعالیت</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 265px;">حذف</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 306px;">جزییات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for trade in trade_roles %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ trade.action_name}}</td>
+                                <td>{{ trade.activity_domain }}</td>
+                                <td>{{ trade.activity_type }}</td>
+                                <td>{{ trade.valid_until|to_jalali }}</td>
+                                <td>{{ trade.issued_at|to_jalali }}</td>
+                                <td>{{ trade.qualification_status }}</td>
+                                <td>{{ trade.qualification_status }}</td>
+                                <td>{{ trade.qualification_status }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="7">هیچ استعلامی یافت نشد</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade {% if  request.GET.active %}show active{% endif %}" id="pills-profile" role="tabpanel"
+            aria-labelledby="pills-profile-tab" tabindex="0">
+            <div class="p-3">
+                <div class="d-md-flex">
+                    <div class="m-2">
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn  btn-primary btn-maya me-2" data-bs-toggle="modal"
+                            data-bs-target="#requestModal">درخواست صدور مجوز</button>
+                        <!-- Modal -->
+                        <div class="modal fade" id="requestModal" tabindex="-1" aria-labelledby="requestModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header"></div>
+                                    <div class="modal-body">
+                                        کاربر محترم برای ثبت درخواست می‌بایست از طریق درگاه ملی مجوزهای کشور به آدرس <a
+                                            href="https://mojavez.ir" target="_blank">https://mojavez.ir</a>اقدام
+                                        نمایید.
+                                    </div>
+                                    <div class="modal-footer justify-content-center">
+                                        <button type="button" class="btn btn-warning btn-mango"
+                                            data-bs-dismiss="modal">بستن</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-2">
+                        <button class="btn  btn-primary btn-maya">درخواست تمدید</button>
+                    </div>
+                    <div class="m-2">
+                        <button class="btn  btn-primary btn-maya">درخواست تغییر</button>
+                    </div>
+                    <div class="m-2">
+                        <button class="btn  btn-success btn-forest">درخواست رفع تعلیق</button>
+                    </div>
+                    <div class="m-2">
+                        <button class="btn  btn-primary btn-maya" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal">بروزرسانی اطلاعات</button>
+                        {% if request.user.active_role == 'br' and not request.user.has_business_card %}
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header"></div>
+                                    <div class="modal-body">پایه بازرگان حقیقی ایجاد شد.</div>
+                                    <div class="modal-footer justify-content-center">
+                                        <form method="post"
+                                            action="{% url 'upload_qualifications:create_business_card' %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-warning btn-mango"
+                                                data-bs-dismiss="modal" id="create-business-card">بستن</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End modall -->
+                        {% elif request.user.active_role == 'bt' and not request.user.has_company_business_card %}
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header"></div>
+                                    <div class="modal-body">پایه بازرگان حقوقی ایجاد شد.</div>
+                                    <div class="modal-footer justify-content-center">
+                                        <form method="post"
+                                            action="{% url 'upload_qualifications:create_business_card' %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-warning btn-mango"
+                                                data-bs-dismiss="modal" id="create-business-card">بستن</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End modall -->
+                        {% else %}
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header"></div>
+                                    <div class="modal-body">
+                                        <h3 class="text-center">پیغام</h3>
+                                        <p>استعلام اطلاعات کارت بازرگانی شما با موفقیت انجام گردید.</p>
+                                    </div>
+                                    <div class="modal-footer justify-content-center">
+                                        <button type="button" class="btn btn-success btn-forest"
+                                            data-bs-dismiss="modal">بستن</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <table class="table table-striped table-hover table-bordered text-center mt-3">
+                    <thead class="text-white" style="background:rgb(2, 65, 88);">
+                        <tr>
+                            <th>ردیف</th>
+                            <th>شماره درخواست</th>
+                            <th>نوع درخواست</th>
+                            <th>زمان ارسال</th>
+                            <th>وضعیت</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for card in businesscard_list %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ card.request_number }}</td>
+                            <td>{{ card.request_type }}</td>
+                            <td>{{ card.created_at | to_jalali }}</td>
+                            <td>{{ card.get_status_display }}</td>
+                            <td></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab" tabindex="0">
+            استعلام مجوز فعالیت مناطق آزاد</div>
+        <div class="tab-pane fade" id="pills-marz" role="tabpanel" aria-labelledby="pills-moredi-tab" tabindex="0">
+            استعلام مبادلات مرزی و گمرکی</div>
+        <div class="tab-pane fade" id="pills-moredi" role="tabpanel" aria-labelledby="pills-moredi-tab" tabindex="0">
+            استعلام مجوز موردی</div>
+        <div class="tab-pane fade" id="pills-dakheli" role="tabpanel" aria-labelledby="pills-dakheli-tab" tabindex="0">
+
+            <div class="p-3">
+
+                <div class="show_register_form_tajer mt-4">
+                    <h5 class="row-title before-primary">معرفی نقش تاجر داخلی</h5>
+                    <div class="shadow-sm p-3 bg-light rounded">
+                        <form method="post" action="{% url 'upload_qualifications:save_trader_role' %}">
+                            {% csrf_token %}
+                            <div class="row">
+                                <!-- نام واحد فعالیت تجاری -->
+                                <div class="col-md-8">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text">
+                                            <span class="text-danger">*</span> نام واحد فعالیت تجاری
+                                        </span>
+                                        <input type="text" name="actionNameStr" class="form-control" maxlength="100"
+                                            required>
+                                    </div>
+                                </div>
+                                <!-- چک‌باکس -->
+                                <div class="col-md-4 d-flex align-items-center">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="chkNotShowForSeller"
+                                            name="chkNotShowForSeller">
+                                        <label class="form-check-label" for="chkNotShowForSeller">عدم مشاهده نقش توسط
+                                            فروشنده</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <!-- حوزه فعالیت -->
+                                <div class="col-md-4">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text"><span class="text-danger">*</span> حوزه
+                                            فعالیت</span>
+                                        <select name="userRoleActivityID" class="form-control" required>
+                                            <option value="">انتخاب کنید</option>
+                                            <option value="دخانیات" statuss="1">دخانیات</option>
+                                            <option value="تلفن همراه و لوازم جانبی" statuss="1">تلفن همراه و لوازم جانبی</option>
+                                            <option value="منسوجات و پوشاک" statuss="1">منسوجات و پوشاک</option>
+                                            <option value="وسایل نقلیه موتوری" statuss="1">وسایل نقلیه موتوری</option>
+                                            <option value="لوازم یدکی خودرو - تایر" statuss="1">لوازم یدکی خودرو - تایر</option>
+                                            <option value="نفت، گاز و پتروشیمی" statuss="1">نفت، گاز و پتروشیمی</option>
+                                            <option value="شمش، مسکوکات و مصنوعات طلا" statuss="1">شمش، مسکوکات و مصنوعات طلا</option>
+                                            <option value="مواد غذایی" statuss="1">مواد غذایی</option>
+                                            <option value="اسباب بازی، بازی و سرگرمی" statuss="1">اسباب بازی، بازی و سرگرمی</option>
+                                            <option value="صنایع دستی" statuss="1">صنایع دستی</option>
+                                            <option value="لوازم خانگی" statuss="1">لوازم خانگی</option>
+                                            <option value="دارو و سلامت" statuss="1">دارو و سلامت</option>
+                                            <option value="صنایع پایین دستی پتروشیمی" statuss="1">صنایع پایین دستی پتروشیمی</option>
+                                            <option value="محصولات سلولزی" statuss="1">محصولات سلولزی</option>
+                                            <option value="میوه و مرکبات" statuss="1">میوه و مرکبات</option>
+                                            <option value="مقاطع فلزی" statuss="1">مقاطع فلزی</option>
+                                            <option value="تولید کننده ماسک (وزارت بهداشت)" statuss="1">تولید کننده ماسک (وزارت بهداشت)</option>
+                                            <option value="مقاطع چوبی" statuss="1">مقاطع چوبی</option>
+                                            <option value="عمران و ساختمان" statuss="1">عمران و ساختمان</option>
+                                            <option value="کالای خاص ثبتارش" statuss="1">کالای خاص ثبتارش</option>
+                                            <option value="مرغداری" statuss="1">مرغداری</option>
+                                            <option value="لوازم یدکی مشمول رهگیری" statuss="1">لوازم یدکی مشمول رهگیری</option>
+                                            <option value="گوشت و مرغ" statuss="1">گوشت و مرغ</option>
+                                            <option value="آرایشی و بهداشتی" statuss="1">آرایشی و بهداشتی</option>
+                                            <option value="معادن فلزی" statuss="1">معادن فلزی</option>
+                                            <option value="روغن موتور" statuss="1">روغن موتور</option>
+                                            <option value="حق العمل کاران تخم مرغ" statuss="1">حق العمل کاران تخم مرغ</option>
+                                            <option value="داروخانه" statuss="1">داروخانه</option>
+                                            <option value="معادن غیر فلزی" statuss="1">معادن غیر فلزی</option>
+                                            <option value="اقلام دیجیتال" statuss="1">اقلام دیجیتال</option>
+                                            <option value="مصالح ساختمانی - شیشه" statuss="1">مصالح ساختمانی - شیشه</option>
+                                            <option value="مصالح ساختمانی - آجر" statuss="1">مصالح ساختمانی - آجر</option>
+                                            <option value="مصالح ساختمانی - گچ" statuss="1">مصالح ساختمانی - گچ</option>
+                                            <option value="مصالح ساختمانی - کاشی و سرامیک" statuss="1">مصالح ساختمانی - کاشی و سرامیک</option>
+                                            <option value="مصالح ساختمانی - شن و ماسه" statuss="1">مصالح ساختمانی - شن و ماسه</option>
+                                            <option value="مصالح ساختمانی - بتن آماده" statuss="1">مصالح ساختمانی - بتن آماده</option>
+                                            <option value="لوازم یدکی خودرو - سایر (بجز تایر)" statuss="1">لوازم یدکی خودرو - سایر (بجز تایر)</option>
+                                            <option value="برق و الکترونیک" statuss="1">برق و الکترونیک</option>
+                                            <option value="آسانسور" statuss="1">آسانسور</option>
+                                            <option value="فرش دستباف" statuss="1">فرش دستباف</option>
+                                            <option value="محصولات نرم افزاری" statuss="1">محصولات نرم افزاری</option>
+                                            <option value="محصولات شیمایی خطرناک" statuss="1">محصولات شیمایی خطرناک</option>
+                                            <option value="سایر" statuss="1">سایر</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- نوع فعالیت -->
+                                <div class="col-md-4">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text"><span class="text-danger">*</span> نوع
+                                            فعالیت</span>
+                                        <select name="typeActivityID" class="form-control" required>
+                                            <option value="">انتخاب کنید</option>
+                                            <option value="وارد کننده" status="1">وارد کننده</option>
+                                            <option value="تولید کننده" status="1">تولید کننده</option>
+                                            <option value="عمده فروش" status="1">عمده فروش</option>
+                                            <option value="خرده فروش" status="1">خرده فروش</option>
+                                            <option value="شرکت پخش کالا" status="1">شرکت پخش کالا</option>
+                                            <option value="شرکت تعاونی توزیعی" status="1">شرکت تعاونی توزیعی</option>
+                                            <option value="صاحب برند" status="1">صاحب برند</option>
+                                            <option value="فروشگاه اینترنتی" status="1">فروشگاه اینترنتی</option>
+                                            <option value="پروژه های عمرانی" status="1">پروژه های عمرانی</option>
+                                            <option value="خدمات" status="1">خدمات</option>
+                                            <option value="شرکت تعاونی روستایی" status="1">شرکت تعاونی روستایی</option>
+                                            <option value="صرافی" status="1">صرافی</option>
+                                            <option value="بهره بردار رمز ارز" status="1">بهره بردار رمز ارز</option>
+                                            <option value="پیمانکار معادن" status="1">پیمانکار معادن</option>
+
+                                            <!-- ... بقیه گزینه‌ها -->
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- شماره تماس -->
+                                <div class="col-md-4">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text"><span class="text-danger">*</span> شماره
+                                            تماس</span>
+                                        <input type="text" name="Phone" class="form-control" maxlength="11" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <!-- کد پستی -->
+                                <div class="col-md-4">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text"><span class="text-danger">*</span> کد پستی محل
+                                            فعالیت</span>
+                                        <input type="text" name="postalCodeStr" class="form-control" maxlength="10"
+                                            required>
+                                    </div>
+                                </div>
+
+                                <!-- آدرس -->
+                                <div class="col-md-8">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text">آدرس</span>
+                                        <input type="text" name="addressPostalCodeStr" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- تعهد -->
+                            <div class="row mt-5">
+                                <div class="d-flex">
+                                    <div class="col-md-5 col-xs-12">
+                                        <div class="form-group">
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" id="checkAcceptRoles"
+                                                        data-fv-notempty-message="انتخاب این گزینه الزامی است"
+                                                        name="checkAcceptRoles" required="required"
+                                                        data-fv-field="checkAcceptRoles"><span class="text">
+                                                        <span
+                                                            style="color: indianred; font-size: 14px; font-weight: bold;">*</span>
+                                                        متعهد به قانون تجارت کشور ج.ا.ا می باشم</span>
+                                                </label>
+                                            </div>
+                                            <small style="display: none;" class="help-block"
+                                                data-fv-validator="notEmpty" data-fv-for="checkAcceptRoles"
+                                                data-fv-result="NOT_VALIDATED">انتخاب این گزینه الزامی است</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7 col-xs-12">
+                                        <div class="form-group">
+                                            <a id="tagCompetenciesAndRoles"
+                                                href="https://statics.ntsw.ir/Upload/NTSW/BusinessLaw.pdf"
+                                                class="btn btn-default"><i class="fa fa-download"></i>متن قانون تجارت
+                                            </a>
+                                            <a id="tagViewStuffRoles"
+                                                href="https://statics.ntsw.ir/Upload/NTSW/StuffObservationLaw.pdf"
+                                                class="btn btn-default"><i class="fa fa-download"></i>دستورالعمل رصد
+                                                کالا </a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!-- دکمه‌ها -->
+                            <div class="row mt-4">
+                                <div class="col-md-12 d-flex justify-content-between">
+
+                                    <div>
+                                        <button type="button" class="btn btn-primary">
+                                            <i class="fa fa-plus"></i> افزودن مجوزهای فعالیتی
+                                        </button>
+                                    </div>
+
+                                    <div class="d-flex">
+                                        <button type="submit" class="btn btn-success">ثبت اطلاعات</button>
+                                        <button type="reset" id="show_register_form_tajer_list"
+                                            class="btn btn-danger">انصراف</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </form>
+
+                        <!-- جدول مجوزها -->
+                        <div class="table-responsive mt-4">
+                            <table class="table table-striped table-bordered text-center">
+                                <thead class="text-white" style="background:rgb(2, 65, 88);">
+                                    <tr>
+                                        <th>ردیف</th>
+                                        <th>نوع مجوز</th>
+                                        <th>شرح عنوان</th>
+                                        <th>وضعیت</th>
+                                        <th>جزئیات</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="5">موردی یافت نشد</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="show_tajer_role_list">
+                    <div class="d-md-flex">
+                        <div class="m-2">
+                            <button id="save_tajer_role" type="button" class="btn  btn-primary btn-maya me-2">
+                                <i class="fa fa-plus-square"></i>
+                                فعالیت تجاری جدید </button>
+                        </div>
+                    </div>
+                   <table class="table table-striped table-hover table-bordered text-center">
+                        <thead class="text-white" style="background:rgb(2, 65, 88);">
+                            <tr class="bg-themeprimary" role="row">
+                                
+                                <th class="sorting_disabled urlvcodelng" rowspan="1" colspan="1" style="width: 37px;">کد
+                                    نقش کاربر</th>
+                                <th class="sorting_disabled coName" rowspan="1" colspan="1" style="width: 57px;">نام
+                                    واحد تجاری</th>
+                                <th class="sorting_disabled userRoleActivityName" rowspan="1" colspan="1"
+                                    style="width: 57px;">حوزه فعالیت</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 41px;">نوع فعالیت
+                                </th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 80px;">تلفن تماس</th>
+                                <th class="sorting_disabled urlPostalCodeStr" rowspan="1" colspan="1"
+                                    style="width: 41px;">کد پستی</th>
+                                <th class="sorting_disabled coLocation" rowspan="1" colspan="1" style="width: 214px;">
+                                    محل فعالیت</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 265px;">حذف</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 306px;">جزییات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for trade in trade_roles %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ trade.action_name}}</td>
+                                <td>{{ trade.activity_domain }}</td>
+                                <td>{{ trade.activity_type }}</td>
+                                <td>{{ trade.phone }}</td>
+                                <td>{{ trade.postal_code }}</td>
+                                <td>{{ trade.address }}</td>
+                                <td><button type="button" name="btnDelete" class="btn btn-danger btn-xs"><i class="fa fa-remove"></i> حذف نقش</button></td>
+                                <td>
+                                    <button type="button" name="btnAddLicense" class="btn btn-info btn-xs margin-top-5 edit"><i class="fa fa-edit"></i> مشاهده / ویرایش</button>
+                                    <button type="button" name="PrinRoleData" class="btn btn-purple btn-xs margin-top-5 edit"> <i class="fa fa-print"></i>چاپ اطلاعات نقش</button>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="7">هیچ استعلامی یافت نشد</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+
+                    </table>
+                </div>
+
+
+
+            </div>
+
+
+
+        </div>
+
+    </div>
+</div>
+
+<style>
+    .nav a {
+        padding: 20px;
+    }
+
+    .nav-link.active {
+        background-color: inherit !important;
+        border-top: 2px solid #024158 !important;
+        border-radius: 0;
+        font-size: 13px;
+        font-weight: bold;
+    }
+
+    .nav-link {
+        color: initial;
+    }
+
+    .nav-link:hover,
+    .nav-link:focus {
+        color: initial;
+        font-weight: bold;
+    }
+
+    span.input-group-text {
+        padding: 13px;
+        padding: 7px 25px;
+        font-size: 12px;
+        min-width: 145px;
+    }
+</style>
+
+{% endblock main %}

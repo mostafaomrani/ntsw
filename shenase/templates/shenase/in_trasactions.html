@@ -1,0 +1,250 @@
+{% extends "base.html" %}
+{% load static %}
+{% load date_filters %}
+{% load widget_tweaks %}
+{% load ui_template_tag %}
+
+{% block title %}
+جستجوی درخواست‌ها
+{% endblock title %}
+
+{% block breadcrumbs %}
+{% breadcrumbs 'عملیات تجارت داخلی' '#' 'جستجوی درخواست‌ها' '#' %}
+{% endblock breadcrumbs %}
+
+{% block page-title %}
+جستجوی درخواست‌ها
+{% endblock page-title %}
+
+{% block main %}
+<div class="container-fluid">
+    <div class="bg-white p-3 request-main-data">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                <form id="frmSearch" class="fv-form fv-form-bootstrap" novalidate="novalidate">
+                    <input name="__RequestVerificationToken" type="hidden" value="tf5SD7Ei5d3iJ-1mJ1dbIZHc9_wU22kNuwI3dkwQnPFRvcC_5oClFTrDQ5K_FVclJpmAT00csXYPZqpohVjLRepHVXU1">
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="card border-primary">
+                                <div class="card-header bg-primary text-white">
+                                    <h5 class="mb-0"><i class="fa fa-search"></i> نوار ابزار جستجو</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <!-- دکمه افزودن جدید -->
+                                        <div class="col-md-12 mb-3 box-bordered-bottom-dashed">
+                                            <div class="dropdown d-inline-block me-2">
+                                                <button class="btn btn-success dropdown-toggle" type="button" id="AddNewDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="fa fa-plus"></i> افزودن جدید
+                                                </button>
+                                                <ul class="dropdown-menu child" aria-labelledby="AddNewDropdown">
+                                                    <li><a class="dropdown-item" href="#" id="NewRequest"><i class="fa fa-plus-square"></i> افزودن درخواست جدید</a></li>
+                                                    <li><a class="dropdown-item" href="#" id="ImportExcel"><i class="fa fa-file-excel"></i> ثبت سند با فایل اکسل</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <!-- شماره درخواست -->
+                                        <div class="col-md-4 mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light">شماره درخواست</span>
+                                                <input type="text" name="requestNumber" class="form-control" placeholder="">
+                                            </div>
+                                        </div>
+                                        <!-- تاریخ ارسال -->
+                                        <div class="col-md-4 mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light">تاریخ ارسال</span>
+                                                <input type="text" name="fromDate" class="form-control persianDatePicker1 pwt-datepicker-input-element" style="width: 100px;" autocomplete="off">
+                                                <span class="input-group-text bg-light">تا</span>
+                                                <input type="text" name="toDate" class="form-control persianDatePicker1 pwt-datepicker-input-element" style="width: 100px;" autocomplete="off">
+                                            </div>
+                                        </div>
+                                        <!-- سرفصل -->
+                                        <div class="col-md-4 mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light">سرفصل</span>
+                                                <input type="text" name="Headlines" class="form-control" placeholder="">
+                                            </div>
+                                        </div>
+                                        <!-- وضعیت درخواست -->
+                                        <div class="col-md-4 mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light">وضعیت درخواست</span>
+                                                <select name="requestType" class="form-control">
+                                                    <option value="1" selected="selected">همه</option>
+                                                    <option value="5">رد شده</option>
+                                                    <option value="3">در حال نظارت</option>
+                                                    <option value="4">جاری (منتظر اقدام کاربر)</option>
+                                                    <option value="2">ارسال نشده</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <!-- دکمه‌های جستجو و لغو -->
+                                        <div class="col-md-4 mb-3">
+                                            <button type="button" name="search" class="btn btn-primary me-2"><i class="fa fa-search"></i> جستجو</button>
+                                            <button type="button" name="btnClearSearch" class="btn btn-warning me-2"><i class="fa fa-refresh"></i> لغو جستجو</button>
+                                        </div>
+                                    </div>
+                                    <!-- هشدارها -->
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="alert alert-warning" style="margin-bottom: 7px;" id="alertMe">
+                                                <strong>توجه!</strong> درخواست ارسال نشده تنها تا یک هفته در کارتابل در گردش باقی می‌ماند، پس از آن خودبخود از کارتابل حذف خواهد شد.
+                                            </div>
+                                            <div class="alert alert-warning" style="margin-bottom: 7px;">
+                                                <strong>توجه!</strong> بعد از ثبت و اخذ شناسه کالا، برای استفاده از آن در سامانه‌های دیگر از جمله سامانه جامع تجارت نیاز است چند ساعت صبر نمایید.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.input-group-text.bg-light {
+    width: 120px;
+}
+.btn-purple-csm {
+    background-color: #6f42c1 !important;
+    color: #fff;
+}
+.btn-purple-csm:hover {
+    background-color: #5a32a3 !important;
+}
+.bg-themeprimary {
+    background-color: #024158 !important;
+    color: white;
+}
+.card.border-primary {
+    border-color: #024158 !important;
+}
+.hidden {
+    display: none;
+}
+.mb-3 {
+    margin-bottom: 1rem !important;
+}
+.me-2 {
+    margin-left: 0.5rem !important;
+}
+.box-bordered-bottom-dashed {
+    border-bottom: 1px dashed #ccc;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+.alert-warning {
+    background-color: #fff3cd;
+    border-color: #ffecb5;
+    color: #664d03;
+}
+</style>
+
+
+
+{% endblock main %}
+
+{% block js %}
+<!-- بارگذاری jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- بارگذاری Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- بارگذاری Persian Datepicker -->
+<script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    // مدیریت Persian DatePicker
+    $('.persianDatePicker1').each(function() {
+        $(this).persianDatepicker({
+            format: 'YYYY/MM/DD',
+            autoClose: true,
+            toolbox: {
+                calendarSwitch: {
+                    enabled: false
+                }
+            }
+        });
+    });
+
+    // باز کردن خودکار منوی دراپ‌داون با کلیک
+    $('#AddNewDropdown').on('click', function() {
+        var $dropdown = $(this).closest('.dropdown');
+        var $menu = $dropdown.find('.dropdown-menu');
+        if ($menu.hasClass('show')) {
+            $menu.removeClass('show');
+        } else {
+            $('.dropdown-menu').removeClass('show');
+            $menu.addClass('show');
+        }
+    });
+
+    // بستن منوها هنگام کلیک خارج از آن‌ها
+    $(document).on('click', function(e) {
+        if (!$(e.target).closest('.dropdown').length) {
+            $('.dropdown-menu').removeClass('show');
+        }
+    });
+
+    // رویداد کلیک برای دکمه جستجو
+    $('button[name="search"]').on('click', function() {
+        alert('جستجو غیرفعال است. لطفاً منطق جستجو را پیاده‌سازی کنید.');
+    });
+
+    // رویداد کلیک برای لغو جستجو
+    $('button[name="btnClearSearch"]').on('click', function() {
+        $('#frmSearch')[0].reset();
+        $('.persianDatePicker1').persianDatepicker('clear');
+    });
+
+    // رویداد کلیک برای آیتم‌های منوی دراپ‌داون
+    $('.dropdown-menu a[id="NewRequest"]').on('click', function(e) {
+        e.preventDefault();
+        alert('افزودن درخواست جدید غیرفعال است. لطفاً منطق را پیاده‌سازی کنید.');
+    });
+
+    $('.dropdown-menu a[id="ImportExcel"]').on('click', function(e) {
+        e.preventDefault();
+        $('#excelUploadModal').modal('show');
+        $('#excelUploadModalLabel').text('آپلود فایل اکسل برای ثبت سند');
+    });
+
+    // Modal برای آپلود اکسل
+    if (!$('#excelUploadModal').length) {
+        $('body').append(`
+            <div class="modal fade" id="excelUploadModal" tabindex="-1" aria-labelledby="excelUploadModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="excelUploadModalLabel">آپلود فایل اکسل</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="file" id="excelFileInput" accept=".xlsx,.xls" class="form-control">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+                            <button type="button" class="btn btn-primary" id="uploadExcelBtn">آپلود</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `);
+    }
+
+    $('#uploadExcelBtn').on('click', function() {
+        var fileInput = $('#excelFileInput')[0];
+        if (fileInput.files.length > 0) {
+            alert('آپلود فایل غیرفعال است. لطفاً منطق آپلود را پیاده‌سازی کنید.');
+        } else {
+            alert('لطفاً یک فایل انتخاب کنید');
+        }
+    });
+});
+</script>
+{% endblock js %}

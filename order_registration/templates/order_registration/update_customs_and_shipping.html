@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% load static %}
+{% load date_filters %}
+{% load widget_tweaks %}
+{% load date_filters %}
+{% block title %}
+    پرونده ثبت سفارش
+{% endblock title %}
+{% block page-title %}
+    مدیریت پرونده
+{% endblock page-title %}
+{% block head %}
+    <link href="{% static 'selectize-master/css/selectize.css' %}"
+          rel="stylesheet">
+    <link href="{% static 'bootstrap-datepicker/css/bootstrap-datepicker.min.css' %}"
+          rel="stylesheet">
+{% endblock head %}
+{% block main %}
+    <nav class="" aria-label="breadcrumb">
+        <ol class="breadcrumb order-registration-breadcrumb">
+            <li class="breadcrumb-item border-bottom border-top px-4 py-3  processed">
+                <strong class="outline-badge">
+                    <svg stroke="currentColor"
+                         fill="currentColor"
+                         stroke-width="0"
+                         viewBox="0 0 512 512"
+                         height="1em"
+                         width="1em"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z">
+                        </path>
+                    </svg>
+                </strong>
+                <strong>اطلاعات اصلی</strong>
+            </li>
+            <li class="breadcrumb-item border-bottom border-top px-4 ps-5 py-3 active"
+                aria-current="page">
+                <strong class="outline-badge">۲</strong>
+                <strong>گمرکی و حمل و نقل</strong>
+            </li>
+            <li class="breadcrumb-item border-bottom border-top px-4 ps-5 py-3"
+                aria-current="page">
+                <strong class="outline-badge">۳</strong>
+                <strong>مالی و بانکی</strong>
+            </li>
+            <li class="breadcrumb-item border-bottom border-top px-4 ps-5 py-3"
+                aria-current="page">
+                <strong class="outline-badge">۴</strong>
+                <strong>کالاهای پرونده</strong>
+            </li>
+            <li class="breadcrumb-item border-bottom border-top px-4 ps-5 py-3"
+                aria-current="page">
+                <strong class="outline-badge">۵</strong>
+                <strong>مستندات پرونده</strong>
+            </li>
+        </ol>
+    </nav>
+    <div class="container-fluid bg-white py-5">
+        <form method="post" class="needs-validation custom-and-shipping" novalidate>
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-12 mb-3 mt-4">
+                    <span class="px-4 py-2 border-start border-navy border-4 bg-white section-title">اطلاعات قرارداد</span>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">{{ form.incoterms.label }}*</span>
+                            {% render_field form.incoterms class="form-control p-0" placeholder="جستجو کنید" %}
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="d-flex">
+                            <div>
+                                <a href="{% static 'order_registration/ContractGuide.f65d372313cab73a272e.pdf' %}"
+                                   class="btn btn-success btn-forest px-3"
+                                   target="_blank"><i class="fa fa-info"
+   aria-hidden="true"
+   style="color: rgb(255, 255, 255)"></i></a>
+                            </div>
+                            <div class="ms-3">
+                                <div class="form-check">
+                                    {% render_field form.shipping_period class="form-check-input" %}
+                                    <label class="form-check-label" for="flexCheckDefault">{{ form.shipping_period.label }}</label>
+                                </div>
+                            </div>
+                            <div class="ms-3">
+                                <div class="form-check">
+                                    {% render_field form.shipping_all_at_once class="form-check-input" %}
+                                    <label class="form-check-label" for="flexCheckDefault">{{ form.shipping_all_at_once.label }}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mb-3 mt-4">
+                        <span class="px-4 py-2 border-start border-navy border-4 section-title">اطلاعات گمرکی</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">{{ form.shipping_type.label }}*</span>
+                            {% render_field form.shipping_type class="form-control p-0"  placeholder="جستجو کنید" %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">{{ form.entrance_edge.label }}*</span>
+                            {% render_field form.entrance_edge class="form-control p-0" placeholder="جستجو کنید" dir="rtl" %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">{{ form.destination_custom.label }}*</span>
+                            {% render_field form.destination_custom class="form-control p-0" dir="rtl" placeholder="جستجو کنید" %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">{{ form.origin_country.label }}*</span>
+                            {% render_field form.origin_country class="form-control p-0" dir="rtl" placeholder="جستجو کنید" %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">{{ form.loading_location.label }}</span>
+                            {% render_field form.loading_location class="form-control" %}
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">{{ form.shipping_nationality.label }}*</span>
+                            {% render_field form.shipping_nationality class="form-control p-0" placeholder="جستجو کنید" %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="d-md-flex justify-content-between align-items-center border border-top">
+                            <div class="d-md-flex">
+                                <div class="my-3 mx-2 bg-gray px-2 py-3">
+                                    <span>وضعیت پرونده:</span>
+                                    <span class="text-danger">پیش نویس</span>
+                                </div>
+                            </div>
+                            <div class="d-md-flex align-items-center">
+                                <div class="my-3 mx-2">
+                                    <a class="btn  btn-primary btn-maya"
+                                       href="{% url 'order_registration:main_data_list' %}"
+                                       type="button">انصراف</a>
+                                </div>
+                                <div class="my-3 mx-2">
+                                    <a class="btn  btn-primary btn-maya"
+                                       href="{% url 'order_registration:update_main_data' object.main_data.pk %}"
+                                       type="button">
+                                        <i class="fa fa-step-forward" aria-hidden="true"></i>
+                                        <span class="ps-1">قبلی</span>
+                                    </a>
+                                </div>
+                                <div class="my-3 mx-2">
+                                    <button class="btn  btn-primary btn-maya" type="submit">
+                                        <span class="pe-1">بعدی</span>
+                                        <i class="fa fa-step-backward" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock main %}
+{% block js %}
+    <script src="{% static 'order_registration/create_customs_and_shipping.js' %}"></script>
+{% endblock js %}

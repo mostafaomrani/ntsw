@@ -1,0 +1,360 @@
+{% extends "base.html" %}
+{% load static %}
+{% load date_filters %}
+{% load widget_tweaks %}
+{% load date_filters %}
+{% load ui_template_tag %}
+{% block title %}
+مدیریت اسناد
+{% endblock title %}
+{% block breadcrumbs %}
+{% breadcrumbs 'عملیات شناسه کالا' '#' 'مدیریت اسناد' '#' %}
+{% endblock breadcrumbs %}
+{% block page-title %}
+مدیریت اسناد
+{% endblock page-title %}
+{% block main %}
+{% if messages %}
+{% for message in messages %}
+<div class="text-center alert alert-{{ message.tags }}">{{ message|safe }}</div>
+{% endfor %}
+{% endif %}
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
+
+{% endblock main %}
+
+{% block js %}
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    // تابع AJAX برای دریافت داده بر اساس shenaseid
+    function loadShenaseData(shenaseId) {
+        $.ajax({
+            url: '/shenase/json/' + shenaseId,
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                console.log('داده‌های دریافتی:', response);
+                
+                // اینجا می‌توانید با داده‌های دریافتی کار کنید
+                handleResponseData(response, shenaseId);
+                
+                // فعال کردن تب بعدی
+                // activateNextTab();
+            },
+            error: function(xhr, status, error) {
+                console.error('خطا در دریافت داده:', error);
+                alert('خطا در بارگذاری اطلاعات. لطفاً دوباره تلاش کنید.');
+            }
+        });
+    }
+
+    // تابع مدیریت داده‌های دریافتی
+    function handleResponseData(data, method) {
+        if (!data || !data.data) {
+            console.error("داده‌ها معتبر نیستند");
+            return;
+        }
+
+        // اگه قبلاً DataTable وجود داره پاکش کن
+        if ($.fn.DataTable.isDataTable('#chapterDataTable')) {
+            $('#chapterDataTable').DataTable().destroy();
+        }
+        $('.showtable').empty();
+
+        // شروع ساخت جدول
+        var tableHTML = '<table id="chapterDataTable" class="display table table-bordered table-striped" style="width:100%">';
+        tableHTML += '<thead><tr class="bg-themeprimary">' +
+            '<th>انتخاب سرفصل</th>' +
+            '<th>تصویر کالا</th>' +
+            '<th>کد سرفصل</th>' +
+            '<th>عنوان سرفصل</th>' +
+            '<th>category</th>' +
+            '</tr></thead><tbody>';
+
+        $.each(data.data, function(index, value) {
+            tableHTML += '<tr>' +
+                '<td><a href="javascript:;" name="btnSuccess" class="btn btn-palegreen">انتخاب سرفصل</a></td>' +
+                '<td><a href="javascript:;" name="btnShowPicture" class="btn btn-magenta"><i class="glyphicon glyphicon-picture"></i>تصویر</a></td>' +
+                '<td>' + (value.CategoryCode || '') + '</td>' +
+                '<td>' + (value.ComBaseName || '') + '</td>' +
+                '<td>' + (value.LatinComBaseName || '') + '</td>' +
+            '</tr>';
+        });
+
+        tableHTML += '</tbody></table>';
+
+        // اضافه کردن جدول به DOM
+        $('.showtable').append(tableHTML);
+
+        // فعال کردن tooltip ها
+        $('[data-toggle="tooltip"]').tooltip();
+
+        // اینیشیالایز DataTable
+        $('#chapterDataTable').DataTable({
+            paging: true,
+            searching: true,
+            info: true,
+            ordering: true,
+            pageLength: 10,
+            language: {
+                "sEmptyTable":     "هیچ داده‌ای در جدول وجود ندارد",
+                "sInfo":           "نمایش _START_ تا _END_ از _TOTAL_ رکورد",
+                "sInfoEmpty":      "نمایش 0 تا 0 از 0 رکورد",
+                "sInfoFiltered":   "(فیلتر شده از _MAX_ رکورد)",
+                "sLengthMenu":     "نمایش _MENU_ رکورد",
+                "sLoadingRecords": "در حال بارگذاری...",
+                "sProcessing":     "در حال پردازش...",
+                "sSearch":         "جستجو:",
+                "sZeroRecords":    "رکوردی مطابق جستجوی شما پیدا نشد",
+                "oPaginate": {
+                    "sFirst":    "اولین",
+                    "sLast":     "آخرین",
+                    "sNext":     "بعدی",
+                    "sPrevious": "قبلی"
+                }
+            }
+        });
+    }
+
+    // تابع نمایش پیام موفقیت
+    function showSuccessMessage(message) {
+        // حذف پیام‌های قبلی
+        $('.success-message').remove();
+        
+        // اضافه کردن پیام جدید
+        $('#nav-profile').prepend(`
+            <div class="alert alert-success alert-dismissible fade show success-message" role="alert">
+                <i class="fa fa-check-circle"></i> ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        `);
+        
+        // حذف خودکار بعد از 3 ثانیه
+        setTimeout(function() {
+            $('.success-message').fadeOut();
+        }, 3000);
+    }
+
+    // تابع نمایش تصویر
+    function showPictureModal(pictureId) {
+        // نمایش loading
+        $('#pictureModal .modal-body').html(`
+            <div class="text-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">در حال بارگذاری...</span>
+                </div>
+                <p class="mt-2">در حال بارگذاری تصویر...</p>
+            </div>
+        `);
+        $('#pictureModal').modal('show');
+        
+        // AJAX برای دریافت تصویر
+        $.ajax({
+            url: '/shenase/picture/' + pictureId,
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                if (response.image_url) {
+                    $('#pictureModal .modal-body').html(`
+                        <div class="text-center">
+                            <img src="${response.image_url}" class="img-fluid" alt="تصویر کالا" style="max-height: 500px;">
+                            <div class="mt-3">
+                                <small class="text-muted">تصویر سرفصل</small>
+                            </div>
+                        </div>
+                    `);
+                } else {
+                    $('#pictureModal .modal-body').html(`
+                        <div class="text-center text-muted">
+                            <i class="fa fa-image fa-3x mb-3"></i>
+                            <p>تصویر در دسترس نیست</p>
+                        </div>
+                    `);
+                }
+            },
+            error: function() {
+                $('#pictureModal .modal-body').html(`
+                    <div class="text-center text-danger">
+                        <i class="fa fa-exclamation-triangle fa-3x mb-3"></i>
+                        <p>خطا در بارگذاری تصویر</p>
+                    </div>
+                `);
+            }
+        });
+    }
+
+    // تابع فعال کردن تب بعدی
+    function activateNextTab() {
+        // تغییر وضعیت تب‌ها
+        $('#nav-home-tab').removeClass('active').addClass('text-success');
+        $('#nav-profile-tab').addClass('active').removeClass('text-muted');
+        
+        // تغییر محتوای تب فعلی
+        $('#nav-home').removeClass('show active');
+        $('#nav-profile').addClass('show active');
+    }
+
+    // اتصال رویداد کلیک به radio ها
+    $('input[name="radioCommonTitle"]').on('click', function() {
+        var shenaseId = $(this).attr('shenaseid');
+        var commonTitleId = $(this).attr('id_commontitle');
+        
+        console.log('شَناسه انتخاب شده:', shenaseId);
+        
+        // نمایش loading
+        // $('#nav-profile').html(`
+        //     <div class="container-fluid">
+        //         <div class="p-3 bg-white text-center">
+        //             <div class="spinner-border text-primary" role="status">
+        //                 <span class="visually-hidden">در حال بارگذاری...</span>
+        //             </div>
+        //             <p class="mt-2">در حال بارگذاری اطلاعات...</p>
+        //         </div>
+        //     </div>
+        // `);
+        
+        // فراخوانی AJAX
+        setTimeout(function() {
+            loadShenaseData(shenaseId);
+        }, 500);
+    });
+
+    // رویداد کلیک برای دکمه جستجو
+    $('#btnSearchInitialInventory').on('click', function() {
+        var searchTerm = $('#searchTerm').val();
+        var searchMode = $('.searchmode').val();
+        
+        if (!searchTerm.trim()) {
+            alert('لطفاً عبارت مورد نظر را وارد کنید');
+            return;
+        }
+        
+        // نمایش loading برای جستجو
+        $('.SuitHeghti').html(`
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">در حال جستجو...</span>
+                </div>
+                <p class="mt-2">در حال جستجو...</p>
+            </div>
+        `);
+        
+        // AJAX برای جستجو
+        $.ajax({
+            url: '/shenase/search/',
+            type: 'GET',
+            data: {
+                'q': searchTerm,
+                'mode': searchMode
+            },
+            dataType: 'json',
+            success: function(response) {
+                console.log('نتایج جستجو:', response);
+                displaySearchResults(response);
+            },
+            error: function(xhr, status, error) {
+                console.error('خطا در جستجو:', error);
+                $('.SuitHeghti').html(`
+                    <div class="text-center text-danger py-5">
+                        <i class="fa fa-exclamation-triangle fa-3x mb-3"></i>
+                        <p>خطا در انجام جستجو</p>
+                    </div>
+                `);
+            }
+        });
+    });
+
+    // تابع نمایش نتایج جستجو
+    function displaySearchResults(results) {
+        var html = '<div class="container-fluid"><div class="p-3 bg-white"><h5 class="mb-3">نتایج جستجو:</h5>';
+        
+        if (!results || results.length === 0) {
+            html += '<div class="text-center text-muted py-4"><i class="fa fa-search fa-2x mb-2"></i><br>نتیجه‌ای یافت نشد</div>';
+        } else {
+            html += '<div class="row">';
+            $.each(results, function(index, item) {
+                html += `
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100 border-primary">
+                            <div class="card-body">
+                                <h6 class="card-title text-primary">${item.ComBaseName || item.title}</h6>
+                                <p class="card-text small text-muted">${item.Definition || item.description || 'توضیحاتی موجود نیست'}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-info">کد: ${item.CategoryCode || item.shenaseid}</small>
+                                    <button class="btn btn-primary btn-sm select-result" 
+                                            data-shenaseid="${item.shenaseid || item.CategoryCode}"
+                                            data-title="${item.ComBaseName || item.title}"
+                                            data-category-id="${item.ID_Category}">
+                                        <i class="fa fa-check"></i> انتخاب
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+        }
+        
+        html += '</div></div>';
+        
+        // نمایش نتایج در تب فعلی
+        $('.SuitHeghti').html(html);
+        
+        // اتصال رویداد به دکمه‌های انتخاب
+        $('.select-result').on('click', function() {
+            var shenaseId = $(this).data('shenaseid');
+            var title = $(this).data('title');
+            var categoryId = $(this).data('category-id');
+            
+            console.log('انتخاب از نتایج جستجو:', { shenaseId, title, categoryId });
+            
+            // شبیه‌سازی انتخاب radio
+            $('input[shenaseid="' + shenaseId + '"]').prop('checked', true).trigger('click');
+        });
+    }
+
+    // رویداد Enter برای جستجو (با توجه به onkeydown موجود)
+    $('#searchTerm').on('keypress', function(e) {
+        if (e.which === 13) {
+            e.preventDefault();
+            $('#btnSearchInitialInventory').click();
+        }
+    });
+
+    // تابع myfunction اصلی (اگر قبلاً تعریف نشده)
+    window.myfunction = function(commonTitleId, shenaseId) {
+        console.log('تابع myfunction فراخوانی شد:', commonTitleId, shenaseId);
+        
+        // فراخوانی AJAX
+        loadShenaseData(shenaseId);
+    };
+
+    // Modal برای نمایش تصویر (اضافه کردن به DOM)
+    if (!$('#pictureModal').length) {
+        $('body').append(`
+            <div class="modal fade" id="pictureModal" tabindex="-1" aria-labelledby="pictureModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="pictureModalLabel">تصویر کالا</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- محتوای تصویر اینجا قرار می‌گیرد -->
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `);
+    }
+});
+</script>
+{% endblock js %}

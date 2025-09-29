@@ -1,0 +1,1433 @@
+{% extends "base.html" %}
+{% load static %}
+{% load date_filters %}
+{% load widget_tweaks %}
+{% load ui_template_tag %}
+{% block title %}
+ثبت کالای جدید
+{% endblock title %}
+{% block breadcrumbs %}
+{% breadcrumbs 'عملیات شناسه کالا' '#' 'ثبت کالای جدید' '#' %}
+{% endblock breadcrumbs %}
+{% block page-title %}
+ثبت کالای جدید
+{% endblock page-title %}
+{% block main %}
+{% if messages %}
+{% for message in messages %}
+<div class="text-center alert alert-{{ message.tags }}">{{ message|safe }}</div>
+{% endfor %}
+{% endif %}
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
+<div class="container-fluid">
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="nav-link active button-breadcrumbs py-3 border-bottom border-top" id="nav-home-tab"
+                data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"
+                aria-selected="true">
+                <span class="outline-badge">1</span> انتخاب سرفصل
+            </button>
+            <button class="nav-link button-breadcrumbs py-3 border-bottom border-top ps-5" id="nav-profile-tab"
+                data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile"
+                aria-selected="false">
+                <span class="outline-badge">2</span> كدهای بين المللی
+            </button>
+            <button class="nav-link button-breadcrumbs py-3 border-bottom border-top ps-5" id="nav-profile3-tab"
+                data-bs-toggle="tab" data-bs-target="#nav-profile3" type="button" role="tab"
+                aria-controls="nav-profile3" aria-selected="false">
+                <span class="outline-badge">3</span> فیلدهای اجباری
+            </button>
+            <button class="nav-link button-breadcrumbs py-3 border-bottom border-top ps-5" id="nav-profile4-tab"
+                data-bs-toggle="tab" data-bs-target="#nav-profile4" type="button" role="tab"
+                aria-controls="nav-profile4" aria-selected="false">
+                <span class="outline-badge">4</span> فیلدهای اختیاری
+            </button>
+            <button class="nav-link button-breadcrumbs py-3 border-bottom border-top ps-5" id="nav-profile5-tab"
+                data-bs-toggle="tab" data-bs-target="#nav-profile5" type="button" role="tab"
+                aria-controls="nav-profile5" aria-selected="false">
+                <span class="outline-badge">5</span> پیوست
+            </button>
+        </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+            <div class="bg-white p-3 request-main-data">
+
+
+
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12"
+                        style="text-align: center;display: flex;margin: auto;justify-content: center;">
+                        <div class=" col-lg-8 col-md-8 col-md-push-2 col-sm-12 col-xs-12">
+                            <div class="form-group" style="margin-top: 20px;margin-bottom: 21px;text-align: center;">
+                                <div class="input-group"
+                                    style="background: #007e90; padding: 3px; border-radius: 30px;">
+                                    <input name="searchTerm" id="searchTerm" type="text" class="form-control search-box"
+                                        onkeydown="return (event.keyCode != 13);"
+                                        placeholder=" لطفا سرفصل مورد نظر را وارد نمایید "
+                                        style="border: 2px solid #007e90; border-radius: 30px !important; font-size: larger; height: 46px; background-image: url(/images/search.png); background-position: right center; background-repeat: no-repeat; padding-right: 35px !important;"><span
+                                        class="input-group-btn" style="border-radius: 30px;">
+                                        <select class="searchmode" name="searchmode">
+
+                                            <option value="0">کد و نام سرفصل</option>
+                                            <option value="1">کد و شرح تعرفه</option>
+                                            <option value="2">کد و شرح ISIC</option>
+                                            <option value="3">نام های متناظر سرفصل</option>
+                                        </select>
+                                        <button type="button" id="btnSearchInitialInventory"
+                                            name="btnSearchInitialInventory" class="btn btn-palegreen llllactive"
+                                            style="border-radius: 30px; margin-right: 5px; border-color: #007e90; height: 45px; outline: none;background-color: #a0d468;">
+                                            <i class="fa fa-search"></i>جستجو</button></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="step-content" id="simplewizard-steps">
+                            <div id="simplewizardstep1" class="active">
+                                <div class="SuitHeghti">
+                                    <div class="row ">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div id="divCommonTitles" class="buttons-preview middle"
+                                                style="margin: 20px 0 20px 0;text-align: center;">
+                                                {% for cat in categories %}
+                                                <label>
+                                                    <input type="radio" name="radioCommonTitle" checked=""
+                                                        shenaseid="{{ cat.id }}" shebasename="{{ cat.name }}"
+                                                        at="{{ cat.id }}" id_commontitle="1"
+                                                        onclick="javascript:myfunction('{{ cat.id }}');">
+                                                    <div class="selectboxme box"><span>{{ cat.name }} </span> </div>
+                                                </label>
+                                                {% endfor %}
+                                            </div>
+                                            <div class="showtable"> </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile2-tab">
+            <div class="container-fluid">
+                <div class="p-3 bg-white">
+
+                    <!-- اطلاعات سرفصل -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        <!-- کد سرفصل -->
+                                        <div class="col-md-12 mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light">
+                                                    کد سرفصل
+                                                </span>
+                                                <input type="text" id="CategoryCode2" name="CategoryCode"
+                                                    class="form-control bg-light" disabled="disabled"
+                                                    placeholder="CategoryCode" readonly>
+                                            </div>
+                                        </div>
+
+                                        <!-- عنوان سرفصل -->
+                                        <div class="col-md-12 mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light">
+                                                    عنوان سرفصل
+                                                </span>
+                                                <input type="text" id="CategoryName2" name="CategoryName"
+                                                    class="form-control bg-light" disabled="disabled"
+                                                    placeholder="CategoryName" readonly>
+                                            </div>
+                                        </div>
+
+                                        <!-- Category Name -->
+                                        <div class="col-md-12 mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light">
+                                                    Category Name
+                                                </span>
+                                                <input type="text" id="LatinCategoryName2" name="LatinCategoryName"
+                                                    class="form-control bg-light" disabled="disabled"
+                                                    placeholder="CategoryName" readonly>
+                                            </div>
+                                        </div>
+
+                                        <!-- تعریف سرفصل -->
+                                        <div class="col-md-12 mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light">
+                                                    تعریف سرفصل
+                                                </span>
+                                                <textarea id="categorydescHelper" name="categorydescHelper"
+                                                    class="form-control bg-light" disabled="disabled"
+                                                    placeholder="تعریف سرفصل" rows="4" readonly></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="card bg-light h-100">
+                                        <div class="card-body text-center p-3">
+                                            <div id="imgGoodViewer"
+                                                style="height: 200px; display: flex; align-items: center; justify-content: center;">
+                                                <a href="#" target="_blank" class="img-fluid">
+                                                    <img id="image_syllabus"
+                                                        src="/static/images/category-placeholder.jpg" alt="تصویر سرفصل"
+                                                        class="img-fluid rounded border"
+                                                        style="max-height: 100%; object-fit: cover;">
+                                                </a>
+                                            </div>
+                                            <div class="card-footer bg-white">
+                                                <small class="text-muted">تصویر سرفصل</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- هشدار مهم -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="alert alert-warning">
+                                <h6 class="alert-heading mb-2">
+                                    <i class="fa fa-exclamation-triangle text-warning"></i>
+                                    <strong>مهم!</strong>
+                                </h6>
+                                <p class="mb-0" style="text-align: justify; font-weight: 500; line-height: 1.6;">
+                                    به اطلاع می‌رساند نصب شناسه کالا در کالاهای دارای بسته‌بندی الزامی است و پس از
+                                    اخذ شناسه کالا، می‌بایست نسبت به نصب آن بر روی محصولات خود اقدام نمایید.
+                                    با توجه به اینکه ممکن است پیش از این، شناسه‌های دیگری مانند GTIN یا VIN11 بر روی
+                                    کالا نصب شده باشد، این امکان وجود دارد که با وارد نمودن آن شناسه معادل در بخش
+                                    زیر و "تکمیل اطلاعات شناسنامه کالا"، این شناسه نیز به عنوان شناسه کالا پذیرفته
+                                    شده و نیازی به نصب شناسه جدید بر روی کالا نباشد.
+                                    در غیر اینصورت، فعالین محترم می‌بایست اقدام به نصب شناسه کالای صادره از سامانه
+                                    شناسه کالا بر روی محصول خود نمایند.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- شناسه های کالا -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="card border-info">
+                                <div class="card-header">
+                                    <h5 class="mb-0">
+                                        <i class="fa fa-barcode"></i> شناسه های کالا
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text">
+                                                    <i class="fa fa-qrcode text-info"></i>
+                                                    شناسه جهانی قلم کالا (GTIN)
+                                                </span>
+                                                <select name="categoryPolicyIdentities" class="form-control">
+                                                    <option value="فاقد شناسه" idtitle="فاقد شناسه"
+                                                        idtypetitle="فاقد شناسه"
+                                                        id_categorypolicy_identification="undefined" reg="Identity_0_1"
+                                                        isrequired="true">
+                                                        فاقد شناسه
+                                                    </option>
+                                                    <option value="شناسه جهانی قلم کالا (GTIN 13)">
+                                                        شناسه جهانی قلم کالا (GTIN 13)
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" style="display: none;">
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text">
+                                                    <i class="fa fa-key text-info"></i> شناسه
+                                                </span>
+                                                <input id="txt1" name="txtCategoryPolicyIdentities" class="form-control"
+                                                    gtintype="0" isrequired="true" placeholder="شناسه">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- تناظرات بین المللی -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">
+                                        <i class="fa fa-globe-americas"></i> تناظرات بین المللی
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <!-- کد HS -->
+                                        <div class="col-md-6 mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light">
+                                                    <span class="text-danger">*</span> کد HS
+                                                </span>
+                                                <select id="hs" name="hs" class="form-control">
+                                                    <option value="">انتخاب کنید</option>
+                                                </select>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <!-- کد ISIC -->
+                                        <div class="col-md-6 mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light">
+                                                    <span class="text-danger">*</span> کد ISIC
+                                                </span>
+                                                <select id="isic" name="isic" class="form-control" required>
+                                                    <option value="" isictitle="" isiccode="">انتخاب کنید</option>
+                                                    <option value="1703" isictitle="نوار چسب پارچه اي"
+                                                        isiccode="1729412307">
+                                                        نوار چسب پارچه اي 1729412307
+                                                    </option>
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- کد CPC -->
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light">
+                                                    کد CPC
+                                                </span>
+                                                <select name="cpc" class="form-control">
+                                                    <option value="" cpctitle="" cpccode="">انتخاب کنید</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- دکمه‌های ناوبری -->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="d-flex justify-content-between">
+                                <button type="button" id="prev2" name="btnExit" class="btn btn-secondary">
+                                    <i class="fa fa-arrow-left me-2"></i> بازگشت
+                                </button>
+
+                                <button type="button" id="btnSelectNext" name="btnSelectNext"
+                                    class="btn btn-primary btnSelectNext">
+                                    <i class="fa fa-step-forward me-2"></i> گام بعدی
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="nav-profile3" role="tabpanel" aria-labelledby="nav-profile3-tab">
+            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                <div class="row required-field-form">
+                    <!-- وضعیت سند -->
+                    <div class="col-md-4 mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">کد سرفصل </span>
+                            <input type="text" id="CategoryCode2" name="CategoryCode" class="form-control bg-light">
+                        </div>
+                    </div>
+                    <!-- نوع سند -->
+                    <div class="col-md-4 mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">عنوان سرفصل </span>
+                            <input type="text" name="CategoryName" class="form-control bg-light">
+                        </div>
+                    </div>
+                    <!-- انبار -->
+                    <div class="col-md-4 mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">Category Name </span>
+                            <input type="text" name="LatinCategoryName" class="form-control bg-light">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                <div class="row required-field-form">
+                    <div class="col-md-4 mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"> واحد شمارش </span>
+                            <select name="unit" class="form-control">
+                                <option value="">لطفا واحد شمارش کالای خود را انتخاب کنید</option>
+                                <option value="متر مربع">متر مربع
+                                </option>
+                                <option value="كيلوگرم">كيلوگرم
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-12" style="margin-top: 30px;">
+                        <div class="table-responsive">
+                            <table id="example2" class="display">
+                                <thead>
+                                    <tr>
+                                        <th>ردیف</th>
+                                        <th>نام فیلد</th>
+                                        <th>PropertyName</th>
+                                        <th>مقدار</th>
+                                        <th>ValueName</th>
+                                        <th>ثبت</th>
+                                        <th>حذف مقدار</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td> 1 </td>
+                                        <td>
+                                            <span>نوع</span>
+                                            <span class="input-group-btn vv">
+                                                <button class="btn isunifiertooltip" data-bs-toggle="tooltip"
+                                                    data-bs-placement="top" type="button"
+                                                    style="background-color: transparent;border: none;box-shadow: none;"
+                                                    title="فیلدهای توصیفی دارای این علامت، یکتاکننده کالا خواهند بود و ترکیب مقادیر انتخاب شده به ازای این فیلدها نمی تواند در دو شناسه کالا یکسان باشد.">
+                                                    <i class="fa fa-2x fa-key no-margin warning"></i>
+                                                    <div class="introjs-hint-dot"></div>
+                                                </button>
+                                            </span>
+                                        </td>
+                                        <td> type </td>
+                                        <td class="Value"></td>
+                                        <td class="ValueName"></td>
+                                        <td><a href="javascript:;" name="btnEdit"
+                                                class="btn btn-palegreen">ثبت/ویرایش</a></td>
+                                        <td><a href="javascript:;" name="btnDelete" class="btn btn-danger">حذف مقدار</a>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td> 2 </td>
+                                        <td>
+                                            <span>طرح </span>
+                                            <span class="input-group-btn vv">
+                                                <button class="btn isunifiertooltip" data-bs-toggle="tooltip"
+                                                    data-bs-placement="top" type="button"
+                                                    style="background-color: transparent;border: none;box-shadow: none;"
+                                                    title="فیلدهای توصیفی دارای این علامت، یکتاکننده کالا خواهند بود و ترکیب مقادیر انتخاب شده به ازای این فیلدها نمی تواند در دو شناسه کالا یکسان باشد.">
+                                                    <i class="fa fa-2x fa-key no-margin warning"></i>
+                                                    <div class="introjs-hint-dot"></div>
+                                                </button>
+                                            </span>
+                                        </td>
+                                        <td> design </td>
+                                        <td class="Value"></td>
+                                        <td class="ValueName"></td>
+                                        <td><a href="javascript:;" name="btnEdit"
+                                                class="btn btn-palegreen">ثبت/ویرایش</a></td>
+                                        <td><a href="javascript:;" name="btnDelete" class="btn btn-danger">حذف مقدار</a>
+                                        </td>
+                                    </tr>
+
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="d-flex justify-content-between">
+                                <button type="button" id="prev2" name="btnExit" class="btn btn-secondary">
+                                    <i class="fa fa-arrow-left me-2"></i> بازگشت
+                                </button>
+
+                                <button type="button" name="btnSelectNext" class="btn btn-primary btnSelectNext">
+                                    <i class="fa fa-step-forward me-2"></i> گام بعدی
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="tab-pane fade" id="nav-profile4" role="tabpanel" aria-labelledby="nav-profile4-tab">
+
+
+            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                <div class="row required-field-form">
+                    <!-- وضعیت سند -->
+                    <div class="col-md-4 mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">کد سرفصل </span>
+                            <input type="text" id="CategoryCode2" name="CategoryCode" class="form-control bg-light">
+                        </div>
+                    </div>
+                    <!-- نوع سند -->
+                    <div class="col-md-4 mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">عنوان سرفصل </span>
+                            <input type="text" name="CategoryName" class="form-control bg-light">
+                        </div>
+                    </div>
+                    <!-- انبار -->
+                    <div class="col-md-4 mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">Category Name </span>
+                            <input type="text" name="LatinCategoryName" class="form-control bg-light">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                <div class="row required-field-form">
+
+                    <div class="col-12" style="margin-top: 30px;">
+                        <div class="table-responsive">
+                            <table id="example3" class="display">
+                                <thead>
+                                    <tr>
+                                        <th>ردیف</th>
+                                        <th>نام فیلد</th>
+                                        <th>PropertyName</th>
+                                        <th>مقدار</th>
+                                        <th>ValueName</th>
+                                        <th>ثبت</th>
+                                        <th>حذف مقدار</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td> 1 </td>
+                                        <td>
+                                            <span>نوع</span>
+                                            <span class="input-group-btn vv">
+                                                <button class="btn isunifiertooltip" data-bs-toggle="tooltip"
+                                                    data-bs-placement="top" type="button"
+                                                    style="background-color: transparent;border: none;box-shadow: none;"
+                                                    title="فیلدهای توصیفی دارای این علامت، یکتاکننده کالا خواهند بود و ترکیب مقادیر انتخاب شده به ازای این فیلدها نمی تواند در دو شناسه کالا یکسان باشد.">
+                                                    <i class="fa fa-2x fa-key no-margin warning"></i>
+                                                    <div class="introjs-hint-dot"></div>
+                                                </button>
+                                            </span>
+                                        </td>
+                                        <td> type </td>
+                                        <td class="Value"></td>
+                                        <td class="ValueName"></td>
+                                        <td><a href="javascript:;" name="btnEdit"
+                                                class="btn btn-palegreen">ثبت/ویرایش</a></td>
+                                        <td><a href="javascript:;" name="btnDelete" class="btn btn-danger">حذف مقدار</a>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td> 2 </td>
+                                        <td>
+                                            <span>طرح </span>
+                                            <span class="input-group-btn vv">
+                                                <button class="btn isunifiertooltip" data-bs-toggle="tooltip"
+                                                    data-bs-placement="top" type="button"
+                                                    style="background-color: transparent;border: none;box-shadow: none;"
+                                                    title="فیلدهای توصیفی دارای این علامت، یکتاکننده کالا خواهند بود و ترکیب مقادیر انتخاب شده به ازای این فیلدها نمی تواند در دو شناسه کالا یکسان باشد.">
+                                                    <i class="fa fa-2x fa-key no-margin warning"></i>
+                                                    <div class="introjs-hint-dot"></div>
+                                                </button>
+                                            </span>
+                                        </td>
+                                        <td> design </td>
+                                        <td class="Value"></td>
+                                        <td class="ValueName"></td>
+                                        <td><a href="javascript:;" name="btnEdit"
+                                                class="btn btn-palegreen">ثبت/ویرایش</a></td>
+                                        <td><a href="javascript:;" name="btnDelete" class="btn btn-danger">حذف مقدار</a>
+                                        </td>
+                                    </tr>
+
+
+                                </tbody>
+
+                            </table>
+
+
+
+
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="d-flex justify-content-between">
+                                <button type="button" id="prev2" name="btnExit" class="btn btn-secondary">
+                                    <i class="fa fa-arrow-left me-2"></i> بازگشت
+                                </button>
+
+                                <button type="button" name="btnSelectNext" class="btn btn-primary btnSelectNext">
+                                    <i class="fa fa-step-forward me-2"></i> گام بعدی
+                                </button>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+
+        <div class="tab-pane fade" id="nav-profile5" role="tabpanel" aria-labelledby="nav-profile5-tab">
+            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                <div class="row required-field-form">
+                    <!-- وضعیت سند -->
+                    <div class="col-md-4 mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">کد سرفصل </span>
+                            <input type="text" id="CategoryCode2" name="CategoryCode" class="form-control bg-light">
+                        </div>
+                    </div>
+                    <!-- نوع سند -->
+                    <div class="col-md-4 mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">عنوان سرفصل </span>
+                            <input type="text" name="CategoryName" class="form-control bg-light">
+                        </div>
+                    </div>
+                    <!-- انبار -->
+                    <div class="col-md-4 mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">Category Name </span>
+                            <input type="text" name="LatinCategoryName" class="form-control bg-light">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="col-12" style="margin-top: 30px;">
+                <div class="form-group">
+                    <div class="input-group " style="display: flex; flex-direction: row;">
+                        <div class="">
+                            <button id="btnAttach" type="button" class="btn btn-info">افزودن فایل</button>
+                        </div>
+                        <div style="flex: 1; margin-right: 15px;">
+                            <div class="alert alert-warning margin-bottom-5 hidden" code="govahiSabtAlert">
+                                <strong>توجه!</strong> به واسطه ثبت نام‌تجارتی جدید، لطفا گواهی ثبت برند خود را ارسال
+                                نمایید.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table id="example4" class="display">
+                        <thead>
+                            <tr>
+                                <th>نوع فایل</th>
+                                <th>نام فایل</th>
+                                <th>توضیحات</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="d-flex justify-content-between">
+                            <button type="button" id="prev2" name="btnExit" class="btn btn-secondary">
+                                <i class="fa fa-arrow-left me-2"></i> بازگشت
+                            </button>
+
+                            <button type="button" class="btn btn-success" id="submitalldata">
+                                <i class="fa fa-step-forward me-2"></i> ثبت
+                            </button>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+
+            <!-- Modal Attach File -->
+            <div class="modal fade" id="attachFileModal" tabindex="-1" aria-labelledby="attachFileModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+
+                        <!-- Header -->
+                        <div class="modal-header">
+                            <h5 class="modal-title">افزودن فایل</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <!-- Body -->
+                        <form id="uploadForm" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="modal-body">
+                                <!-- نوع پیوست -->
+                                <div class="mb-3">
+                                    <label class="form-label d-block">نوع پیوست</label>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="sellBuy" id="rdoSell"
+                                            value="1" checked>
+                                        <label class="form-check-label" for="rdoSell">تصویر</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="sellBuy" id="rdoBuy"
+                                            value="2">
+                                        <label class="form-check-label" for="rdoBuy">مستندات فنی</label>
+                                    </div>
+                                </div>
+
+                                <!-- انتخاب فایل -->
+                                <div class="mb-3">
+                                    <label class="form-label">مستند</label>
+                                    <div class="input-group">
+                                        <button class="btn btn-file">
+                                            انتخاب فایل…
+                                            <input type="file" name="inputDocumentsFile" class="file-input"
+                                                accept=".jpg,.png,.jpeg">
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- راهنمای فایل -->
+                                <div class="mb-3">
+                                    <ul style="color: red;">
+                                        <li>نوع تصویر باید jpg , jpeg , png باشد.</li>
+                                        <li>تصویر مورد نظر باید کمتر از 340 کیلوبایت حجم داشته باشد.</li>
+                                        <li>تصویر باید در ابعاد (±10) 700*700 باشد.</li>
+                                    </ul>
+                                </div>
+
+                                <!-- توضیحات -->
+                                <div class="mb-3">
+                                    <label class="form-label">توضیحات</label>
+                                    <textarea name="descriptionFile" class="form-control" rows="4"></textarea>
+                                </div>
+                            </div>
+                            <button type="submit" id="btnUploadFile" class="btn btn-success">ثبت</button>
+                        </form>
+                        <!-- Footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">انصراف</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="editValueModal" tabindex="-1" aria-labelledby="editValueModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">ویرایش مقدار</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body" style="padding-top: 0;">
+                    <div class="row">
+                        <!-- Property Name -->
+                        <div class="col-lg-6 mb-2">
+                            <div class="input-group">
+                                <span class="input-group-text" style="width: 120px;">نام
+                                    فیلد</span>
+                                <input name="PropertyName" type="text" class="form-control" placeholder="PropertyName"
+                                    disabled>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 mb-2">
+                            <div class="input-group">
+                                <span class="input-group-text" style="width: 120px;">Property Name</span>
+                                <input name="latinPropertyName" type="text" class="form-control"
+                                    placeholder="latinPropertyName" disabled>
+                            </div>
+                        </div>
+
+                        <!-- Select مقدار -->
+                        <div class="col-lg-6 mb-2">
+                            <div class="input-group">
+                                <span class="input-group-text" style="width: 120px;">مقدار</span>
+                                <select id="propertyValue" class="form-select">
+                                    <option value="">انتخاب کنید</option>
+                                    <option fk_format="34" formatcode="2134" id_value="1655" latinvaluename="plain"
+                                        value="14111">ساده</option>
+                                    <option fk_format="34" formatcode="2134" id_value="17697790" latinvaluename="serge"
+                                        value="14339278">سرژه</option>
+                                    <option fk_format="34" formatcode="2134" id_value="367" latinvaluename="patterned"
+                                        value="142826">طرح دار
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Value Name -->
+                        <div class="col-lg-6 mb-2">
+                            <div class="input-group">
+                                <span class="input-group-text" style="width: 120px;">Value
+                                    Name</span>
+                                <input id="valueName" class="form-control" disabled>
+                            </div>
+                        </div>
+
+                        <!-- توضیحات -->
+                        <div class="col-lg-12 mb-2">
+                            <div class="input-group">
+                                <span class="input-group-text" style="width: 120px;">توضیحات</span>
+                                <textarea id="usercomment1" class="form-control" rows="2"></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- دکمه‌های Modal -->
+                    <div class="modal-footer" style="text-align: left;">
+                        <button type="button" class="btn btn-success" id="btnSaveSelectedLimitedValue">ثبت</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">انصراف</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <form id="sendalldata" method="POST" action="{% url 'shenase:save_shenase' %}" style="display: none;">
+        {% csrf_token %}
+        <input type="text" name="shenase_category_id" id="shenase_category_id">
+        <input type="text" name="shenase_category_title" id="shenase_category_title">
+        <input type="text" name="shenase_title" id="shenase_title">
+        <input type="text" name="hsdata" id="hsdata">
+        <input type="text" name="categoryPolicyIdentitiesdata" id="categoryPolicyIdentitiesdata">
+        <input type="text" name="cpcdata" id="cpcdata">
+        <input type="text" name="unitdata" id="unitdata">
+        <input type="text" name="isicdata" id="isicdata">
+        <button type="submit" id="btnUploadFile" class="btn btn-success">ثبت</button>
+    </form>
+
+
+</div>
+
+
+
+{% endblock main %}
+
+{% block js %}
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        function loadShenaseData(shenaseId) {
+            $.ajax({
+                url: '/shenase/json/' + shenaseId,
+                type: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    handleResponseData(response, shenaseId);
+                },
+                error: function (xhr, status, error) {
+                    console.error('خطا در دریافت داده:', error);
+                    alert('خطا در بارگذاری اطلاعات. لطفاً دوباره تلاش کنید.');
+                }
+            });
+        }
+        function loadOneShenaseData(shenaseId) {
+            $.ajax({
+                url: '/shenase/json/one/' + shenaseId,
+                type: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    $('#nav-home-tab').removeClass('active').addClass('text-success');
+                    $('#nav-profile-tab').addClass('active').removeClass('text-muted');
+                    $('#nav-home').removeClass('show active');
+                    $('#nav-profile').addClass('show active');
+
+                    $('[name^="CategoryCode"]').val(response.code);
+                    $('[name^="CategoryName"]').val(response.title);
+                    $('[name^="LatinCategoryName"]').val(response.title_en);
+                    $('[name^="categorydescHelper"]').val(response.description);
+                    $('#image_syllabus').attr('src', response.image)
+
+
+                    $('#shenase_category_id').val(response.id);
+                    $('#shenase_category_title').val(response.title);
+
+
+                    var hsSelect = $('#hs');
+                    hsSelect.empty().append('<option value="">انتخاب کنید</option>');
+                    $.each(response.hs, function (index, hsItem) {
+                        hsSelect.append('<option value="' + hsItem.name + '">' + hsItem.name + '</option>');
+                    });
+
+                    var isicSelect = $('#isic');
+                    isicSelect.empty().append('<option value="">انتخاب کنید</option>');
+                    $.each(response.isic, function (i, isicItem) {
+                        isicSelect.append('<option value="' + isicItem.name + '">' + isicItem.name + '</option>');
+                    });
+
+
+                },
+                error: function (xhr, status, error) {
+                    console.error('خطا در دریافت داده:', error);
+                    alert('خطا در بارگذاری اطلاعات. لطفاً دوباره تلاش کنید.');
+                }
+            });
+        }
+
+        function handleResponseData(data, method) {
+            if (!data || !data.data) {
+                console.error("داده‌ها معتبر نیستند");
+                return;
+            }
+
+            // اگه قبلاً DataTable وجود داره پاکش کن
+            if ($.fn.DataTable.isDataTable('#chapterDataTable')) {
+                $('#chapterDataTable').DataTable().destroy();
+            }
+            $('.showtable').empty();
+
+            // شروع ساخت جدول
+            var tableHTML = '<table id="chapterDataTable" class="display table table-bordered table-striped" style="width:100%">';
+            tableHTML += '<thead><tr class="bg-themeprimary">' +
+                '<th>انتخاب سرفصل</th>' +
+                '<th>تصویر کالا</th>' +
+                '<th>کد سرفصل</th>' +
+                '<th>عنوان سرفصل</th>' +
+                '<th>category</th>' +
+                '</tr></thead><tbody>';
+
+            $.each(data.data, function (index, value) {
+                tableHTML += '<tr>' +
+                    '<td><a data-id="' + value.id + '" name="btnSuccess" class="btn btn-palegreen">انتخاب سرفصل</a></td>' +
+                    '<td><a data-image="' + (value.image || '') + '" name="btnShowPicture" class="btn btn-magenta"><i class="glyphicon glyphicon-picture"></i>تصویر</a></td>' +
+                    '<td>' + (value.CategoryCode || '') + '</td>' +
+                    '<td>' + (value.title || '') + '</td>' +
+                    '<td>' + (value.title_en || '') + '</td>' +
+                    '</tr>';
+            });
+
+            tableHTML += '</tbody></table>';
+
+            // اضافه کردن جدول به DOM
+            $('.showtable').append(tableHTML);
+
+            // فعال کردن tooltip ها
+            $('[data-toggle="tooltip"]').tooltip();
+
+            // اینیشیالایز DataTable
+            $('#chapterDataTable').DataTable({
+                paging: true,
+                searching: true,
+                info: true,
+                ordering: true,
+                pageLength: 10,
+                language: {
+                    "sEmptyTable": "هیچ داده‌ای در جدول وجود ندارد",
+                    "sInfo": "نمایش _START_ تا _END_ از _TOTAL_ رکورد",
+                    "sInfoEmpty": "نمایش 0 تا 0 از 0 رکورد",
+                    "sInfoFiltered": "(فیلتر شده از _MAX_ رکورد)",
+                    "sLengthMenu": "نمایش _MENU_ رکورد",
+                    "sLoadingRecords": "در حال بارگذاری...",
+                    "sProcessing": "در حال پردازش...",
+                    "sSearch": "جستجو:",
+                    "sZeroRecords": "رکوردی مطابق جستجوی شما پیدا نشد",
+                    "oPaginate": {
+                        "sFirst": "اولین",
+                        "sLast": "آخرین",
+                        "sNext": "بعدی",
+                        "sPrevious": "قبلی"
+                    }
+                }
+            });
+        }
+
+        $('.showtable').on('click', 'a[name="btnSuccess"]', function () {
+            var id = $(this).data('id');
+            console.log(id);
+            loadOneShenaseData(id)
+        })
+
+
+        $('#submitalldata').click(function () {
+            console.log(23423423);
+            console.log($('[name="hs"] option:selected').val());
+
+            $('#shenase_title').val("");
+            $('#hsdata').val($('[name="hs"] option:selected').val());
+            $('#isicdata').val($('[name="isic"] option:selected').val());
+            $('#cpcdata').val($('[name="cpc"] option:selected').val());
+            $('#unitdata').val($('[name="unit"]').val());
+            $('#categoryPolicyIdentitiesdata').val($('[name="categoryPolicyIdentities"]').val());
+        })
+
+
+
+        $('.showtable').on('click', 'a[name="btnShowPicture"]', function () {
+            var imageSrc = $(this).data('image') || '';
+            $('#pictureModal .modal-body').html('<img src="' + imageSrc + '" class="img-fluid" alt="تصویر">');
+            var myModal = new bootstrap.Modal(document.getElementById('pictureModal'), {});
+            myModal.show();
+        });
+
+        $('.btnSelectNext').on('click', function () {
+            var $tabs = $('.nav-tabs .nav-link');
+            var $activeTab = $tabs.filter('.active');
+            var index = $tabs.index($activeTab);
+            console.log(index);
+
+            if (index == 2) {
+                var value = $('[name="unit"]').val();
+                if (!value) { // اگر هیچ چیزی انتخاب نشده
+                    alert('لطفا  واحد شمارش  انتخاب کنید!');
+                    $('[name="unit"]').focus();
+                    return;
+                }
+            } else if (index == 1) {
+                var hs = $('[name="hs"]').val();
+                var isic = $('[name="isic"]').val();
+                if (!hs) { // اگر هیچ چیزی انتخاب نشده
+                    alert('لطفا  کد HS  انتخاب کنید!');
+                    $('[name="hs"]').focus();
+                    return;
+                }
+                if (!isic) { // اگر هیچ چیزی انتخاب نشده
+                    alert('لطفا  کد ISIC  انتخاب کنید!');
+                    $('[name="isic"]').focus();
+                    return;
+                }
+            }
+            // اگر تب بعدی وجود داره
+            if (index + 1 < $tabs.length) {
+                $tabs.eq(index + 1).tab('show');
+            }
+        });
+
+        function showSuccessMessage(message) {
+            // حذف پیام‌های قبلی
+            $('.success-message').remove();
+
+            // اضافه کردن پیام جدید
+            $('#nav-profile').prepend(`
+            <div class="alert alert-success alert-dismissible fade show success-message" role="alert">
+                <i class="fa fa-check-circle"></i> ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        `);
+
+            // حذف خودکار بعد از 3 ثانیه
+            setTimeout(function () {
+                $('.success-message').fadeOut();
+            }, 3000);
+        }
+
+        // تابع نمایش تصویر
+        function showPictureModal(pictureId) {
+            // نمایش loading
+            $('#pictureModal .modal-body').html(`
+            <div class="text-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">در حال بارگذاری...</span>
+                </div>
+                <p class="mt-2">در حال بارگذاری تصویر...</p>
+            </div>
+        `);
+            $('#pictureModal').modal('show');
+
+        }
+
+        // اتصال رویداد کلیک به radio ها
+        $('input[name="radioCommonTitle"]').on('click', function () {
+            var shenaseId = $(this).attr('shenaseid');
+            console.log('شَناسه انتخاب شده:', shenaseId);
+            setTimeout(function () {
+                loadShenaseData(shenaseId);
+            }, 500);
+        });
+
+        // رویداد کلیک برای دکمه جستجو
+        $('#btnSearchInitialInventory').on('click', function () {
+            var searchTerm = $('#searchTerm').val();
+            var searchMode = $('.searchmode').val();
+
+            if (!searchTerm.trim()) {
+                alert('لطفاً عبارت مورد نظر را وارد کنید');
+                return;
+            }
+
+            // نمایش loading برای جستجو
+            $('.SuitHeghti').html(`
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">در حال جستجو...</span>
+                </div>
+                <p class="mt-2">در حال جستجو...</p>
+            </div>
+        `);
+
+            // AJAX برای جستجو
+            $.ajax({
+                url: '/shenase/search/',
+                type: 'GET',
+                data: {
+                    'q': searchTerm,
+                    'mode': searchMode
+                },
+                dataType: 'json',
+                success: function (response) {
+                    console.log('نتایج جستجو:', response);
+                    displaySearchResults(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error('خطا در جستجو:', error);
+                    $('.SuitHeghti').html(`
+                    <div class="text-center text-danger py-5">
+                        <i class="fa fa-exclamation-triangle fa-3x mb-3"></i>
+                        <p>خطا در انجام جستجو</p>
+                    </div>
+                `);
+                }
+            });
+        });
+
+        // تابع نمایش نتایج جستجو
+        function displaySearchResults(results) {
+            var html = '<div class="container-fluid"><div class="p-3 bg-white"><h5 class="mb-3">نتایج جستجو:</h5>';
+
+            if (!results || results.length === 0) {
+                html += '<div class="text-center text-muted py-4"><i class="fa fa-search fa-2x mb-2"></i><br>نتیجه‌ای یافت نشد</div>';
+            } else {
+                html += '<div class="row">';
+                $.each(results, function (index, item) {
+                    html += `
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100 border-primary">
+                            <div class="card-body">
+                                <h6 class="card-title text-primary">${item.ComBaseName || item.title}</h6>
+                                <p class="card-text small text-muted">${item.Definition || item.description || 'توضیحاتی موجود نیست'}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-info">کد: ${item.CategoryCode || item.shenaseid}</small>
+                                    <button class="btn btn-primary btn-sm select-result" 
+                                            data-shenaseid="${item.shenaseid || item.CategoryCode}"
+                                            data-title="${item.ComBaseName || item.title}"
+                                            data-category-id="${item.ID_Category}">
+                                        <i class="fa fa-check"></i> انتخاب
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                });
+                html += '</div>';
+            }
+
+            html += '</div></div>';
+
+            // نمایش نتایج در تب فعلی
+            $('.SuitHeghti').html(html);
+
+            // اتصال رویداد به دکمه‌های انتخاب
+            $('.select-result').on('click', function () {
+                var shenaseId = $(this).data('shenaseid');
+                var title = $(this).data('title');
+                var categoryId = $(this).data('category-id');
+
+                console.log('انتخاب از نتایج جستجو:', { shenaseId, title, categoryId });
+
+                // شبیه‌سازی انتخاب radio
+                $('input[shenaseid="' + shenaseId + '"]').prop('checked', true).trigger('click');
+            });
+        }
+
+        // رویداد Enter برای جستجو (با توجه به onkeydown موجود)
+        $('#searchTerm').on('keypress', function (e) {
+            if (e.which === 13) {
+                e.preventDefault();
+                $('#btnSearchInitialInventory').click();
+            }
+        });
+
+        window.myfunction = function (shenaseId) {
+            loadShenaseData(shenaseId);
+        };
+
+        // Modal برای نمایش تصویر (اضافه کردن به DOM)
+        if (!$('#pictureModal').length) {
+            $('body').append(`
+            <div class="modal fade" id="pictureModal" tabindex="-1" aria-labelledby="pictureModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="pictureModalLabel">تصویر کالا</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- محتوای تصویر اینجا قرار می‌گیرد -->
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `);
+        }
+
+
+
+
+        // اینیشیالایز DataTable
+        $('#example2').DataTable({
+            paging: true,
+            searching: true,
+            info: true,
+            ordering: false,
+            pageLength: 10,
+            language: {
+                "sEmptyTable": "هیچ داده‌ای در جدول وجود ندارد",
+                "sInfo": "نمایش _START_ تا _END_ از _TOTAL_ رکورد",
+                "sInfoEmpty": "نمایش 0 تا 0 از 0 رکورد",
+                "sInfoFiltered": "(فیلتر شده از _MAX_ رکورد)",
+                "sLengthMenu": "نمایش _MENU_ رکورد",
+                "sLoadingRecords": "در حال بارگذاری...",
+                "sProcessing": "در حال پردازش...",
+                "sSearch": "جستجو:",
+                "sZeroRecords": "رکوردی مطابق جستجوی شما پیدا نشد",
+                "oPaginate": {
+                    "sFirst": "اولین",
+                    "sLast": "آخرین",
+                    "sNext": "بعدی",
+                    "sPrevious": "قبلی"
+                }
+            },
+
+        });
+
+
+        $('#example3').DataTable({
+            paging: true,
+            searching: true,
+            info: true,
+            ordering: false,
+            pageLength: 10,
+            language: {
+                "sEmptyTable": "هیچ داده‌ای در جدول وجود ندارد",
+                "sInfo": "نمایش _START_ تا _END_ از _TOTAL_ رکورد",
+                "sInfoEmpty": "نمایش 0 تا 0 از 0 رکورد",
+                "sInfoFiltered": "(فیلتر شده از _MAX_ رکورد)",
+                "sLengthMenu": "نمایش _MENU_ رکورد",
+                "sLoadingRecords": "در حال بارگذاری...",
+                "sProcessing": "در حال پردازش...",
+                "sSearch": "جستجو:",
+                "sZeroRecords": "رکوردی مطابق جستجوی شما پیدا نشد",
+                "oPaginate": {
+                    "sFirst": "اولین",
+                    "sLast": "آخرین",
+                    "sNext": "بعدی",
+                    "sPrevious": "قبلی"
+                }
+            },
+
+        });
+
+
+
+
+
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        });
+
+
+
+        var currentRow; // نگه داشتن ردیف فعلی
+
+        // باز کردن modal روی دکمه ثبت/ویرایش جدول
+        $('#example2').on('click', 'a[name="btnEdit"]', function () {
+            currentRow = $(this).closest('tr');
+
+            // پر کردن فیلدهای Modal با اطلاعات ردیف
+            var propertyName = currentRow.find('td:nth-child(3)').text().trim();
+            $('[name="PropertyName"]').val(propertyName);
+            $('[name="latinPropertyName"]').val(propertyName); // اگر نیاز به ترجمه داری می‌تونی اینو تغییر بدی
+
+            $('#propertyValue').val(currentRow.find('.Value').text()).trigger('change');
+            $('#valueName').val(currentRow.find('.ValueName').text());
+
+            $('#usercomment1').val(''); // یا اگر توضیح داری از ردیف بگیر
+
+            $('#editValueModal').modal('show');
+        });
+
+
+        $('#example3').on('click', 'a[name="btnEdit"]', function () {
+            currentRow = $(this).closest('tr');
+
+            // پر کردن فیلدهای Modal با اطلاعات ردیف
+            var propertyName = currentRow.find('td:nth-child(3)').text().trim();
+            $('[name="PropertyName"]').val(propertyName);
+            $('[name="latinPropertyName"]').val(propertyName); // اگر نیاز به ترجمه داری می‌تونی اینو تغییر بدی
+
+            $('#propertyValue').val(currentRow.find('.Value').text()).trigger('change');
+            $('#valueName').val(currentRow.find('.ValueName').text());
+
+            $('#usercomment1').val(''); // یا اگر توضیح داری از ردیف بگیر
+
+            $('#editValueModal').modal('show');
+        });
+
+
+        // وقتی کاربر روی دکمه ثبت Modal کلیک کرد
+        $('#btnSaveSelectedLimitedValue').on('click', function () {
+            var selectedValue = $('#propertyValue').val();
+            var valueName = $('#propertyValue option:selected').attr('latinvaluename');
+
+            currentRow.find('.Value').text(selectedValue);
+            currentRow.find('.ValueName').text(valueName);
+
+            $('#editValueModal').modal('hide');
+            $('#editValueModal3').modal('hide');
+        });
+
+        // وقتی select تغییر کرد Value Name اتوماتیک پر شود
+        $('#propertyValue').on('change', function () {
+            var valueName = $(this).find('option:selected').attr('latinvaluename') || '';
+            $('#valueName').val(valueName);
+        });
+
+        $('#btnAttach').on('click', function () {
+            $('#attachFileModal').modal('show');
+        });
+
+
+
+
+
+
+
+
+        // فعال‌سازی DataTable
+        var table = $('#example4').DataTable({
+            language: {
+                "emptyTable": "هیچ داده‌ای وجود ندارد"
+            }
+        });
+
+        $('#btnUploadFile').on('click', function () {
+
+            // گرفتن اطلاعات
+            var fileType = $('input[name="sellBuy"]:checked').next('label').text().trim();
+            var fileInput = $('input[name="inputDocumentsFile"]')[0];
+            var fileName = fileInput.files.length > 0 ? fileInput.files[0].name : '';
+            var description = $('textarea[name="descriptionFile"]').val().trim();
+
+            if (!fileName) {
+                alert("لطفاً یک فایل انتخاب کنید!");
+                return;
+            }
+
+            // اضافه کردن ردیف از طریق DataTables
+            table.row.add([
+                fileType,
+                fileName,
+                description,
+                '<button class="btn btn-danger btn-sm btn-delete">حذف</button>',
+                '<button class="btn btn-primary btn-sm btn-download">دانلود</button>'
+            ]).draw(false); // draw(false) برای عدم reset صفحه
+
+            // بستن مودال و ریست فرم
+            $('#attachFileModal').modal('hide');
+            $('#frmAttach')[0].reset();
+        });
+
+        // حذف ردیف
+        $('#example4').on('click', '.btn-delete', function () {
+            table.row($(this).closest('tr')).remove().draw(false);
+        });
+
+        // دانلود فایل (نمونه)
+        $('#example4').on('click', '.btn-download', function () {
+            var fileName = $(this).closest('tr').find('td:nth-child(2)').text();
+            alert('در اینجا فایل "' + fileName + '" دانلود می‌شود.');
+        });
+
+
+
+
+    });
+
+
+
+    $(document).on("submit", "#uploadForm", function (e) {
+        e.preventDefault();
+
+        let formData = new FormData(this);
+
+        $.ajax({
+            url: "/shenase/upload/",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                alert("فایل با موفقیت آپلود شد");
+                console.log(response);
+            },
+            error: function (xhr) {
+                alert("خطا در آپلود فایل");
+                console.log(xhr.responseText);
+            }
+        });
+    });
+
+
+</script>
+{% endblock js %}

@@ -1,0 +1,288 @@
+{% extends "base.html" %}
+{% load static %}
+{% load date_filters %}
+{% load widget_tweaks %}
+{% load ui_template_tag %}
+{% block title %}
+    پرونده ثبت سفارش
+{% endblock title %}
+{% block page-title %}
+    مدیریت پرونده
+{% endblock page-title %}
+{% block breadcrumbs %}
+    {% breadcrumbs 'عملیات تجاری' '#' 'مدیریت پرونده‌ها' 'order_registration:main_data_list' 'پرونده' '#' %}
+{% endblock breadcrumbs %}
+{% block head %}
+    <link href="{% static 'selectize-master/css/selectize.css' %}"
+          rel="stylesheet">
+    <link href="{% static 'bootstrap-datepicker/css/bootstrap-datepicker.min.css' %}"
+          rel="stylesheet">
+{% endblock head %}
+{% block main %}
+    <nav class="" style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
+        <ol class="breadcrumb order-registration-breadcrumb">
+            <li class="breadcrumb-item border-bottom border-top px-4 py-3  active">
+                <strong class="outline-badge">&nbsp;۱&nbsp;</strong>
+                <strong>اطلاعات اصلی</strong>
+            </li>
+            <li class="breadcrumb-item border-bottom border-top px-4 ps-5 py-3"
+                aria-current="page">
+                <strong class="outline-badge">۲</strong>
+                <strong>گمرکی و حمل و نقل</strong>
+            </li>
+            <li class="breadcrumb-item border-bottom border-top px-5 py-3"
+                aria-current="page">
+                <strong class="outline-badge">۳</strong>
+                <strong>مالی و بانکی</strong>
+            </li>
+            <li class="breadcrumb-item border-bottom border-top px-5 py-3"
+                aria-current="page">
+                <strong class="outline-badge">۴</strong>
+                <strong>کالاهای پرونده</strong>
+            </li>
+            <li class="breadcrumb-item border-bottom border-top px-5 py-3"
+                aria-current="page">
+                <strong class="outline-badge">۵</strong>
+                <strong>مستندات پرونده</strong>
+            </li>
+        </ol>
+    </nav>
+    <div class="container-fluid bg-white py-5 ">
+        <div class="row mb-3">
+            <div class="col-12 col-md-3">
+                <label class="visually-hidden" for="specificSizeInputGroupUsername">سطح دسترسی</label>
+                <div class="input-group">
+                    <div class="input-group-text disabled">سطح دسترسی</div>
+                    <input type="text"
+                           class="form-control"
+                           id="specificSizeInputGroupUsername"
+                           placeholder=""
+                           value="کامل"
+                           disabled>
+                </div>
+            </div>
+        </div>
+        <form method="post" class="needs-validation main-data-form" novalidate>
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-12 mb-3 mt-3">
+                    <span class="px-4 py-2 border-start border-navy border-4 bg-white section-title">اطلاعات پرونده</span>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">{{ form.proforma_invoice.label }}*</span>
+                            {% render_field form.proforma_invoice class="form-control" %}
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">{{ form.beneficiary_country.label }}*</span>
+                            {% render_field form.beneficiary_country class="form-control p-0" placeholder="جستجو کنید" %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">{{ form.proforma_invoice_issue_date.label }}*</span>
+                            {% render_field form.proforma_invoice_issue_date class="form-control" data-date-end-date="0d" %}
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">{{ form.proforam_invoice_expire_date.label }}*</span>
+                            {% render_field form.proforam_invoice_expire_date class="form-control" %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 mb-3 mt-3">
+                    <span class="px-4 py-2 border-start border-navy border-4 section-title">اطلاعات حالت ثبت سفارش</span>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">{{ form.order_registration_case.label }}*</span>
+                            {% render_field form.order_registration_case class="form-control" style="background-color: #ffff002e !important; cursor: no-drop;" %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 mb-3 mt-3">
+                    <span class="px-4 py-2 bg-white border-start border-dark border-4 section-title">اطلاعات فروشنده خارجی</span>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">{{ form.supplier.label }}*</span>
+                            {% render_field form.supplier class="form-control p-0" dir="rtl" %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">{{ form.related_object_id.label }}*</span>
+                            {% render_field form.related_object_id class="form-control" dir="rtl" %}
+                            <button class="btn btn-primary btn-maya" type="button" id="search-supplier">جستجو</button>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 personal-seller">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">نام فروشنده</span>
+                            <input type="text"
+                                   maxlength="50"
+                                   class="form-control"
+                                   id="seller-name"
+                                   value="{{ object.supplier_type.first_name }}"
+                                   disabled>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 company-seller">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">نام فروشنده</span>
+                            <input type="text"
+                                   maxlength="50"
+                                   class="form-control"
+                                   id="company-name"
+                                   value="{{ object.related_object.en_name }}"
+                                   disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="row personal-seller">
+                    <div class="col-12 col-md-6 personal-seller">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">نام خانوادگی فروشنده</span>
+                            <input type="text"
+                                   maxlength="50"
+                                   class="form-control"
+                                   id="last-name"
+                                   value="{{ object.related_object.last_name }}"
+                                   disabled>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 personal-seller">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">کشور محل تولید</span>
+                            <input type="text"
+                                   maxlength="50"
+                                   class="form-control"
+                                   value="{{ object.related_object.country }}"
+                                   id="produce-country"
+                                   disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="row company-seller">
+                    <div class="col-12 col-md-6 company-seller">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">شماره ثبت</span>
+                            <input type="text"
+                                   maxlength="50"
+                                   class="form-control"
+                                   id="registered-number"
+                                   value="{{ object.related_object.register_number }}"
+                                   disabled>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 company-seller">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">کشور محل ثبت</span>
+                            <input type="text"
+                                   maxlength="50"
+                                   class="form-control p-0"
+                                   value="{{ object.related_object.registered_country }}"
+                                   id="registered-country"
+                                   disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="row company-seller">
+                    <div class="col-12 col-md-6 company-seller">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">آدرس</span>
+                            <input type="text"
+                                   maxlength="50"
+                                   class="form-control p-0"
+                                   id="address"
+                                   value="{{ object.related_object.address }}"
+                                   disabled>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 company-seller">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">تلفن</span>
+                            <input type="text"
+                                   maxlength="50"
+                                   class="form-control p-0"
+                                   id="phone"
+                                   value="{{ object.related_object.phone }}"
+                                   disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 mb-3 mt-3">
+                    <span class="px-4 py-2 bg-white border-start border-dark border-4 section-title">اطلاعات واحد تولیدی</span>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">نوع واحد تولیدی</span>
+                            {{ form.producer_type }}
+                        </div>
+                    </div>
+                    <div class="w-100"></div>
+                    <div class="col-12 col-md-6" id="producer_type_container">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="producer-type-data-text">شناسه کسب و کار</span>
+                            {% render_field form.producer_type_data class="form-control" %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="d-md-flex justify-content-between align-items-center border border-top">
+                            <div class="d-md-flex">
+                                <div class="my-3 mx-2 bg-gray px-2 py-3">
+                                    <span>وضعیت پرونده:</span>
+                                    <span class="text-danger">{{ object.get_status_display }}</span>
+                                </div>
+                            </div>
+                            <div class="d-md-flex align-items-center">
+                                <div class="my-3 mx-2">
+                                    <button type="button" class="btn btn-forest px-3">
+                                        <i class="fa fa-info" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                                <div class="my-3 mx-2">
+                                    <a class="btn  btn-primary btn-maya"
+                                       href="{% url 'order_registration:main_data_list' %}"
+                                       type="button">انصراف</a>
+                                </div>
+                                <div class="my-3 mx-2">
+                                    <button class="btn  btn-primary btn-maya" type="submit">
+                                        <span class="pe-1">بعدی</span><i class="fa fa-step-backward" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock main %}
+{% block js %}
+    <script src="{% static 'order_registration/update_main_data.js' %}"></script>
+    <script>
+        personJsonList = '{% url 'supplier:person_json_list' %}';
+        companyJsonList = '{% url 'supplier:company_json_list' %}';        
+        {% if '{{ object.supplier_type.model}}' == 'person' %}
+        $('.personal-seller').show();
+        $('.company-seller').hide();
+        {% else %}
+        $('.company-seller').show();
+        $('.personal-seller').hide();
+        {% endif %}
+    </script>
+{% endblock js %}

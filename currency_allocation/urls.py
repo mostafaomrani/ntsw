@@ -1,0 +1,93 @@
+from django.urls import path
+from .views import (
+    RequestListView,
+    RequestCreateView,
+    UndertakingJsonListView,
+    FacilityLocationJsonListView,
+    RepaymentDeadLineJsonListView,
+    SupplyCurrencyPlaceJsonListView,
+    CurrencyRateJsonListView,
+    RequestTypeJsonListView,
+    RequestDetailView,
+    CurrencyRequestDecomposition,
+    CurrencyRequestCanceleation,
+    CurrencyRequestDeleteView,
+    CurrencyRequestUpdateView,
+    CurrencyRequestStatusUpdate
+
+)
+
+app_name = 'currency_allocation'
+
+urlpatterns = [
+    path(
+        'requests/',
+        RequestListView.as_view(),
+        name='requests'
+    ),
+    path(
+        'create-request/',
+        RequestCreateView.as_view(),
+        name='create_request'
+    ),
+    path(
+        'undertaking-json-list/<int:transaction_type>/',
+        UndertakingJsonListView.as_view(),
+        name='undertaking-json-list'
+    ),
+    path(
+        'facility-location-json-list/<int:undertaking>',
+        FacilityLocationJsonListView.as_view(),
+        name='ficility_location_json_list'
+    ),
+    path(
+        'repayment-deadline-json-list/<int:facility>/',
+        RepaymentDeadLineJsonListView.as_view(),
+        name='repayment_deadline_json_list'
+    ),
+    path(
+        'supply-currency-place-json-list/<int:repayment_deadline>/',
+        SupplyCurrencyPlaceJsonListView.as_view(),
+        name='supply_currency_place_json_list'
+    ),
+    path(
+        'currency-rate-json-list/<int:currency_rate>/',
+        CurrencyRateJsonListView.as_view(),
+        name='currency_rate_json_list'
+    ),
+    path(
+        'request-type-json-list/<int:currency_rate>/',
+        RequestTypeJsonListView.as_view(),
+        name='currency_rate_json_list'
+    ),
+    path(
+        'request-detail/<int:pk>/',
+        RequestDetailView.as_view(),
+        name="request_detail"
+
+    ),
+    path(
+        'decomposition/<int:currency_request_pk>/',
+        CurrencyRequestDecomposition.as_view(),
+        name="decomposition"
+    ),
+    path(
+        'currency-request-cancelation/',
+        CurrencyRequestCanceleation.as_view(),
+        name="cancelation"
+    ),
+    path('currency-request-status-update/<int:pk>',
+         CurrencyRequestStatusUpdate.as_view(),
+         name='update_status'
+         ),
+    path(
+        'currency-request-delete/<int:pk>',
+        CurrencyRequestDeleteView.as_view(),
+        name="delete"
+    ),
+    path(
+        'currency-request-update/<int:pk>',
+        CurrencyRequestUpdateView.as_view(),
+        name="update"
+    ),
+]

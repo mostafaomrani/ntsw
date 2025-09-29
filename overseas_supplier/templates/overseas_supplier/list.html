@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+{% load static %}
+{% load date_filters %}
+{% load widget_tweaks %}
+{% load date_filters %}
+{% load ui_template_tag %}
+{% block title %}
+    مدیریت فروشندگان خارجی
+{% endblock title %}
+{% block breadcrumbs %}
+    {% breadcrumbs 'عملیات تجارت خارجی' '#' 'مدیریت فروشندگان خارجی' '#' %}
+{% endblock breadcrumbs %}
+{% block page-title %}
+    مدیریت فروشندگان خارجی
+{% endblock page-title %}
+{% block main %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="text-center alert alert-{{ message.tags }}">{{ message|safe }}</div>
+        {% endfor %}
+    {% endif %}
+    <div class="bg-white p-3 shadow mt-3">
+        <div class="d-md-flex">
+            <div class="mt-3 me-md-3">
+                <button class="btn  btn-primary btn-maya"
+                        data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">اخذ شناسه فروشنده خارجی جدید</button>
+            </div>
+            <div class="mt-3 me-md-3">
+                <button class="btn  btn-primary btn-maya">جستجوی فروشندگان استعلام شده</button>
+            </div>
+            <div class="mt-3 me-md-3">
+                <button class="btn btn-success btn-forest px-4">
+                    <i class="fa fa-info" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+        <div class="mt-3 d-md-flex justify-content-center">
+            <div class="mt-3 me-md-3">
+                <a href="#" class="btn  btn-primary btn-maya">فیلم آموزشی</a>
+            </div>
+            <div class="mt-3 me-md-3">
+                <a href="{% static 'overseas_supplier/HelpFile.pdf' %}"
+                   target="_blank"
+                   class="btn  btn-primary btn-maya">فایل راهنما</a>
+            </div>
+        </div>
+        <div class="mt-3">
+            <div class="text-end"></div>
+            <table class="table table-striped table-hover table-bordered text-center">
+                <thead class="text-white" style="background:rgb(2, 65, 88);">
+                    <tr>
+                        <th>ردیف</th>
+                        <th>شناسه فروشنده خارجی</th>
+                        <th>نام فروشنده خارجی</th>
+                        <th>نام لاتین فروشنده خارجی</th>
+                        <th>کشور محل ثبت/ تولد</th>
+                        <th>تاریخ درخواست</th>
+                        <th>وضعیت</th>
+                        <th>توضیحات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in combined %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ p.identifier }}</td>
+                            <td>
+                                {% if p.first_name %}
+                                    {{ p.first_name }}
+                                {% else %}
+                                    {{ p.name }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if p.last_name %}
+                                    {{ p.last_name }}
+                                {% else %}
+                                    {{ p.en_name }}
+                                {% endif %}
+                            </td>
+                            <td>{{ p.country }}</td>
+                            <td>{{ p.created_at| to_jalali }}</td>
+                            <td>
+                                {% if p.status %}تایید شده{% endif %}
+                            </td>
+                            <td>{{ p.identifier }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade"
+         id="exampleModal"
+         aria-hidden="true"
+         aria-labelledby="exampleModalLabel"
+         tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable modal-fullscreen-md-down">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-6 text-dark" id="exampleModalLabel">
+                        استعلام شناسه فروشنده خارجی- این بخش نیازمند استفاده از امضای الکترونیکی (توکن) است
+                    </h1>
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="select-supplier-type">انتخاب نوع فروشنده خارجی</label>
+                        <select class="form-select" id="select-supplier-type">
+                            <option selected disabled>انتخاب کنید</option>
+                            <option value="p">شخص حقیقی</option>
+                            <option value="c">شخص حقوقی</option>
+                        </select>
+                    </div>
+                    <div id="supplier-container"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock main %}
+{% block js %}
+    <script>
+    $('#select-supplier-type').change(function (e) {
+    let url = '';
+    if (e.target.value == 'p') {
+    url = '{% url 'supplier:create_person' %}';
+    }
+    else {
+    url = '{% url 'supplier:create_company' %}';
+    }
+    console.log(url)
+    $.ajax({
+    url: url,
+    type: 'get',
+    success: function (data) {
+    $('#supplier-container').html('')
+    $('#supplier-container').html(data)
+    }
+    });
+    });
+    
+    $(document).on('submit', '#personal-form', function(event) {
+        event.preventDefault(); // جلوگیری از رفتار پیش‌فرض فرم
+        let form = $(this); // انتخاب فرم
+        let submitBtn = form.find('button[type="submit"]'); // پیدا کردن دکمه سابمیت
+        
+        // ذخیره محتوای اصلی دکمه
+        submitBtn.data('original-html', submitBtn.html());
+        
+        // غیرفعال کردن دکمه و نمایش اسپینر
+        submitBtn.prop('disabled', true);
+        submitBtn.html(`
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            در حال ارسال...
+        `);
+        
+        if (form[0].checkValidity() === false) {
+            form.addClass('was-validated'); // نمایش پیام‌های خطا
+            
+            // بازگردانی دکمه به حالت اولیه
+            submitBtn.html(submitBtn.data('original-html'));
+            submitBtn.prop('disabled', false);
+            return; // توقف ارسال فرم در صورت وجود خطا
+        }
+        
+        let url = form.attr('action'); // آدرس اکشن
+        let formData = new FormData(this); // جمع‌آوری داده‌های فرم
+        
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                alert('فروشنده خارجی با موفقیت ثبت شد.');
+                window.location.href = response.success_url;
+            },
+            error: function(xhr) {
+                // نمایش فرم با پیام‌های خطا
+                $('#supplier-container').html(xhr.responseText);
+                alert('خطایی در ثبت فروشنده رخ داده است. لطفا پس از اصلاح خطاها دوباره امتحان کنید');
+                
+                // بازگردانی دکمه به حالت اولیه در صورت خطا
+                submitBtn.html(submitBtn.data('original-html'));
+                submitBtn.prop('disabled', false);
+            },
+            complete: function() {
+                // این تابع در هر حالتی (موفق یا خطا) اجرا می‌شود
+                // اگر نمی‌خواهید صفحه ریدایرکت شود، می‌توانید بازگردانی دکمه را اینجا انجام دهید
+            }
+        });
+    });
+
+    </script>
+{% endblock js %}

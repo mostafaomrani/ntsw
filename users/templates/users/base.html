@@ -1,0 +1,387 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+    <head>
+        <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico" />
+        <link rel="shortcut icon" type="image/x-icon" href="/static/images/favicon.ico" />
+        <link rel="stylesheet" href="{% static 'login/lib/bootstrap/dist/css/bootstrap.min.css'%}" />
+        <link rel="stylesheet" href="{% static 'login/lib/bootstrap4-glyphicons/css/bootstrap-glyphicons.min.css'%}" />
+        <link rel="stylesheet" href="{% static 'login/css/site-fa.css'%}" />
+        <link rel="stylesheet" href="{% static 'login/css/login-fa.css'%}" />
+        <link rel="stylesheet" href="{% static 'login/css/slider-fa.css'%}" />
+        <link rel="stylesheet" href="{% static 'login/css/responsive-fa.css'%}" />
+        {% block title %} سامانه جامع تجارت-{% endblock title %}
+        {% block head %}
+        {% endblock head %}
+    </head>
+    <body class="rtl">
+        <!-- <partial name="_Nav"> -->
+        <div class="header-container">
+
+        <div class="header">
+            <div class="header_logo">
+                    <img class="logo" src="{% static 'login/images/logo.svg'%}" />
+            </div>
+            <div class="header-with-lang">
+                <img id="burgerIcon" class="burger-button" src="{% static 'login/images/hamber.svg'%}" />
+                <div class="profile__backButtons mb-1" id="backtoSystmeButton" style="display: none;">
+                    <button class="button backtoSystem" onclick="backtoSystem()">بازگشت به سامانه</button>
+                </div>
+            </div>
+
+            <div class="drawer-menu">
+                <div class="socials">
+                    <div class="drawer-menus-links">
+                    </div>
+                    <div id="callSenterIcon2">
+                        <img src="{% static 'login/images/callcenter_black.svg'%}" />
+                        <span>پشتیبانی</span>
+                    </div>
+                    <div>
+                        <img src="{% static 'login/images/info_outline_black.svg'%}" />
+                        <span>پایگاه آموزش و اطلاع رسانی</span>
+                    </div>
+                    <div>
+                        <img src="{% static 'login/images/bale_black.svg'%}" />
+                        <span>بله</span>
+                    </div>
+                    <div>
+                        <img src="{% static 'login/images/aparat_black.svg'%}" />
+                        <span>آپارات</span>
+                    </div>
+                    <div class="change-lang-mobile-menu" onclick="openChangeLang()">
+                        <span>زبان</span>
+                        <span><img src="{% static 'login/images/arrow-left.svg'%}" /></span>
+                    </div>
+                </div>
+                <div class="login-footer-contact">
+                    <div>
+                        <span>ارتباط با مدیر سامانه: admin@ntsw.ir</span>
+                        <a referrerpolicy="origin" target="_blank" class="" href="https://trustseal.enamad.ir/?id=177575&Code=mrlh9FNszGs9FvlErzmL">
+                            <img id="enamad-img"
+                                src="{% static 'login/images/enamad.svg'%}"
+                                alt="enamad"
+                                style="cursor:pointer"
+                                class="enamad_image">
+                        </a>
+                    </div>
+                    <span>کلیه حقوق این سامانه برای وزارت صنعت، معدن و تجارت محفوظ است.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade chagne-lang-modal" id="langModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M6 18L18 6M6 6L18 18" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </span>
+                    <h5 class="modal-title" id="exampleModalLongTitle">زبان</h5>
+                </div>
+                <div class="modal-body">
+                    <a class="dropdown-item px-0 pr-2 py-2" href="Lang?culture=fa&amp;path=%2FAccount%2FLogin&amp;query=%3FReturnUrl%3D%252Fconnect%252Fauthorize%252Fcallback%253Fclient_id%253Darka%2526response_type%253Dcode%2526scope%253Dopenid%252520api%252520offline_access%252520profile%2526redirect_uri%253Dhttps%25253A%25252F%25252Fntsw.ir%25252FIndex_SSO.aspx%2526code_challenge%253DOmm6izlBUfHBUeHWXJpMZHtEbypjI8zQoZGKbV7wjvo%2526code_challenge_method%253DS256">
+                        فارسی
+                    </a>
+                    <a class="dropdown-item px-0 pr-2 py-2" href="Lang?culture=en&amp;path=%2FAccount%2FLogin&amp;query=%3FReturnUrl%3D%252Fconnect%252Fauthorize%252Fcallback%253Fclient_id%253Darka%2526response_type%253Dcode%2526scope%253Dopenid%252520api%252520offline_access%252520profile%2526redirect_uri%253Dhttps%25253A%25252F%25252Fntsw.ir%25252FIndex_SSO.aspx%2526code_challenge%253DOmm6izlBUfHBUeHWXJpMZHtEbypjI8zQoZGKbV7wjvo%2526code_challenge_method%253DS256">
+                        English
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="logutModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M6 18L18 6M6 6L18 18" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </span>
+                    <h5 class="modal-title" id="exampleModalLongTitle">خروج از حساب کاربری</h5>
+                </div>
+                <div class="modal-body" id="modalContent">
+                    <div>آیا مطمئن هستید؟</div>
+                </div>
+
+                <div class="modal-footer-logout">
+                    <button class="" data-dismiss="modal" type="button">خیر</button>
+                    <button class="" id="confirmLogoutButton" type="submit">بله</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Place the script at the end of the body -->
+    <script>
+        function openChangeLang() {
+            console.log("openChangeLang called");
+            const langModal = document.getElementById("langModal");
+            if (langModal) {
+                $(langModal).modal('show');  // Assuming Bootstrap is used for the modal
+            }
+        }
+        function hideModalIfLarge() {
+            const langModal = document.getElementById("langModal");
+            if (window.innerWidth > 1100 && $(langModal).hasClass('show')) {
+                console.log("Window size is greater than 1100px, hiding modal.");
+                $(langModal).modal('hide');
+            }
+        }
+        window.addEventListener("resize", hideModalIfLarge);
+
+        const userDropdown = document.getElementById("userDropdown")
+        const dropdownOptions = document.getElementById("dropdownOptions")
+        const chevIcon = document.getElementById("chevIcon")
+
+        userDropdown.addEventListener("click", (e) => {
+            e.stopPropagation()
+            dropdownOptions.classList.toggle("d-none")
+            chevIcon.classList.toggle("rotated")
+        })
+
+        document.addEventListener("click", (e) => {
+            if (!userDropdown.contains(e.target)) {
+                dropdownOptions.classList.add("d-none")
+                chevIcon.classList.remove("rotated")
+            }
+        })
+
+        document.getElementById("confirmLogoutButton").addEventListener("click", function () {
+            window.location.href = "account/logout"
+        })
+
+            function openLogoutModal() {
+            console.log("openLogoutModal called")
+            const logoutModal = document.getElementById("logutModal")
+            if (logoutModal) {
+                $(logoutModal).modal('show')
+            }
+        }
+    </script>
+
+
+        
+
+        <div class="modal fade call__center__page" id="modalCallCenter" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <span type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M6 18L18 6M6 6L18 18" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </span>
+                        <h5 class="modal-title">راهنمای مرکز تماس سامانه جامع تجارت</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="box-colored">
+                            <span class="box-colored__title">
+                                <span>تلفن مرکز پشتیبانی:</span>
+                                <span>124</span>
+                            </span>
+                            <span class="box-colored__subTitle">
+                                <span>ساعت پاسخگویی : شنبه الی چهارشنبه ساعت 7 الی 15:30 و پنجشنبه‌ها ساعت 7 الی 13</span>
+                            </span>
+                        </div>
+                        <div class="modal-body__text">
+                            برای مشاهده فرایندها و راهنمای شماره داخلی هر یک از عملیات/سامانه‌ها، آن را انتخاب کنید.
+                        </div>
+                        <div class="callCenterContainer">
+
+                            <div class="select-container">
+                                <span class="label">سامانه‌ها</span>
+                                <div class="select">
+                                    <span class="select-value">انتخاب کنید</span>
+                                    <img src="{% static 'login/images/chevron-down2.svg'%}" class="select-icon" />
+                                    <div id="parentSection" class="options parentSection">
+                                                <span data-comment="1-1" data-proccess="1-&#x62B;&#x628;&#x62A; &#x646;&#x627;&#x645; 2- &#x645;&#x639;&#x631;&#x641;&#x6CC; &#x634;&#x631;&#x6A9;&#x62A; 3-&#x6A9;&#x627;&#x631;&#x62A; &#x628;&#x627;&#x632;&#x631;&#x6AF;&#x627;&#x646;&#x6CC;(&#x635;&#x62F;&#x648;&#x631;&#x60C;&#x62A;&#x645;&#x62F;&#x6CC;&#x62F; &#x648; &#x627;&#x628;&#x637;&#x627;&#x644;) 4-&#x62F;&#x631;&#x6CC;&#x627;&#x641;&#x62A; &#x646;&#x642;&#x634; &#x645;&#x62C;&#x648;&#x632; &#x645;&#x648;&#x631;&#x62F;&#x6CC; 5- &#x645;&#x62F;&#x6CC;&#x631;&#x6CC;&#x62A; &#x646;&#x645;&#x627;&#x6CC;&#x646;&#x62F;&#x6AF;&#x627;&#x646; 6- &#x627;&#x645;&#x636;&#x627;&#x6CC; &#x627;&#x644;&#x6A9;&#x62A;&#x631;&#x648;&#x646;&#x6CC;&#x6A9;&#x6CC; 7-&#x62F;&#x631;&#x6CC;&#x627;&#x641;&#x62A; &#x646;&#x642;&#x634; &#x645;&#x62C;&#x648;&#x632; &#x645;&#x646;&#x637;&#x642;&#x647; &#x622;&#x632;&#x627;&#x62F; &#x648; &#x648;&#x6CC;&#x698;&#x647; &#x627;&#x642;&#x62A;&#x635;&#x627;&#x62F;&#x6CC; 8-&#x62F;&#x631;&#x6CC;&#x627;&#x641;&#x62A; &#x646;&#x642;&#x634; &#x645;&#x631;&#x62A;&#x628;&#x637; &#x628;&#x627; &#x627;&#x633;&#x62A;&#x62B;&#x646;&#x627;&#x626;&#x627;&#x62A; &#x62A;&#x62C;&#x627;&#x631;&#x6CC; (&#x645;&#x631;&#x632;&#x646;&#x634;&#x6CC;&#x646;&#x60C;&#x645;&#x644;&#x648;&#x627;&#x646;&#x60C; &#x6A9;&#x648;&#x644;&#x647; &#x628;&#x631;&#x60C; &#x67E;&#x6CC;&#x644;&#x647; &#x648;&#x631;) 9-&#x645;&#x634;&#x6A9;&#x644; &#x62F;&#x631; &#x627;&#x646;&#x62A;&#x642;&#x627;&#x644; &#x628;&#x647; &#x633;&#x627;&#x645;&#x627;&#x646;&#x647; &#x62C;&#x627;&#x645; 10-&#x645;&#x634;&#x6A9;&#x644; &#x62F;&#x631; &#x627;&#x646;&#x62A;&#x642;&#x627;&#x644; &#x628;&#x647; &#x633;&#x627;&#x645;&#x627;&#x646;&#x647;(124)" data-has-child="False" value="&#x639;&#x645;&#x644;&#x6CC;&#x627;&#x62A; &#x67E;&#x627;&#x6CC;&#x647;" class="option">&#x639;&#x645;&#x644;&#x6CC;&#x627;&#x62A; &#x67E;&#x627;&#x6CC;&#x647;</span>
+                                                <span data-comment="" data-proccess="" data-has-child="True" value="&#x62A;&#x62C;&#x627;&#x631;&#x62A; &#x62E;&#x627;&#x631;&#x62C;&#x6CC;" class="option">&#x62A;&#x62C;&#x627;&#x631;&#x62A; &#x62E;&#x627;&#x631;&#x62C;&#x6CC;</span>
+                                                <span data-comment="1-3" data-proccess="1-&#x62F;&#x631;&#x6CC;&#x627;&#x641;&#x62A; &#x646;&#x642;&#x634; &#x62A;&#x627;&#x62C;&#x631; 2- &#x62B;&#x628;&#x62A; &#x6AF;&#x627;&#x631;&#x627;&#x646;&#x62A;&#x6CC; 3-&#x62A;&#x627;&#x6CC;&#x6CC;&#x62F;/&#x631;&#x62F; &#x627;&#x633;&#x646;&#x627;&#x62F; &#x62E;&#x631;&#x6CC;&#x62F; 4-&#x62A;&#x627;&#x6CC;&#x6CC;&#x62F; &#x648; &#x631;&#x62F; &#x627;&#x633;&#x646;&#x627;&#x62F; &#x628;&#x627;&#x631;&#x646;&#x627;&#x645;&#x647; 5-&#x627;&#x638;&#x647;&#x627;&#x631; &#x62A;&#x648;&#x644;&#x6CC;&#x62F; 6-&#x627;&#x638;&#x647;&#x627;&#x631; &#x648;&#x627;&#x631;&#x62F;&#x627;&#x62A; 7-&#x637;&#x631;&#x62D; &#x627;&#x641;&#x642; &#x635;&#x646;&#x627;&#x6CC;&#x639; &#x67E;&#x627;&#x6CC;&#x6CC;&#x646; &#x62F;&#x633;&#x62A; &#x67E;&#x62A;&#x631;&#x648;&#x634;&#x6CC;&#x645;&#x6CC; 8-&#x637;&#x631;&#x62D; &#x627;&#x641;&#x642; &#x62A;&#x644;&#x641;&#x646; &#x647;&#x645;&#x631;&#x627;&#x647; 9- &#x62B;&#x628;&#x62A; &#x62E;&#x631;&#x6CC;&#x62F; &#x648; &#x641;&#x631;&#x648;&#x634; &#x6A9;&#x627;&#x644;&#x627;&#x647;&#x627;&#x6CC; &#x6A9;&#x634;&#x627;&#x648;&#x631;&#x632;&#x6CC; 10-&#x62B;&#x628;&#x62A; &#x641;&#x627;&#x6A9;&#x62A;&#x648;&#x631; &#x647;&#x627;&#x6CC; &#x645;&#x627;&#x644;&#x6CC;&#x627;&#x62A;&#x6CC; &#x6A9;&#x627;&#x644;&#x627;&#x6CC; &#x62E;&#x627;&#x635; 11-&#x62B;&#x628;&#x62A; &#x62E;&#x631;&#x6CC;&#x62F; &#x648; &#x641;&#x631;&#x648;&#x634;(&#x62F;&#x62E;&#x627;&#x646;&#x6CC;&#x627;&#x62A;&#x60C;&#x6A9;&#x627;&#x63A;&#x630;&#x60C;&#x633;&#x6CC;&#x645;&#x627;&#x646;&#x60C;&#x636;&#x62F; &#x639;&#x641;&#x648;&#x646;&#x6CC; &#x6A9;&#x646;&#x646;&#x62F;&#x647;&#x60C;&#x644;&#x648;&#x627;&#x632;&#x645; &#x62E;&#x627;&#x646;&#x6AF;&#x6CC;)" data-has-child="False" value="&#x62A;&#x62C;&#x627;&#x631;&#x62A; &#x62F;&#x627;&#x62E;&#x644;&#x6CC; &#x648; &#x645;&#x62D;&#x635;&#x648;&#x644;&#x627;&#x62A; &#x641;&#x648;&#x644;&#x627;&#x62F;&#x6CC;" class="option">&#x62A;&#x62C;&#x627;&#x631;&#x62A; &#x62F;&#x627;&#x62E;&#x644;&#x6CC; &#x648; &#x645;&#x62D;&#x635;&#x648;&#x644;&#x627;&#x62A; &#x641;&#x648;&#x644;&#x627;&#x62F;&#x6CC;</span>
+                                                <span data-comment="1-4" data-proccess="1-&#x62F;&#x631;&#x6CC;&#x627;&#x641;&#x62A; &#x641;&#x6CC;&#x634; &#x631;&#x632;&#x631;&#x648;(&#x62D;&#x648;&#x627;&#x644;&#x647;)&#x62A;&#x648;&#x633;&#x637; &#x631;&#x627;&#x646;&#x646;&#x62F;&#x6AF;&#x627;&#x646; 2-&#x645;&#x634;&#x6A9;&#x644;&#x627;&#x62A; &#x645;&#x648;&#x62C;&#x648;&#x62F;&#x6CC; &#x639;&#x627;&#x645;&#x644;&#x6CC;&#x646; &#x641;&#x631;&#x648;&#x634; &#x62A;&#x627;&#x6CC;&#x631; &#x62F;&#x631;&#x633;&#x627;&#x645;&#x627;&#x646;&#x647; &#x6A9;&#x627;&#x644;&#x627; &#x648; &#x633;&#x627;&#x645;&#x627;&#x646;&#x647; &#x62C;&#x627;&#x645;&#x639; &#x62A;&#x62C;&#x627;&#x631;&#x62A;" data-has-child="False" value="&#x62A;&#x648;&#x632;&#x6CC;&#x639; &#x633;&#x6CC;&#x633;&#x62A;&#x645;&#x6CC; &#x62A;&#x627;&#x6CC;&#x631;" class="option">&#x62A;&#x648;&#x632;&#x6CC;&#x639; &#x633;&#x6CC;&#x633;&#x62A;&#x645;&#x6CC; &#x62A;&#x627;&#x6CC;&#x631;</span>
+                                                <span data-comment="1-6" data-proccess="1-&#x645;&#x634;&#x627;&#x647;&#x62F;&#x647; &#x628;&#x6CC;&#x645;&#x647; &#x646;&#x627;&#x645;&#x647; &#x647;&#x627;&#x6CC; &#x62A;&#x62C;&#x627;&#x631;&#x6CC; 2-&#x62F;&#x631;&#x62E;&#x648;&#x627;&#x633;&#x62A; &#x635;&#x62F;&#x648;&#x631; &#x648; &#x627;&#x644;&#x62D;&#x627;&#x642;&#x6CC;&#x647; &#x628;&#x6CC;&#x645;&#x647; &#x646;&#x627;&#x645;&#x647; &#x628;&#x627;&#x631;&#x628;&#x631;&#x6CC; 3-&#x645;&#x634;&#x627;&#x647;&#x62F;&#x647;&#x60C; &#x62A;&#x641;&#x6A9;&#x6CC;&#x6A9; &#x648; &#x645;&#x639;&#x627;&#x645;&#x644;&#x647; &#x628;&#x627;&#x631;&#x646;&#x627;&#x645;&#x647; &#x628;&#x6CC;&#x646; &#x627;&#x644;&#x645;&#x644;&#x644;&#x6CC;" data-has-child="False" value="&#x644;&#x62C;&#x633;&#x62A;&#x6CC;&#x6A9; &#x62E;&#x627;&#x631;&#x62C;&#x6CC;" class="option">&#x644;&#x62C;&#x633;&#x62A;&#x6CC;&#x6A9; &#x62E;&#x627;&#x631;&#x62C;&#x6CC;</span>
+                                                <span data-comment="4" data-proccess="1-&#x62B;&#x628;&#x62A; &#x648;&#x627;&#x62D;&#x62F; 2-&#x627;&#x646;&#x628;&#x627;&#x631;&#x62F;&#x627;&#x631;&#x6CC;(&#x62B;&#x628;&#x62A; &#x631;&#x633;&#x6CC;&#x62F; &#x648; &#x62D;&#x648;&#x627;&#x644;&#x647;) 3-&#x628;&#x627;&#x631;&#x646;&#x627;&#x645;&#x647;(&#x645;&#x634;&#x627;&#x647;&#x62F;&#x647;&#x60C;&#x631;&#x62F;&#x60C;&#x62A;&#x627;&#x6CC;&#x6CC;&#x62F;)" data-has-child="False" value="&#x633;&#x627;&#x645;&#x627;&#x646;&#x647; &#x627;&#x646;&#x628;&#x627;&#x631;&#x647;&#x627; &#x648; &#x645;&#x631;&#x627;&#x6A9;&#x632; &#x646;&#x6AF;&#x647;&#x62F;&#x627;&#x631;&#x6CC; &#x6A9;&#x627;&#x644;&#x627;" class="option">&#x633;&#x627;&#x645;&#x627;&#x646;&#x647; &#x627;&#x646;&#x628;&#x627;&#x631;&#x647;&#x627; &#x648; &#x645;&#x631;&#x627;&#x6A9;&#x632; &#x646;&#x6AF;&#x647;&#x62F;&#x627;&#x631;&#x6CC; &#x6A9;&#x627;&#x644;&#x627;</span>
+                                                <span data-comment="5" data-proccess="1-&#x646;&#x62D;&#x648;&#x62F;&#x647; &#x627;&#x62E;&#x630; &#x634;&#x646;&#x627;&#x633;&#x647; &#x6A9;&#x627;&#x644;&#x627;&#x6CC; &#x62A;&#x648;&#x644;&#x6CC;&#x62F;&#x6CC;/&#x648;&#x627;&#x631;&#x62F;&#x627;&#x62A;&#x6CC; 2- &#x627;&#x633;&#x62A;&#x639;&#x644;&#x627;&#x645; &#x634;&#x646;&#x627;&#x633;&#x647; &#x6A9;&#x627;&#x644;&#x627; 3-&#x646;&#x62D;&#x648;&#x647; &#x627;&#x633;&#x62A;&#x641;&#x627;&#x62F;&#x647; &#x627;&#x632; &#x634;&#x646;&#x627;&#x633;&#x647; &#x6A9;&#x627;&#x644;&#x627; &#x62F;&#x631; &#x641;&#x631;&#x622;&#x6CC;&#x646;&#x62F; &#x62B;&#x628;&#x62A; &#x633;&#x641;&#x627;&#x631;&#x634;" data-has-child="False" value="&#x633;&#x627;&#x645;&#x627;&#x646;&#x647; &#x634;&#x646;&#x627;&#x633;&#x647; &#x6A9;&#x627;&#x644;&#x627;" class="option">&#x633;&#x627;&#x645;&#x627;&#x646;&#x647; &#x634;&#x646;&#x627;&#x633;&#x647; &#x6A9;&#x627;&#x644;&#x627;</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="zirsamaneha" class="select-container my-2">
+                                <span class="label">زیر‌سامانه‌ها</span>
+                                        <div class="select zirsamaneha">
+                                            <span class="select-value">انتخاب کنید</span>
+                                            <img src="{% static 'login/images/chevron-down2.svg'%}" class="select-icon" />
+                                            <div id="childSection" class="options childSection">
+                                                        <span data-comment="1-2-1" data-proccess="1-&#x62F;&#x631;&#x6CC;&#x627;&#x641;&#x62A; &#x634;&#x646;&#x627;&#x633;&#x647; &#x641;&#x631;&#x648;&#x634;&#x646;&#x62F;&#x647; &#x62E;&#x627;&#x631;&#x62C;&#x6CC; 2-&#x627;&#x62E;&#x630; &#x645;&#x62C;&#x648;&#x632; &#x633;&#x627;&#x632;&#x645;&#x627;&#x646; &#x647;&#x627; 3-&#x62B;&#x628;&#x62A; &#x67E;&#x631;&#x648;&#x646;&#x62F;&#x647; &#x62B;&#x628;&#x62A; &#x633;&#x641;&#x627;&#x631;&#x634;&#x60C;&#x627;&#x633;&#x62A;&#x639;&#x644;&#x627;&#x645; &#x636;&#x648;&#x627;&#x628;&#x637;&#x60C; &#x627;&#x646;&#x62C;&#x627;&#x645; &#x641;&#x631;&#x622;&#x628;&#x646;&#x62F; &#x62B;&#x628;&#x62A; &#x633;&#x641;&#x627;&#x631;&#x634;(&#x627;&#x6CC;&#x62C;&#x627;&#x62F;&#x60C;&#x648;&#x6CC;&#x631;&#x627;&#x6CC;&#x634;&#x60C; &#x62A;&#x645;&#x62F;&#x6CC;&#x62F;)" class="option">&#x639;&#x645;&#x644;&#x6CC;&#x627;&#x62A; &#x62A;&#x62C;&#x627;&#x631;&#x6CC;</span>
+                                                        <span data-comment="1-2-2" data-proccess="1-&#x62A;&#x639;&#x6CC;&#x6CC;&#x646; &#x645;&#x646;&#x634;&#x627; &#x627;&#x631;&#x632;(&#x628;&#x627;&#x646;&#x6A9;&#x6CC;&#x60C;&#x628;&#x62F;&#x648;&#x646; &#x627;&#x646;&#x62A;&#x642;&#x627;&#x644; &#x627;&#x631;&#x632; &#x648; &#x63A;&#x6CC;&#x631;&#x628;&#x627;&#x646;&#x6A9;&#x6CC;) 2-&#x627;&#x628;&#x637;&#x627;&#x644; &#x645;&#x646;&#x634;&#x627; &#x627;&#x631;&#x632; 3-&#x639;&#x645;&#x644;&#x6CC;&#x627;&#x62A; &#x628;&#x627;&#x646;&#x6A9;&#x6CC; &#x62B;&#x628;&#x62A; &#x633;&#x641;&#x627;&#x631;&#x634;" class="option">&#x639;&#x645;&#x644;&#x6CC;&#x627;&#x62A; &#x627;&#x631;&#x632;&#x6CC;</span>
+                                                        <span data-comment="1-2-3" data-proccess="1-&#x627;&#x646;&#x62C;&#x627;&#x645; &#x62B;&#x628;&#x62A; &#x622;&#x645;&#x627;&#x631;&#x6CC; &#x648;&#x627;&#x62E;&#x630; &#x6A9;&#x62F; 8 &#x631;&#x642;&#x645;&#x6CC; &#x62B;&#x628;&#x62A; &#x622;&#x645;&#x627;&#x631;&#x6CC;(&#x645;&#x646;&#x627;&#x637;&#x642; &#x622;&#x632;&#x627;&#x62F; &#x648; &#x648;&#x6CC;&#x698;&#x647; &#x627;&#x642;&#x62A;&#x635;&#x627;&#x62F;&#x6CC;&#x60C;&#x62A;&#x639;&#x627;&#x648;&#x646;&#x6CC; &#x645;&#x631;&#x632;&#x646;&#x634;&#x6CC;&#x646;&#x627;&#x646;&#x60C;&#x67E;&#x6CC;&#x644;&#x647; &#x648;&#x631;&#x627;&#x646;&#x60C;&#x6A9;&#x648;&#x644;&#x647; &#x628;&#x631;&#x627;&#x646;&#x60C; &#x648; &#x645;&#x644;&#x648;&#x627;&#x646;&#x627;&#x646;...) 2-&#x627;&#x62E;&#x630; &#x634;&#x646;&#x627;&#x633;&#x647; &#x6A9;&#x627;&#x644;&#x627; &#x648; &#x631;&#x647;&#x6AF;&#x6CC;&#x631;&#x6CC; &#x62F;&#x631; &#x635;&#x648;&#x631;&#x62A; &#x646;&#x6CC;&#x627;&#x632;" class="option">&#x62B;&#x628;&#x62A; &#x622;&#x645;&#x627;&#x631;&#x6CC;</span>
+                                                        <span data-comment="1-2-4" data-proccess="&#x641;&#x631;&#x622;&#x6CC;&#x646;&#x62F; &#x627;&#x639;&#x644;&#x627;&#x645; &#x62A;&#x631;&#x62E;&#x635;&#x6CC; &#x645;&#x646;&#x634;&#x627; &#x627;&#x631;&#x632; 2-&#x645;&#x62F;&#x6CC;&#x631;&#x6CC;&#x62A; &#x648; &#x645;&#x634;&#x627;&#x647;&#x62F;&#x647; &#x627;&#x638;&#x647;&#x627;&#x631;&#x646;&#x627;&#x645;&#x647; &#x648;&#x627;&#x631;&#x62F;&#x627;&#x62A; &#x648; &#x67E;&#x631;&#x648;&#x627;&#x646;&#x647; &#x647;&#x627;&#x6CC; &#x639;&#x628;&#x648;&#x631;&#x6CC; 3-&#x645;&#x62F;&#x6CC;&#x631;&#x6CC;&#x62A; &#x648; &#x645;&#x634;&#x627;&#x647;&#x62F;&#x647; &#x627;&#x638;&#x647;&#x627;&#x631;&#x646;&#x627;&#x645;&#x647; &#x635;&#x627;&#x62F;&#x631;&#x627;&#x62A; &#x648; &#x67E;&#x631;&#x648;&#x627;&#x646;&#x647; &#x647;&#x627;&#x6CC; &#x639;&#x628;&#x648;&#x631;&#x6CC; 4-&#x645;&#x634;&#x627;&#x647;&#x62F;&#x647; &#x633;&#x627;&#x628;&#x642;&#x647; &#x648;&#x627;&#x631;&#x62F;&#x627;&#x62A; &#x60C;&#x645;&#x62F;&#x6CC;&#x631;&#x6CC;&#x62A; &#x62F;&#x631;&#x62E;&#x648;&#x627;&#x633;&#x62A; &#x645;&#x62C;&#x648;&#x632; &#x62A;&#x631;&#x62E;&#x6CC;&#x635;" class="option">&#x639;&#x645;&#x644;&#x6CC;&#x627;&#x62A; &#x6AF;&#x645;&#x631;&#x6A9;&#x6CC; &#x648; &#x627;&#x639;&#x644;&#x627;&#x645; &#x62A;&#x631;&#x62E;&#x6CC;&#x635;</span>
+                                                        <span data-comment="1-2-5" data-proccess="1-&#x645;&#x634;&#x627;&#x647;&#x62F;&#x647; &#x634;&#x627;&#x62E;&#x635; &#x647;&#x627;&#x6CC; &#x631;&#x62A;&#x628;&#x647; &#x628;&#x646;&#x62F;&#x6CC;&#x60C;&#x631;&#x62A;&#x628;&#x647; &#x6A9;&#x644; &#x648; &#x633;&#x642;&#x641; &#x627;&#x631;&#x632;&#x6CC; &#x645;&#x62A;&#x646;&#x627;&#x638;&#x631; &#x628;&#x627; &#x622;&#x646; &#x628;&#x631;&#x627;&#x6CC; &#x648;&#x627;&#x631;&#x62F;&#x627;&#x62A; 2-&#x645;&#x634;&#x627;&#x647;&#x62F;&#x647; &#x645;&#x62C;&#x648;&#x632;&#x647;&#x627; &#x648; &#x631;&#x634;&#x62A;&#x647; &#x641;&#x639;&#x627;&#x644;&#x6CC;&#x62A; &#x647;&#x627;" class="option">&#x639;&#x645;&#x644;&#x6CC;&#x627;&#x62A; &#x631;&#x62A;&#x628;&#x647;&#x200C;&#x628;&#x646;&#x62F;&#x6CC;</span>
+                                            </div>
+                                        </div>
+                            </div>
+                            <div id="extentionCard" class="details-box mt-3">
+                                <span class="details-box-top">
+                                    <span>داخلی (از چپ به راست)</span>
+                                    <span id="comments" class="details-box__number">1 - 6</span>
+                                </span>
+                                <span class="details-box-bottom">
+                                    <span>فرایندها:</span>
+                                    <span id="proccesses">
+                                        مشاهده بیمه‌نامه‌های تجاری، ثبت درخواست بیمه‌نامه باربری
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <span id="SelectPlaceholder" class="hidden">انتخاب کنید</span>
+                </div>
+            </div>
+        </div>
+            <div id="toast" class="toast">
+            <img id="toast-icon" class="toast-icon" src="" alt="Icon" />
+            <span id="toast-message"></span>
+        </div>
+
+        <div class="loading-bar" id="loadingBar"></div>
+
+
+
+        <div class="body-container">
+            
+
+        <div class="login-page">
+
+            <div class="login-page-form-slider row">
+
+
+                <div class=" login-form-container">
+                    <div class="card-header">
+                            <img class="logo" src="{% static 'login/images/logo.svg'%}" />
+                    </div>
+                    <div class="card login-form">
+                        
+                        <div class="title-container">
+
+                            <span class="title">ورود</span>
+                            <span class="subtitle d-none-js">
+                                لطفا کدملی/شناسه فراگیر اتباع خود را وارد کنید
+                            </span>
+                        </div>
+
+                        <div class="card-body">
+                            {% include "partials/message.html" %}
+                                {% block main %}
+                                {% endblock main %}
+                        
+
+                        </div>
+                    </div>
+                    <div class="login-footer">
+                        <div class="login-footer-cr">
+                            <a href="https://www.mimt.gov.ir/fa/" target="_blank" rel="noopener noreferrer" class="fa-underline">
+                                درگاه یکپارچه خدمات وزارت صمت 
+                            </a>
+
+                            <span class="pip"></span>
+                            <a href="https://www.nwms.ir/" target="_blank" rel="noopener noreferrer">
+                                ورود نگهداری کنندگان کالا
+                            </a>
+                        </div>
+                        <div class="login-footer-contact">
+                            <span>ارتباط با مدیر سامانه : admin@ntsw.ir</span>
+                            <span>کلیه حقوق این سامانه برای وزارت صنعت، معدن و تجارت محفوظ است.</span>
+                        </div>
+                    </div>
+                </div>
+
+                
+
+                <div class="slider__container">
+                    <ul class="navbar-nav change-lang" style="text-align:left">
+                        <a href="#" class="nav-link dropdown-toggle " data-toggle="dropdown">
+                                <span class="px-2">FA</span>
+                        </a>
+                        <ul class="dropdown-menu change-lang-list">
+                            <li class="">
+                                <a class="dropdown-item px-0 pr-2" href="Lang?culture=fa&amp;path=%2FAccount%2FLogin&amp;query=%3FReturnUrl%3D%252Fconnect%252Fauthorize%252Fcallback%253Fclient_id%253Darka%2526response_type%253Dcode%2526scope%253Dopenid%252520api%252520offline_access%252520profile%2526redirect_uri%253Dhttps%25253A%25252F%25252Fntsw.ir%25252FIndex_SSO.aspx%2526code_challenge%253DOmm6izlBUfHBUeHWXJpMZHtEbypjI8zQoZGKbV7wjvo%2526code_challenge_method%253DS256">
+                                FA
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item px-0 pr-2" href="Lang?culture=en&amp;path=%2FAccount%2FLogin&amp;query=%3FReturnUrl%3D%252Fconnect%252Fauthorize%252Fcallback%253Fclient_id%253Darka%2526response_type%253Dcode%2526scope%253Dopenid%252520api%252520offline_access%252520profile%2526redirect_uri%253Dhttps%25253A%25252F%25252Fntsw.ir%25252FIndex_SSO.aspx%2526code_challenge%253DOmm6izlBUfHBUeHWXJpMZHtEbypjI8zQoZGKbV7wjvo%2526code_challenge_method%253DS256">
+                                    EN
+                                </a>
+                            </li>
+                        </ul>
+                    </ul>
+
+
+                    <div class="silder_images_container hide-scroll" id="silder_images_container">
+                            <div class="silder_imagetext">
+                                <img src="{% static 'login/images/SlideShow4.png'%}" />
+                            </div>
+                            <div class="silder_imagetext">
+                                <img src="{% static 'login/images/SlideShow3.png'%}" />
+                            </div>
+                    </div>
+                    <div id="slider-indicators" class="slider-indicators">
+                        <span class="slider-dot active"></span>
+                        <span class="slider-dot "></span>
+                </div>
+
+                        <img class="position-absolute samt-icon" src="{% static 'login/images/samt.svg'%}" />
+
+                    <img id="slider__arrow_right" class="slider__arrow position-absolute" src="{% static 'login/images/slider-right.svg'%}" />
+                    <img id="slider__arrow_left" class="slider__arrow position-absolute" src="{% static 'login/images/slider-left.svg'%}" />
+
+                    <div class="position-absolute slider_button_icons">
+                        <div>
+                            <a target="_blank" href="https://ble.ir/ntsw_ir" rel="noopener noreferrer" class="mr-2 bale-icon">
+                                <img src="{% static 'login/images/bale-icon.svg'%}" data-toggle="tooltip" offset="10" title="شبکه اجتماعی بله" />
+                            </a>
+                            <a target="_blank" href="https://www.aparat.com/ntsw_ir" rel="noopener noreferrer">
+                                <img src="{% static 'login/images/aparat_icon.svg'%}" data-toggle="tooltip" title="شبکه آپارات" />
+                            </a>
+                            <span class="hiphen mx-2"></span>
+                            <a target="_blank" href="https://info.ntsw.ir" rel="noopener noreferrer">
+                                <img src="{% static 'login/images/info_outline.svg'%}" data-toggle="tooltip" title="پایگاه آموزش و اطلاع رسانی" />
+                            </a>
+                            <img src="{% static 'login/images/124.svg'%}" id="callSenterIcon" data-toggle="tooltip" title="راهنمای مرکز تماس" />
+                        </div>
+                        <a referrerpolicy="origin" target="_blank" rel="noopener noreferrer" class="enamad-link enamad_image position-absolute" href="https://trustseal.enamad.ir/?id=177575&Code=mrlh9FNszGs9FvlErzmL">
+                            <img id="enamad-img"
+                                src="{% static 'login/images/enamad.svg'%}"
+                                alt="enamad"
+                                style="cursor:pointer">
+                        </a>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        </div>
+
+        <span id="version">v: 0.015</span>
+
+        <script src="{% static 'login/lib/jquery/dist/jquery.min.js'%}"></script>
+        <script src="{% static 'login/lib/bootstrap/dist/js/bootstrap.bundle.min.js'%}"></script>
+        <script src="{% static 'login/js/script.js'%}"></script>
+        <script src="{% static 'login/js/toast.js'%}"></script>
+
+        
+        <script type="text/javascript" src="{% static 'login/js/captcha.js'%}"></script>
+        <script type="text/javascript" src="{% static 'login/js/validate_form.js'%}"></script>
+        {% block js %}
+        {% endblock js %}
+
+    </body>
+</html>

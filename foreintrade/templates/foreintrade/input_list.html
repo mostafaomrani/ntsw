@@ -1,0 +1,776 @@
+{% extends "base.html" %}
+{% load static %}
+{% load date_filters %}
+{% load widget_tweaks %}
+{% load ui_template_tag %}
+
+{% block title %}
+جستجوی اسناد
+{% endblock title %}
+
+{% block breadcrumbs %}
+{% breadcrumbs 'عملیات تجارت داخلی' '#' 'مدیریت اسناد' '#' %}
+{% endblock breadcrumbs %}
+
+{% block page-title %}
+مدیریت اسناد ورودی
+{% endblock page-title %}
+
+{% block main %}
+<link rel='stylesheet' href='https://cdn.datatables.net/2.3.4/css/dataTables.dataTables.css' media='all' />
+<div class="container-fluid">
+    <div class="bg-white p-3 request-main-data">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                <form id="frmSearch" novalidate="novalidate" class="fv-form fv-form-bootstrap">
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="card border-primary">
+                                <div class="card-header bg-primary text-white">
+                                    <h5 class="mb-0"><i class="fa fa-search"></i> نوار ابزار جستجو</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <!-- نوع سند -->
+                                        <div class="col-md-3 mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light">نوع سند</span>
+                                                <select name="selltypes" id="selltypes" class="form-control">
+                                                    <option value="">انتخاب کنید</option>
+                                                    <option value="1">اظهار تولید</option>
+                                                    <option value="2">انتقال مالکیت</option>
+                                                    <option value="4">تفکیک</option>
+                                                    <option value="5">انتقال مکان</option>
+                                                    <option value="6">انتقال مالکیت و مکان</option>
+                                                    <option value="7">واردات</option>
+                                                    <option value="10">اظهار استثنائات تجاری</option>
+                                                    <option value="11">اظهار موجودی اولیه</option>
+                                                    <option value="13">فاکتور فروش به تاجر</option>
+                                                    <option value="14">اظهار خرید/دریافت</option>
+                                                    <option value="15">اظهار واردات</option>
+                                                    <option value="16">انبار گردانی (افزایشی)</option>
+                                                    <option value="17">برگشت از خرید</option>
+                                                    <option value="23">برنامه تولید</option>
+                                                    <option value="24">برنامه تولید(افزایش ظرفیت با توسعه ماشین آلات)</option>
+                                                    <option value="26">تولید</option>
+                                                    <option value="27">بدون موجودی اولیه</option>
+                                                    <option value="29">اظهار برگشت از فروش</option>
+                                                    <option value="30">تحویل حق العمل کاری</option>
+                                                    <option value="31">تولید شناسه های رهگیری</option>
+                                                    <option value="32">فاکتور مالیاتی فروش به تاجر</option>
+                                                    <option value="33">فاکتور برگشت از فروش</option>
+                                                    <option value="36">فاکتور مالیاتی فروش به مصرف کننده</option>
+                                                    <option value="37">فاکتور مالیاتی برگشت از فروش</option>
+                                                    <option value="38">پیش اظهار ورود کالا</option>
+                                                    <option value="39">فروش خارج از ضابطه</option>
+                                                    <option value="40">تولید رهگیری فرامرزی</option>
+                                                    <option value="42">ورود کالای تفکیک/تجمیع/بسته بندی</option>
+                                                    <option value="43">تحویل امانت</option>
+                                                    <option value="44">برگشت امانت</option>
+                                                    <option value="46">پیش فاکتور</option>
+                                                    <option value="47">فاکتور مالیاتی اصلاحی</option>
+                                                    <option value="48">فاکتور مالیاتی ابطالی</option>
+                                                    <option value="49">فروش صادراتی</option>
+                                                    <option value="50">خرید بورس کالا</option>
+                                                    <option value="51">مصارف داخلی</option>
+                                                    <option value="53">برآورد صادرات</option>
+                                                    <option value="54">تبدیل خلوص طلا(عیار)</option>
+                                                    <option value="55">نیاز ماشین آلات تولیدی</option>
+                                                    <option value="56">نیاز اجزا و قطعات</option>
+                                                    <option value="58">نیاز ماشین آلات معدنی و راهسازی</option>
+                                                    <option value="59">نیاز سهمیه اتوبوس</option>
+                                                    <option value="60">نیاز ماشین آلات کشاورزی و ساختمانی</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <!-- وضعیت سند -->
+                                        <div class="col-md-3 mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light">وضعیت سند</span>
+                                                <select name="status" id="status" class="form-control">
+                                                    <option value="" selected="selected">انتخاب کنید</option>
+                                                    <option value="2">در انتظار تایید</option>
+                                                    <option value="3">فروش نهایی (انتقال به همتا)</option>
+                                                    <option value="4">تایید شده</option>
+                                                    <option value="5">عدم تایید</option>
+                                                    <option value="6">باطل شده</option>
+                                                    <option value="7">ثبت اولیه</option>
+                                                    <option value="8">پیش نویس</option>
+                                                    <option value="9">در انتظار سهمیه</option>
+                                                    <option value="10">تخصیص یافته</option>
+                                                    <option value="11">حذف شده</option>
+                                                    <option value="12">در حال حمل</option>
+                                                    <option value="13">استعلام</option>
+                                                    <option value="14">ارسال شده</option>
+                                                    <option value="15">تائید مجوز حمل</option>
+                                                    <option value="16">تایید نهایی</option>
+                                                    <option value="17">تایید نیاز ماشین آلات</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <!-- نوع تاریخ -->
+                                        <div class="col-md-3 mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light">نوع تاریخ</span>
+                                                <select name="dateTimeType" id="dateTimeType" class="form-control">
+                                                    <option value="1" selected="selected">تاریخ سند</option>
+                                                    <option value="2">تاریخ ثبت</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <!-- از تاریخ - تا تاریخ -->
+                                        <div class="col-md-3 mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light">از تاریخ - تا تاریخ</span>
+                                                <input type="text" id="fromDate" placeholder="از تاریخ" autocomplete="off" name="fromDate" class="persianDatePicker1 form-control max-date1 pwt-datepicker-input-element" style="width: 50%">
+                                                <input type="text" id="toDate" placeholder="تا تاریخ" autocomplete="off" name="toDate" class="persianDatePicker1 form-control max-date1 pwt-datepicker-input-element" style="width: 50%">
+                                            </div>
+                                        </div>
+
+                                        <!-- نوع جستجو -->
+                                        <div class="col-md-3 mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light">نوع جستجو</span>
+                                                <select name="searchType" id="searchType" class="form-control">
+                                                    <option value="1" selected="selected">شماره سند</option>
+                                                    <option value="2">شماره صورتحساب</option>
+                                                    <option value="10">کوتاژ</option>
+                                                    <option value="9">شماره قرارداد بورس</option>
+                                                    <option value="4">کدپستی انبار مقصد</option>
+                                                    <option value="3">کدپستی انبار مبدا</option>
+                                                    <option value="6">کد/شناسه ملی خریدار</option>
+                                                    <option value="7">کد/شناسه ملی فروشنده</option>
+                                                    <option value="8">کدملی خریدار مصرف کننده</option>
+                                                    <option value="5">کدپستی محل عرضه</option>
+                                                    <option value="11">شماره ثبت سفارش</option>
+                                                    <option value="12">منشا ارز</option>
+                                                    <option value="13">شناسه کالا</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <!-- متن جستجو -->
+                                        <div class="col-md-3 mb-3">
+                                            <div class="input-group">
+                                                <input type="text" name="txtSearch" id="txtSearch" class="form-control" placeholder="متن جستجو">
+                                            </div>
+                                        </div>
+
+                                        <!-- دکمه‌های جستجو و لغو -->
+                                        <div class="col-md-3 mb-3">
+                                            <div class="input-group">
+                                                <button type="button" name="search" class="btn btn-primary me-2"><i class="fa fa-search"></i> جستجو</button>
+                                                <button type="button" name="resetFilter" class="btn btn-warning"><i class="fa fa-remove"></i> لغو فیلتر</button>
+                                            </div>
+                                        </div>
+
+                                        <!-- خروجی اکسل -->
+                                        <div class="col-md-3 mb-3">
+                                            <div class="input-group">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-purple-csm dropdown-toggle" type="button" id="exportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="fa fa-upload"></i> دریافت خروجی اکسل
+                                                    </button>
+                                                    <ul class="dropdown-menu" aria-labelledby="exportDropdown">
+                                                        <li><button name="exportexcelsanad" id="exportexcelsanad" class="dropdown-item">به تفکیک سند</button></li>
+                                                        <li><button name="exportexcelkala" id="exportexcelkala" class="dropdown-item">به تفکیک کالا</button></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- تعیین وضعیت سند با فایل اکسل -->
+                                        <div class="col-md-3 mb-3">
+                                            <div class="input-group">
+                                                <button type="button" name="ImportExcel" id="ImportExcel" class="btn btn-success w-100"><i class="fa fa-download"></i> تعیین وضعیت سند با فایل اکسل</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- جدول نتایج جستجو -->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="card border-primary">
+                                <div class="card-header bg-primary text-white">
+                                    <h5 class="mb-0"><i class="fa fa-table"></i> نتایج جستجو</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table id="example" class="display">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Position</th>
+                <th>Office</th>
+                <th>Age</th>
+                <th>Start date</th>
+                <th>Salary</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Tiger Nixon</td>
+                <td>System Architect</td>
+                <td>Edinburgh</td>
+                <td>61</td>
+                <td>2011-04-25</td>
+                <td>$320,800</td>
+            </tr>
+            <tr>
+                <td>Garrett Winters</td>
+                <td>Accountant</td>
+                <td>Tokyo</td>
+                <td>63</td>
+                <td>2011-07-25</td>
+                <td>$170,750</td>
+            </tr>
+            <tr>
+                <td>Ashton Cox</td>
+                <td>Junior Technical Author</td>
+                <td>San Francisco</td>
+                <td>66</td>
+                <td>2009-01-12</td>
+                <td>$86,000</td>
+            </tr>
+            <tr>
+                <td>Cedric Kelly</td>
+                <td>Senior JavaScript Developer</td>
+                <td>Edinburgh</td>
+                <td>22</td>
+                <td>2012-03-29</td>
+                <td>$433,060</td>
+            </tr>
+            <tr>
+                <td>Airi Satou</td>
+                <td>Accountant</td>
+                <td>Tokyo</td>
+                <td>33</td>
+                <td>2008-11-28</td>
+                <td>$162,700</td>
+            </tr>
+            <tr>
+                <td>Brielle Williamson</td>
+                <td>Integration Specialist</td>
+                <td>New York</td>
+                <td>61</td>
+                <td>2012-12-02</td>
+                <td>$372,000</td>
+            </tr>
+            <tr>
+                <td>Herrod Chandler</td>
+                <td>Sales Assistant</td>
+                <td>San Francisco</td>
+                <td>59</td>
+                <td>2012-08-06</td>
+                <td>$137,500</td>
+            </tr>
+            <tr>
+                <td>Rhona Davidson</td>
+                <td>Integration Specialist</td>
+                <td>Tokyo</td>
+                <td>55</td>
+                <td>2010-10-14</td>
+                <td>$327,900</td>
+            </tr>
+            <tr>
+                <td>Colleen Hurst</td>
+                <td>JavaScript Developer</td>
+                <td>San Francisco</td>
+                <td>39</td>
+                <td>2009-09-15</td>
+                <td>$205,500</td>
+            </tr>
+            <tr>
+                <td>Sonya Frost</td>
+                <td>Software Engineer</td>
+                <td>Edinburgh</td>
+                <td>23</td>
+                <td>2008-12-13</td>
+                <td>$103,600</td>
+            </tr>
+            <tr>
+                <td>Jena Gaines</td>
+                <td>Office Manager</td>
+                <td>London</td>
+                <td>30</td>
+                <td>2008-12-19</td>
+                <td>$90,560</td>
+            </tr>
+            <tr>
+                <td>Quinn Flynn</td>
+                <td>Support Lead</td>
+                <td>Edinburgh</td>
+                <td>22</td>
+                <td>2013-03-03</td>
+                <td>$342,000</td>
+            </tr>
+            <tr>
+                <td>Charde Marshall</td>
+                <td>Regional Director</td>
+                <td>San Francisco</td>
+                <td>36</td>
+                <td>2008-10-16</td>
+                <td>$470,600</td>
+            </tr>
+            <tr>
+                <td>Haley Kennedy</td>
+                <td>Senior Marketing Designer</td>
+                <td>London</td>
+                <td>43</td>
+                <td>2012-12-18</td>
+                <td>$313,500</td>
+            </tr>
+            <tr>
+                <td>Tatyana Fitzpatrick</td>
+                <td>Regional Director</td>
+                <td>London</td>
+                <td>19</td>
+                <td>2010-03-17</td>
+                <td>$385,750</td>
+            </tr>
+            <tr>
+                <td>Michael Silva</td>
+                <td>Marketing Designer</td>
+                <td>London</td>
+                <td>66</td>
+                <td>2012-11-27</td>
+                <td>$198,500</td>
+            </tr>
+            <tr>
+                <td>Paul Byrd</td>
+                <td>Chief Financial Officer (CFO)</td>
+                <td>New York</td>
+                <td>64</td>
+                <td>2010-06-09</td>
+                <td>$725,000</td>
+            </tr>
+            <tr>
+                <td>Gloria Little</td>
+                <td>Systems Administrator</td>
+                <td>New York</td>
+                <td>59</td>
+                <td>2009-04-10</td>
+                <td>$237,500</td>
+            </tr>
+            <tr>
+                <td>Bradley Greer</td>
+                <td>Software Engineer</td>
+                <td>London</td>
+                <td>41</td>
+                <td>2012-10-13</td>
+                <td>$132,000</td>
+            </tr>
+            <tr>
+                <td>Dai Rios</td>
+                <td>Personnel Lead</td>
+                <td>Edinburgh</td>
+                <td>35</td>
+                <td>2012-09-26</td>
+                <td>$217,500</td>
+            </tr>
+            <tr>
+                <td>Jenette Caldwell</td>
+                <td>Development Lead</td>
+                <td>New York</td>
+                <td>30</td>
+                <td>2011-09-03</td>
+                <td>$345,000</td>
+            </tr>
+            <tr>
+                <td>Yuri Berry</td>
+                <td>Chief Marketing Officer (CMO)</td>
+                <td>New York</td>
+                <td>40</td>
+                <td>2009-06-25</td>
+                <td>$675,000</td>
+            </tr>
+            <tr>
+                <td>Caesar Vance</td>
+                <td>Pre-Sales Support</td>
+                <td>New York</td>
+                <td>21</td>
+                <td>2011-12-12</td>
+                <td>$106,450</td>
+            </tr>
+            <tr>
+                <td>Doris Wilder</td>
+                <td>Sales Assistant</td>
+                <td>Sydney</td>
+                <td>23</td>
+                <td>2010-09-20</td>
+                <td>$85,600</td>
+            </tr>
+            <tr>
+                <td>Angelica Ramos</td>
+                <td>Chief Executive Officer (CEO)</td>
+                <td>London</td>
+                <td>47</td>
+                <td>2009-10-09</td>
+                <td>$1,200,000</td>
+            </tr>
+            <tr>
+                <td>Gavin Joyce</td>
+                <td>Developer</td>
+                <td>Edinburgh</td>
+                <td>42</td>
+                <td>2010-12-22</td>
+                <td>$92,575</td>
+            </tr>
+            <tr>
+                <td>Jennifer Chang</td>
+                <td>Regional Director</td>
+                <td>Singapore</td>
+                <td>28</td>
+                <td>2010-11-14</td>
+                <td>$357,650</td>
+            </tr>
+            <tr>
+                <td>Brenden Wagner</td>
+                <td>Software Engineer</td>
+                <td>San Francisco</td>
+                <td>28</td>
+                <td>2011-06-07</td>
+                <td>$206,850</td>
+            </tr>
+            <tr>
+                <td>Fiona Green</td>
+                <td>Chief Operating Officer (COO)</td>
+                <td>San Francisco</td>
+                <td>48</td>
+                <td>2010-03-11</td>
+                <td>$850,000</td>
+            </tr>
+            <tr>
+                <td>Shou Itou</td>
+                <td>Regional Marketing</td>
+                <td>Tokyo</td>
+                <td>20</td>
+                <td>2011-08-14</td>
+                <td>$163,000</td>
+            </tr>
+            <tr>
+                <td>Michelle House</td>
+                <td>Integration Specialist</td>
+                <td>Sydney</td>
+                <td>37</td>
+                <td>2011-06-02</td>
+                <td>$95,400</td>
+            </tr>
+            <tr>
+                <td>Suki Burks</td>
+                <td>Developer</td>
+                <td>London</td>
+                <td>53</td>
+                <td>2009-10-22</td>
+                <td>$114,500</td>
+            </tr>
+            <tr>
+                <td>Prescott Bartlett</td>
+                <td>Technical Author</td>
+                <td>London</td>
+                <td>27</td>
+                <td>2011-05-07</td>
+                <td>$145,000</td>
+            </tr>
+            <tr>
+                <td>Gavin Cortez</td>
+                <td>Team Leader</td>
+                <td>San Francisco</td>
+                <td>22</td>
+                <td>2008-10-26</td>
+                <td>$235,500</td>
+            </tr>
+            <tr>
+                <td>Martena Mccray</td>
+                <td>Post-Sales support</td>
+                <td>Edinburgh</td>
+                <td>46</td>
+                <td>2011-03-09</td>
+                <td>$324,050</td>
+            </tr>
+            <tr>
+                <td>Unity Butler</td>
+                <td>Marketing Designer</td>
+                <td>San Francisco</td>
+                <td>47</td>
+                <td>2009-12-09</td>
+                <td>$85,675</td>
+            </tr>
+            <tr>
+                <td>Howard Hatfield</td>
+                <td>Office Manager</td>
+                <td>San Francisco</td>
+                <td>51</td>
+                <td>2008-12-16</td>
+                <td>$164,500</td>
+            </tr>
+            <tr>
+                <td>Hope Fuentes</td>
+                <td>Secretary</td>
+                <td>San Francisco</td>
+                <td>41</td>
+                <td>2010-02-12</td>
+                <td>$109,850</td>
+            </tr>
+            <tr>
+                <td>Vivian Harrell</td>
+                <td>Financial Controller</td>
+                <td>San Francisco</td>
+                <td>62</td>
+                <td>2009-02-14</td>
+                <td>$452,500</td>
+            </tr>
+            <tr>
+                <td>Timothy Mooney</td>
+                <td>Office Manager</td>
+                <td>London</td>
+                <td>37</td>
+                <td>2008-12-11</td>
+                <td>$136,200</td>
+            </tr>
+            <tr>
+                <td>Jackson Bradshaw</td>
+                <td>Director</td>
+                <td>New York</td>
+                <td>65</td>
+                <td>2008-09-26</td>
+                <td>$645,750</td>
+            </tr>
+            <tr>
+                <td>Olivia Liang</td>
+                <td>Support Engineer</td>
+                <td>Singapore</td>
+                <td>64</td>
+                <td>2011-02-03</td>
+                <td>$234,500</td>
+            </tr>
+            <tr>
+                <td>Bruno Nash</td>
+                <td>Software Engineer</td>
+                <td>London</td>
+                <td>38</td>
+                <td>2011-05-03</td>
+                <td>$163,500</td>
+            </tr>
+            <tr>
+                <td>Sakura Yamamoto</td>
+                <td>Support Engineer</td>
+                <td>Tokyo</td>
+                <td>37</td>
+                <td>2009-08-19</td>
+                <td>$139,575</td>
+            </tr>
+            <tr>
+                <td>Thor Walton</td>
+                <td>Developer</td>
+                <td>New York</td>
+                <td>61</td>
+                <td>2013-08-11</td>
+                <td>$98,540</td>
+            </tr>
+            <tr>
+                <td>Finn Camacho</td>
+                <td>Support Engineer</td>
+                <td>San Francisco</td>
+                <td>47</td>
+                <td>2009-07-07</td>
+                <td>$87,500</td>
+            </tr>
+            <tr>
+                <td>Serge Baldwin</td>
+                <td>Data Coordinator</td>
+                <td>Singapore</td>
+                <td>64</td>
+                <td>2012-04-09</td>
+                <td>$138,575</td>
+            </tr>
+            <tr>
+                <td>Zenaida Frank</td>
+                <td>Software Engineer</td>
+                <td>New York</td>
+                <td>63</td>
+                <td>2010-01-04</td>
+                <td>$125,250</td>
+            </tr>
+            <tr>
+                <td>Zorita Serrano</td>
+                <td>Software Engineer</td>
+                <td>San Francisco</td>
+                <td>56</td>
+                <td>2012-06-01</td>
+                <td>$115,000</td>
+            </tr>
+            <tr>
+                <td>Jennifer Acosta</td>
+                <td>Junior JavaScript Developer</td>
+                <td>Edinburgh</td>
+                <td>43</td>
+                <td>2013-02-01</td>
+                <td>$75,650</td>
+            </tr>
+            <tr>
+                <td>Cara Stevens</td>
+                <td>Sales Assistant</td>
+                <td>New York</td>
+                <td>46</td>
+                <td>2011-12-06</td>
+                <td>$145,600</td>
+            </tr>
+            <tr>
+                <td>Hermione Butler</td>
+                <td>Regional Director</td>
+                <td>London</td>
+                <td>47</td>
+                <td>2011-03-21</td>
+                <td>$356,250</td>
+            </tr>
+            <tr>
+                <td>Lael Greer</td>
+                <td>Systems Administrator</td>
+                <td>London</td>
+                <td>21</td>
+                <td>2009-02-27</td>
+                <td>$103,500</td>
+            </tr>
+            <tr>
+                <td>Jonas Alexander</td>
+                <td>Developer</td>
+                <td>San Francisco</td>
+                <td>30</td>
+                <td>2010-07-14</td>
+                <td>$86,500</td>
+            </tr>
+            <tr>
+                <td>Shad Decker</td>
+                <td>Regional Director</td>
+                <td>Edinburgh</td>
+                <td>51</td>
+                <td>2008-11-13</td>
+                <td>$183,000</td>
+            </tr>
+            <tr>
+                <td>Michael Bruce</td>
+                <td>JavaScript Developer</td>
+                <td>Singapore</td>
+                <td>29</td>
+                <td>2011-06-27</td>
+                <td>$183,000</td>
+            </tr>
+            <tr>
+                <td>Donna Snider</td>
+                <td>Customer Support</td>
+                <td>New York</td>
+                <td>27</td>
+                <td>2011-01-25</td>
+                <td>$112,000</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>Name</th>
+                <th>Position</th>
+                <th>Office</th>
+                <th>Age</th>
+                <th>Start date</th>
+                <th>Salary</th>
+            </tr>
+        </tfoot>
+    </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.input-group-text.bg-light {
+    width: 120px;
+}
+.btn-purple-csm {
+    background-color: #6f42c1 !important;
+    color: #fff;
+}
+.btn-purple-csm:hover {
+    background-color: #5a32a3 !important;
+}
+.dropdown-menu {
+    min-width: 100%;
+}
+.text-align-center {
+    text-align: center !important;
+}
+.bg-themeprimary {
+    background-color: #024158 !important;
+    color: white;
+}
+.bg-themeprimary th {
+    text-align: center !important;
+}
+.table-responsive {
+    overflow-x: auto;
+}
+.hidden {
+    display: none;
+}
+div.dt-container div.dt-layout-row div.dt-layout-cell.dt-layout-start {
+	margin-right: initial !important;
+}
+div.dt-container div.dt-layout-row div.dt-layout-cell.dt-layout-end {
+	margin-left: initial !important;
+}
+</style>
+{% endblock main %}
+
+{% block js %}
+<!-- بارگذاری jQuery و DataTables -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/2.3.4/js/dataTables.js"></script>
+<!-- بارگذاری Persian Datepicker (در صورت نیاز) -->
+
+<script>
+$(document).ready(function() {
+
+
+    // اینیشیالایز DataTable
+    $('#example').DataTable({
+        paging: true,
+        searching: true,
+        info: true,
+        ordering: false,
+        pageLength: 10,
+        language: {
+            "sEmptyTable": "هیچ داده‌ای در جدول وجود ندارد",
+            "sInfo": "نمایش _START_ تا _END_ از _TOTAL_ رکورد",
+            "sInfoEmpty": "نمایش 0 تا 0 از 0 رکورد",
+            "sInfoFiltered": "(فیلتر شده از _MAX_ رکورد)",
+            "sLengthMenu": "نمایش _MENU_ رکورد",
+            "sLoadingRecords": "در حال بارگذاری...",
+            "sProcessing": "در حال پردازش...",
+            "sSearch": "جستجو:",
+            "sZeroRecords": "رکوردی مطابق جستجوی شما پیدا نشد",
+            "oPaginate": {
+                "sFirst": "اولین",
+                "sLast": "آخرین",
+                "sNext": "بعدی",
+                "sPrevious": "قبلی"
+            }
+        },
+      
+    });
+
+});
+</script>
+{% endblock js %}

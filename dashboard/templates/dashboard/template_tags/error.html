@@ -1,0 +1,7 @@
+{% if errors %}
+    {% for er in errors %}
+        <p>
+            <small class="text-danger">{{ er }}</small>
+        </p>
+    {% endfor %}
+{% endif %}

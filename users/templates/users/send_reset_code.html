@@ -1,0 +1,25 @@
+{% extends "users/base.html" %}
+{% load widget_tweaks %}
+{% load static %}
+{% block title %}
+    بازیابی رمز عبور
+{% endblock title %}
+{% block main %}
+    <div class="bg-white rounded shadow">
+        <p class="bg-primary text-white p-2 mb-0 rounded-top section-header">بازیابی رمز عبور</p>
+        <form method="post">
+            {% csrf_token %}
+            <div class="d-grid gap-2 col-6 mx-auto py-5">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon2">{{ form.username.label }}</span>
+                    {% render_field form.username class="form-control" %}
+                </div>
+                <button type="submit" class="btn  btn-success btn-login">بازیابی از طریق ارسال پیامک</button>
+                <button type="submit" class="btn  btn-primary btn-signup disabled">بازیابی از طریق شماره گیری کد دستوری USSD</button>
+                <div class="text-center mt-4">
+                    <a href="#" class="btn  btn-primary me-2 disabled"><i class="fa fa-info-circle"></i> راهنمای سریع</a>
+                    <a href="{% url 'users:login' %}" class="btn  btn-primary ms-2"><i class="fa fa-home"></i> بازگشت به صفحه‌ی اصلی</a>
+                </div>
+            </form>
+        </div>
+    {% endblock main %}

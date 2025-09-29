@@ -1,0 +1,23 @@
+# فایل‌های پایتون
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# محیط مجازی
+venv/
+env/
+ENV/
+
+
+# فایل‌های IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# گزارش‌ها و لاگ‌ها
+*.log
+
+

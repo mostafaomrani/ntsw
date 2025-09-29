@@ -1,0 +1,301 @@
+{% load static %}
+{% load widget_tweaks %}
+{% include "partials/show_errors.html" %}
+<form method="post"
+      action="{% url 'order_registration:create_ware' main_data_id %}"
+      id="create-ware-form"
+      class="needs-validation"
+      novalidate>
+    {% csrf_token %}
+    <div id="ware-base-data" class="container-fluid">
+        <div class="row">
+            <div class="col-12 mb-3 mt-4">
+                <span class="px-4 py-2 shadow-sm border-start border-dark border-4 bg-white text-center">اطلاعات پایه</span>
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon2">{{ form.hs_code.label }}</span>
+                    {% render_field form.hs_code class="form-control" min="10000000" max="99999999" %}
+                    <span class="invalid-feedback">پرکردن این فیلد الزامی است</span>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <button class="btn  btn-primary btn-maya" id="search-hs-code" type="button">جستجو</button>
+            </div>
+        </div>
+    </div>
+    <div id="ware-complet-data"
+         class="container-fluid {% if form.errors %}{% else %}d-none{% endif %}">
+        <div class="row">
+            <div class="col-12 mb-3 mt-4">
+                <span class="px-4 py-2 shadow-sm border-start border-dark border-4 bg-white text-center">اطلاعات تکمیلی</span>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon2">{{ form.representation_status.label }}</span>
+                    {% render_field form.representation_status class="form-control" %}
+                    <span class="invalid-feedback">پرکردن این فیلد الزامی است</span>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="border d-md-flex justify-content-between">
+                    <div class="p-2">
+                        <div class="d-flex justify-content-start">
+                            <div class="p-2">
+                                <span>شرح تعرفه:</span><span>-</span>
+                            </div>
+                            <div class="p-2">
+                                <span>درصد حقوق ورودی:</span><span>-</span>
+                            </div>
+                            <div class="p-2">
+                                <span>اولویت کالایی:</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-2">
+                        <button class="btn  btn-primary btn-maya"
+                                id="check-base-information"
+                                type="button">بررسی اطلاعات پایه کالا</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="ware-main-data"
+         class="container-fluid {% if form.errors %}{% else %}d-none{% endif %}">
+        <div class="row">
+            <div class="col-12 mb-3 mt-4">
+                <span class="px-4 py-2 shadow-sm border-start border-dark border-4 bg-white text-center">اطلاعات اصلی</span>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon2">{{ form.ware_identifier.label }}</span>
+                    {% render_field form.ware_identifier class="form-control " %}
+                    <span class="invalid-feedback">پرکردن این فیلد الزامی است</span>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon2">{{ form.organization_identifier.label }}</span>
+                    {% render_field form.organization_identifier class="form-control " %}
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon2">{{ form.persian_title.label }}</span>
+                    {% render_field form.persian_title class="form-control " %}
+                    <span class="invalid-feedback">پرکردن این فیلد الزامی است</span>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon2">{{ form.english_title.label }}</span>
+                    {% render_field form.english_title class="form-control " %}
+                    <span class="invalid-feedback">پرکردن این فیلد الزامی است</span>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon2">{{ form.manufacture_year.label }}</span>
+                    {% render_field form.manufacture_year class="form-control p-0" placeholder="جستجو کنید" %}
+                    <span class="invalid-feedback">پرکردن این فیلد الزامی است</span>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon2">{{ form.unit.label }}</span>
+                    {% render_field form.unit class="form-control p-0" placeholder="جستجو کنید" %}
+                    <span class="invalid-feedback">پرکردن این فیلد الزامی است</span>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon2">{{ form.fob_price.label }}</span>
+                    {% render_field form.fob_price class="form-control " %}
+                    <span class="invalid-feedback">پرکردن این فیلد الزامی است</span>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon2">{{ form.off.label }}</span>
+                    {% render_field form.off class="form-control " %}
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon2">{{ form.amount.label }}</span>
+                    {% render_field form.amount class="form-control " %}
+                    <span class="invalid-feedback">پرکردن این فیلد الزامی است</span>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon2">{{ form.net_weight.label }}</span>
+                    {% render_field form.net_weight class="form-control " %}
+                    <span class="invalid-feedback">پرکردن این فیلد الزامی است</span>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon2">{{ form.gross_weight.label }}</span>
+                    {% render_field form.gross_weight class="form-control " %}
+                    <span class="invalid-feedback">پرکردن این فیلد الزامی است</span>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon2">{{ form.packing_type.label }}</span>
+                    {% render_field form.packing_type class="form-control p-0" placeholder="جستجو کنید" %}
+                    <span class="invalid-feedback">پرکردن این فیلد الزامی است</span>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon2">{{ form.status.label }}</span>
+                    {% render_field form.status class="form-control p-0" placeholder="جستجو کنید" %}
+                    <span class="invalid-feedback">پرکردن این فیلد الزامی است</span>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon2">{{ form.made_country.label }}</span>
+                    {% render_field form.made_country class="form-control p-0" placeholder="جستجو کنید" %}
+                    <span class="invalid-feedback">پرکردن این فیلد الزامی است</span>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon2">{{ form.technical_specifications.label }}</span>
+                    {% render_field form.technical_specifications class="form-control " %}
+                    <span class="invalid-feedback">پرکردن این فیلد الزامی است</span>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon2">{{ form.standard.label }}</span>
+                    {% render_field form.standard class="form-control " %}
+                    <span class="invalid-feedback">پرکردن این فیلد الزامی است</span>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon2">{{ form.producer_name.label }}</span>
+                    {% render_field form.producer_name class="form-control" %}
+                    <span class="invalid-feedback">پرکردن این فیلد الزامی است</span>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="border d-flex justify-content-end">
+                <div class="p-2">
+                    <button class="btn success btn-forest">ثبت کالا</button>
+                </div>
+                <div class="p-2">
+                    <button class="btn  btn-danger btn-bittersweet"
+                            type="button"
+                            data-bs-dismiss="modal">انصراف</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script>    
+$('#id_manufacture_year, #id_packing_type, #id_status, #id_made_country,#id_unit').selectize({
+    maxItems: 1,
+    create: false,    
+});
+
+$('#search-hs-code').click(function() {
+    let hsCode = document.getElementById('id_hs_code')
+    if (hsCode.value.length != 8)
+    {
+        hsCode.classList.add('border-danger');
+        alert('مقدار کد تعرفه به درستی وارد نشده. این مقدار باید ۸ رقمی باشد.');
+
+    }else {
+
+        $('#ware-complet-data').removeClass('d-none');
+        hsCode.classList.remove('border-danger');
+
+    }
+
+});
+$('#check-base-information').click(function(){
+    $('#ware-main-data').removeClass('d-none');
+});
+
+document.getElementById('id_amount').addEventListener('input',e=>{
+    let unit = document.getElementById('id_unit');
+    let netweight = document.getElementById('id_net_weight');
+    if (unit.value === 'kg') {
+        netweight.value = e.target.value;
+    }
+});
+
+
+// اعتبارسنجی فرم
+const pforms = document.querySelectorAll('.needs-validation');
+Array.from(pforms).forEach(form => {
+    form.addEventListener('submit', event => {
+        let isFormValid = true;
+
+        // بررسی اعتبارسنجی پیش‌فرض فرم
+        if (!form.checkValidity()) {
+            isFormValid = false;
+        }
+        // اگر فرم معتبر نباشد، ارسال نشود
+        if (!isFormValid) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        form.querySelectorAll('select.selectized').forEach(select => {
+            const selectizeInstance = $(select)[0].selectize; // دسترسی به نمونه Selectize
+            if (!selectizeInstance) {
+                console.error('Selectize مقداردهی نشده است:', select);
+                return;
+            }
+            validateSelectize(selectizeInstance);
+
+            if (!selectizeInstance.getValue()) {
+                isFormValid = false;
+            }
+            // مثال: دریافت مقدار فعلی
+            console.log('مقدار فعلی:', selectizeInstance.getValue());
+
+        })
+
+        // اضافه کردن کلاس was-validated به فرم
+        form.classList.add('was-validated');
+    }, false);
+});
+
+// تابع اعتبارسنجی
+function validateSelectize(selectizeInstance) {
+    const control = selectizeInstance.$control[0];
+    if (!control || !control.parentElement) {
+        console.error('والد کنترل selectize یافت نشد.', control)
+    }
+    if (!selectizeInstance.getValue() || selectizeInstance.getValue().length === 0) {
+        control.parentElement.classList.add('is-invalid');
+    } else {
+        control.parentElement.classList.remove('is-invalid');
+    }
+}
+// پیدا کردن تمام Selectizeهای موجود
+$('select.selectized').each(function () {
+    const selectizeInstance = this.selectize;
+    if (!selectizeInstance) {
+        console.error('Selectize مقداردهی نشده است:', this);
+        return;
+    }
+    // افزودن رویداد onChange برای اعتبارسنجی
+    selectizeInstance.on('change', function () {
+        validateSelectize(selectizeInstance);
+    });
+
+    // افزودن رویداد onBlur برای اعتبارسنجی
+    selectizeInstance.on('blur', function () {
+        validateSelectize(selectizeInstance);
+    });
+});
+</script>

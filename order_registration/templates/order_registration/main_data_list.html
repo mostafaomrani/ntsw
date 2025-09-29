@@ -1,0 +1,271 @@
+{% extends "base.html" %}
+{% load static %}
+{% load date_filters %}
+{% load widget_tweaks %}
+{% load date_filters %}
+{% load ui_template_tag %}
+{% block title %}
+    پرونده ثبت سفارش
+{% endblock title %}
+{% block page-title %}
+    مدیریت پرونده
+{% endblock page-title %}
+{% block breadcrumbs %}
+    {% breadcrumbs 'عملیات تجارت خارجی' '#' 'مدیریت پرونده‌ها' '#' %}
+{% endblock breadcrumbs %}
+{% block head %}
+    <link href="{% static 'selectize-master/css/selectize.css' %}"
+          rel="stylesheet">
+    <link href="{% static 'bootstrap-datepicker/css/bootstrap-datepicker.min.css' %}"
+          rel="stylesheet">
+{% endblock head %}
+{% block main %}
+    <div class="container-fluid bg-white py-4">
+        <div class="row">
+            <div class="col-12 mb-3">
+                <a class="btn btn-primary btn-maya"
+                   href="{% url 'order_registration:create_main_data' %}">
+                    <i class="fa fa-plus-square" aria-hidden="true"></i>
+                    <span class="ps-1">پرونده جدید</span>
+                </a>
+            </div>
+            <div class="col-12 col-sm-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">وضعیت</span>
+                            <input type="text"
+                                   class="form-control"
+                                   aria-describedby="basic-addon1"
+                                   value='همه'>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">انتخاب پرونده‌ها</span>
+                            <input type="text"
+                                   class="form-control"
+                                   aria-describedby="basic-addon1"
+                                   value='همه'>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">برچسب پرونده</span>
+                            <input type="text"
+                                   class="form-control"
+                                   aria-describedby="basic-addon1"
+                                   value='همه'>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">حالت ثبت سفارش</span>
+                            <input type="text"
+                                   class="form-control"
+                                   aria-describedby="basic-addon1"
+                                   value="همه">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">صدور از تاریخ</span>
+                            <input type="text"
+                                   class="form-control"
+                                   aria-describedby="basic-addon1"
+                                   value="">
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">تا تاریخ</span>
+                            <input type="text"
+                                   class="form-control"
+                                   aria-describedby="basic-addon1"
+                                   value="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">اعتبار ثبت سفارش از تاریخ</span>
+                            <input type="text"
+                                   class="form-control"
+                                   aria-describedby="basic-addon1"
+                                   value="">
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">اعتبار ثبت سفارش تا تاریخ</span>
+                            <input type="text"
+                                   class="form-control"
+                                   aria-describedby="basic-addon1"
+                                   value="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">متن جستجو</span>
+                            <input type="value" class="form-control" aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="d-flex">
+                            <div class="me-3 mb-3">
+                                <button class="btn btn-primary btn-maya" type="button">
+                                    <i class="fa fa-search" aria-hidden="true"></i>
+                                    <span class="ps-1">جستجو</span>
+                                </button>
+                            </div>
+                            <div class="me-3 mb-3">
+                                <button class="btn btn-success btn-forest px-4">
+                                    <i class="fa fa-info" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            <div class="me-3 mb-3">
+                                <button class="btn rounded-0"
+                                        style="background-color: rgb(140, 68, 162);
+                                               border: 1px solid rgb(140, 68, 162);
+                                               cursor: pointer;
+                                               color: white;
+                                               width: fit-content">
+                                    <i class="fa fa-table" aria-hidden="true"></i>
+                                    <span class="ps-1">خروجی اکسل</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="border shadow-sm">
+            <table class="table table-striped table-hover table-bordered text-center d-table table-responsive">
+                <thead class="text-white bg-navy">
+                    <tr>
+                        <th>ردیف</th>
+                        <th>شماره پرونده</th>
+                        <th>شماره پیش فاکتور</th>
+                        <th>تاریخ صدور پیش فاکتور</th>
+                        <th>تاریخ اعتبار پیش فاکتور</th>
+                        <th>تاریخ اعتبار ثبت سفارش</th>
+                        <th>فروشنده خارجی</th>
+                        <th>کشور ذینفع</th>
+                        <th>مبلغ کل پیش فاکتور</th>
+                        <th>نوع ارز</th>
+                        <th>نوع عملیات ارزی</th>
+                        <th>وضعیت</th>
+                        <th>ثبت کننده</th>
+                        <th>شماره ثبت سفارش</th>
+                        <th>حالت ثبت سفارش</th>
+                        <th>جزئیات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for main_data in object_list %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ main_data.identifier }}</td>
+                            <td>{{ main_data.proforma_invoice }}</td>
+                            <td>{{ main_data.proforma_invoice_issue_date|date:'Y/m/d' }}</td>
+                            <td>{{ main_data.proforam_invoice_expire_date|date:'Y/m/d' }}</td>
+                            <td>{{ main_data.expire_date| to_jalali }}</td>
+                            <td>{{ main_data.related_object }}</td>
+                            <td>{{ main_data.beneficiary_country }}</td>
+                            <td>{{ main_data.financial.proforma_amount }}</td>
+                            <td>{{ main_data.financial.currency_type }}</td>
+                            <td>{{ main_data.financial.get_currency_operation_type_display }}</td>
+                            <td>{{ main_data.get_status_display }}</td>
+                            <td>{{ main_data.user.get_full_name|default:main_data.user.username }}</td>
+                            <td>
+                                {% if main_data.registrations_number %}{{ main_data.registrations_number }}{% endif %}
+                            </td>
+                            <td>{{ main_data.order_registration_case }}</td>
+                            <td>
+                                {% if main_data.status == 'c' %}
+                                    <a href="{% url 'order_registration:detail' main_data.pk %}"
+                                       class="btn btn-sm btn-danger w-100 mx-auto rounded-2px">ابطال</a>
+                                {% else %}
+                                <a href="{% url 'order_registration:detail' main_data.pk %}"
+                                   class="btn btn-sm btn-primary btn-maya w-100 mx-auto"><i class="fa fa-search"></i>
+                                <span class="ps-1">جزئیات</span>
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+</div>
+<!-- Modal -->
+<div class="modal fade "
+     id="exampleModal"
+     tabindex="-1"
+     aria-labelledby="exampleModalLabel"
+     aria-hidden="true"
+     role="dialog">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-6" id="exampleModalLabel">ثبت کالا</h1>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="ware-form-container"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% comment %} END CREATE WARE {% endcomment %}
+{% comment %} DELETE MODAL {% endcomment %}
+<div class="modal fade"
+     id="deleteModal"
+     tabindex="-1"
+     aria-labelledby="deleteModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteModalLabel">حذف کالا از پرونده</h1>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    آیا می‌خواهید کالا با کد تعرفه <span id="delete-hs-code"></span> را حذف کنید؟
+                </p>
+            </div>
+            <div class="modal-footer">
+                <form method="post" action="" id="delete-form">
+                    {% csrf_token %}
+                    <button class="btn btn-secondary" type="submit">بله</button>
+                    <button type="button"
+                            class="btn btn-sm btn-primary btn-maya"
+                            data-bs-dismiss="modal">انصراف</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main %}

@@ -1,0 +1,295 @@
+﻿
+@media only screen and (max-width: 1100px) {
+    .change-lang {
+        position: static;
+/*        height: 36px;*/
+        display: flex;
+        justify-content: center;
+        margin-left: 8px;
+    }
+
+    .modal-dialog {
+        margin: 0
+    }
+
+    .modal-content {
+        position: absolute;
+        bottom: -54px;
+        right: 0;
+        width: 100vw;
+        animation: moveUpModal54 0.5s;
+    }
+    
+    {
+            min-width: 54px;
+        }
+
+    .header-with-lang {
+        display: flex;
+        align-items: center;
+    }
+
+    .card {
+        border: none;
+    }
+
+    .button-container {
+        flex-direction: column;
+    }
+
+        .button-container > label:last-child {
+            margin-right: 0;
+        }
+
+        .button-container > label:first-child {
+            margin-bottom: 0;
+        }
+
+        .button-container > label > span {
+            flex-direction: row;
+            justify-content: flex-start;
+        }
+
+        .button-container > label > img {
+            margin-left: 8px;
+        }
+}
+
+@media only screen and (max-width: 500px) {
+
+
+/*    .login-form-container {
+        padding: 0 24px;
+        min-width: unset;
+    }*/
+
+    .inputs input {
+        width: 32px !important;
+        height: 32px !important;
+        margin: 0 6px !important;
+    }
+    .resend {
+        top: 44px !important;
+    }
+}
+
+
+@media only screen and (max-width: 600px) {
+
+
+
+    .modal-dialog {
+        margin: 0
+    }
+
+    .modal-content {
+        position: absolute;
+        bottom: -54px;
+        right: 0;
+        width: 100vw;
+        animation: moveUpModal54 0.5s;
+    }
+
+    .box-colored {
+        width: 100%;
+    }
+
+    .modal-body__text {
+        width: auto;
+    }
+
+    .login-form-container.select-lang {
+        min-width: unset;
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width: 576px) {
+    .text-for-logo {
+        display: none;
+    }
+
+    .modal-content {
+        position: absolute;
+        bottom: -16px;
+        right: 0;
+        width: 100vw;
+        animation: moveUpModal 0.5s;
+    }
+}
+
+
+
+
+/* Small devices (portrait tablets and large phones, 400px and up) */
+@media only screen and (min-width: 400px) {
+
+    .slider__container {
+        display: none;
+    }
+
+    .login-form-container {
+        margin-left: 0;
+    }
+
+    .card-header {
+        display: none;
+    }
+
+    .login-page .login-footer-contact {
+        display: none;
+    }
+
+    .login-page {
+        padding: 0;
+    }
+
+    .login-form {
+        padding: 24px 6px;
+    }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+    
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (max-width: 1100px) {
+    .user-name-drop-down {
+        display: none
+    }
+    .systemsMenu {
+        display: none;
+    }
+    .user-name-drop-down  #chevIcon {
+        display: none;
+    }
+    .user-name-drop-down span {
+        display: none;
+    }
+    .header {
+        height: 64px;
+    }
+    #burgerIcon {
+        display: block;
+    }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1100px) {
+
+
+    .slider__container {
+        display: flex;
+    }
+
+    .login-form-container {
+        margin-left: 40px;
+    }
+
+    .header {
+        display: none;
+    }
+
+    .card-header {
+        display: flex;
+    }
+
+    .login-page .login-footer-contact {
+        display: flex;
+    }
+
+    .login-page {
+        padding: 35px 140px;
+    }
+
+    .login-form {
+        padding: 12px 48px 24px 48px;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    .login-form-container {
+        margin-left: 0;
+        min-width: unset;
+        padding: 0 20px;
+    }
+}
+
+    /* Extra small devices (phones, 400px and down) */
+    @media only screen and (max-width: 400px) {
+        .backtoSystem {
+            height: 34px !important;
+            font-size: 9pt !important;
+            margin: 3px 0 !important;
+            padding: 0px 4px !important;
+        }
+
+        .slider__container {
+            display: none;
+        }
+
+        .login-form-container {
+            margin-left: 0;
+            min-width: unset;
+            padding: 0 20px;
+        }
+
+        .card-header {
+            display: none;
+        }
+
+        .login-page .login-footer-contact {
+            display: none;
+        }
+
+        .login-page {
+            padding: 0;
+        }
+
+        .login-form {
+            padding: 24px 6px;
+        }
+
+        .change-phone {
+            flex-direction: column;
+        }
+
+/*        .header .header_logo {
+            height: 80%;
+        }*/
+    }
+
+    @media only screen and (max-width: 360px) {
+        .inputs .input {
+            margin: 0 6px !important;
+            width: 32px !important;
+            height: 32px !important;
+        }
+    }
+
+
+    @keyframes moveUpModal {
+        from {
+            bottom: -500px;
+        }
+
+        to {
+            bottom: -16px;
+        }
+    }
+
+    @keyframes moveUpModal54 {
+        from {
+            bottom: -500px;
+        }
+
+        to {
+            bottom: -54px;
+        }
+    }

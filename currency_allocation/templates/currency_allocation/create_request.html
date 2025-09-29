@@ -1,0 +1,360 @@
+{% extends "base.html" %}
+{% load static %}
+{% load date_filters %}
+{% load ui_template_tag %}
+{% load widget_tweaks %}
+{% block title %}
+    درخواست تخصیص ارز
+{% endblock title %}
+{% block page-title %}
+    درخواست تخصیص ارز
+{% endblock page-title %}
+{% block breadcrumbs %}
+    {% breadcrumbs 'عملیات ارزی' '#' 'تخصیص ارز' '#' 'درخواست تخصیص ارز' '#' %}
+{% endblock breadcrumbs %}
+{% block head %}
+    <link href="{% static 'selectize-master/css/selectize.css' %}"
+          rel="stylesheet">
+    <link href="{% static 'bootstrap-datepicker/css/bootstrap-datepicker.min.css' %}"
+          rel="stylesheet">
+{% endblock head %}
+{% block main %}
+    <div class="container-fluid">
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <button class="nav-link active button-breadcrumbs py-3 border-bottom border-top"
+                        id="nav-home-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#nav-home"
+                        type="button"
+                        role="tab"
+                        aria-controls="nav-home"
+                        aria-selected="true">
+                    <span class="outline-badge">1</span> اطلاعات ثبت سفارش
+                </button>
+                <button class="nav-link button-breadcrumbs py-3 border-bottom border-top ps-5"
+                        id="nav-profile-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#nav-profile"
+                        type="button"
+                        role="tab"
+                        aria-controls="nav-profile"
+                        aria-selected="false">
+                    <span class="outline-badge">2</span>
+                    اطلاعات درخواست تخصیص ارز
+                </button>
+            </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active"
+                 id="nav-home"
+                 role="tabpanel"
+                 aria-labelledby="nav-home-tab">
+                <div class="bg-white p-3 request-main-data">
+                    {% section_title 'اطلاعات اصلی' %}
+                    <div class="row">
+                        {% input_box 'شماره پرونده' main_data.identifier %}
+                        {% input_box 'شماره پیش فاکتور' main_data.proforma_invoice %}
+                        {% input_box 'سطح دسترسی' main_data.get_permission_display %}
+                        {% input_box 'شناسه فروشنده خارجی' main_data.related_object.identifier %}
+                        {% input_box 'فروشنده خارجی' main_data.related_object %}
+                        {% input_box 'تلفن فروشنده خارجی' main_data.related_object.phone %}
+                        {% input_box 'کشور ذینفع' main_data.beneficiary_country %}
+                        {% input_box 'تاریخ صدور' main_data.proforma_invoice_issue_date|date:'Y/m/d' %}
+                        {% input_box 'تاریخ اعتبار' main_data.proforam_invoice_expire_date|date:'Y/m/d' %}
+                        {% input_box 'ثبت کننده' main_data.user %}
+                        {% input_box 'برچسب پرونده' main_data.order_registration_case %}
+                        {% input_box 'شناسه کسب و کار' main_data.producer_type_data %}
+                    </div>
+                    {% section_title 'اطلاعات گمرکی و حمل و نقل' %}
+                    <div class="row">
+                        {% input_box 'نوع قرارداد' main_data.custom_and_shipping.incoterms %}
+                        {% input_box 'مرز ورودی' main_data.custom_and_shipping.entrance_edges_str %}
+                        {% input_box 'روش حمل' main_data.custom_and_shipping.shipping_type_str %}
+                        {% input_box 'کشور مبدا' main_data.custom_and_shipping.origin_country %}
+                        {% input_box 'محل بارگیری' main_data.custom_and_shipping.loading_location %}
+                        {% input_box 'گمرک مقصد' main_data.custom_and_shipping.destination_custom_str %}
+                        {% input_box 'ناوگان حمل و نقل' main_data.custom_and_shipping.get_shipping_nationality_display %}
+                        {% input_box 'حمل به دفعات' main_data.custom_and_shipping.shipping_period_str %}
+                        {% input_box 'حمل یکسره' main_data.custom_and_shipping.shipping_all_at_once_str %}
+                    </div>
+                    <div class="row">
+                        {% section_title 'اطلاعات مالی و بانکی' %}
+                        {% input_box 'مبلغ کل پرونده' main_data.financial.proforma_amount %}
+                        {% input_box 'نوع عملیات ارزی' main_data.financial.get_currency_operation_type_display %}
+                        {% input_box 'نوع ارز' main_data.financial.currency_type %}
+                        {% input_box 'تامین ارز' main_data.financial.curency_supply_str %}
+                        {% input_box 'سایر هزینه‌ها' main_data.financial.other_price %}
+                        {% input_box 'تخفیف' main_data.financial.off %}
+                        {% input_box 'هزینه حمل' main_data.financial.shipping_price %}
+                        {% input_box 'نوع پرداخت' main_data.financial.get_payment_type_display %}
+                        {% input_box 'بانک' main_data.financial.bank %}
+                        {% input_box 'شعبه' main_data.financial.bank_branch %}
+                    </div>
+                    <div class="row">
+                        {% section_title 'اطلاعات ثبت سفارش' %}
+                        {% input_box 'شماره ثبت سفارش' main_data.registrations_number %}
+                        {% input_box 'تاریخ صدور ثبت سفارش' main_data.created_at|to_jalali %}
+                        {% input_box 'تاریخ اعتبار ثبت سفارش' main_data.expire_date|to_jalali %}
+                        {% input_box ' گروه کالایی پرونده' '' %}
+                        {% input_box 'نوع واردات' 'کارت بازرگانی' %}
+                        {% input_box 'حالت ثبت سفارش' main_data.order_registration_case %}
+                    </div>
+                    <div class="d-sm-flex justify-content-end">
+                        <div class="m-2">
+                            <button type="button" class="btn  success btn-forest">
+                                <i class="fa fa-info-circle fs-24" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <div class="m-2">
+                            <a href="{% url 'currency_allocation:requests' %}"
+                               class="btn  btn-primary btn-maya">
+                                <i class="fa fa-sign-out"></i>
+                                <span class="ps-1">انصراف</span>
+                            </a>
+                        </div>
+                        <div class="m-2 me-0">
+                            <button class="btn  btn-primary btn-maya"
+                                    id="request-currency-next"
+                                    type="button"
+                                    role="tab"
+                                    aria-controls="nav-profile"
+                                    aria-selected="false">
+                                <span class="pe-1">بعدی</span>
+                                <i class="fa fa-step-backward"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade"
+                 id="nav-profile"
+                 role="tabpanel"
+                 aria-labelledby="nav-profile-tab">
+                <div class="container-fluid">
+                    <div class="p-3 bg-white">
+                        <form method="post"
+                              class="request-form needs-validation"
+                              enctype="multipart/form-data"
+                              novalidate>
+                            {{ form.errors }}
+                            {% csrf_token %}
+                            <div class="row">
+                                {% input_box 'شماره ثبت سفارش' main_data.identifier True 'number' %}
+                                <div class="w-100"></div>
+                                {% input_box 'ارز ثبت سفارش' main_data.financial.currency_type True 'text' %}
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon2">{{ form.request_amount_by_main_data_currency.label }}<small class="text-danger">*</small></span>
+                                        {% render_field form.request_amount_by_main_data_currency class="form-control" %}
+                                        <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                                    </div>
+                                </div>
+                                <div class="w-100"></div>
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon2">{{ form.currency.label }}<small class="text-danger">*</small></span>
+                                        {% render_field form.currency class="form-control p-0" placeholder="جستجو کنید" %}
+                                        <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon2">{{ form.request_amount.label }}<small class="text-danger">*</small></span>
+                                        {% render_field form.request_amount class="form-control disabled" %}
+                                        <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                                    </div>
+                                </div>
+                                <div class="w-100"></div>
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon2">{{ form.transaction_type.label }}<small class="text-danger">*</small></span>
+                                        {% render_field form.transaction_type class="form-control p-0" placeholder="جستجو کنید" %}
+                                        <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon2">{{ form.undertaking.label }}<small class="text-danger">*</small></span>
+                                        {% render_field form.undertaking class="form-control p-0" placeholder="جستجو کنید" %}
+                                        <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                                    </div>
+                                </div>
+                                <div class="w-100"></div>
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon2">{{ form.facility_location.label }}<small class="text-danger">*</small></span>
+                                        {% render_field form.facility_location class="form-control p-0" placeholder="جستجو کنید" %}
+                                        <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon2">{{ form.repayment_deadline.label }}<small class="text-danger">*</small></span>
+                                        {% render_field form.repayment_deadline class="form-control p-0" placeholder="جستجو کنید" %}
+                                        <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                                    </div>
+                                </div>
+                                <div class="w-100"></div>
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon2">{{ form.supply_currency_place.label }}<small class="text-danger">*</small></span>
+                                        {% render_field form.supply_currency_place class="form-control p-0" placeholder="جستجو کنید" %}
+                                        <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon2">{{ form.currency_rate.label }}<small class="text-danger">*</small></span>
+                                        {% render_field form.currency_rate class="form-control p-0" placeholder="جستجو کنید" %}
+                                        <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                                    </div>
+                                </div>
+                                <div class="w-100"></div>
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon2">{{ form.request_type.label }}<small class="text-danger">*</small></span>
+                                        {% render_field form.request_type class="form-control p-0" placeholder="جستجو کنید" %}
+                                        <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon2">{{ form.duration_per_month.label }}<small class="text-danger">*</small></span>
+                                        {% render_field form.duration_per_month class="form-control" %}
+                                        <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="request-expire-data">{{ form.expire_date.label }}<small class="text-danger">*</small></span>
+                                        {% render_field form.expire_date class="form-control" %}
+                                        <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 mx-auto">
+                                    <div class="mt-4">
+                                        <button class="btn btn-pu"
+                                                type="button"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#uploadModal">
+                                            <i class="fa fa-plus"></i>
+                                            <span class="ps-1">افزودن مستندات</span>
+                                        </button>
+                                        <!-- upload Modal -->
+                                        <div class="modal fade"
+                                             id="uploadModal"
+                                             tabindex="-1"
+                                             aria-labelledby="uploadModalLabel"
+                                             aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header border-0">
+                                                        <h1 class="modal-title fs-5" id="uploadModalLabel">انتخاب مستندات پرونده</h1>
+                                                        <button type="button"
+                                                                class="btn-close"
+                                                                data-bs-dismiss="modal"
+                                                                aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="alert alert-warning text-center">
+                                                            توجه اندازه هریک از مستندات انتخابی بایستی کمتر از 400 کیلوبایت باشد.
+                                                            فرمت های قابل قبول : .jpg , .jpeg , .pdf, .txt, .doc, .docx, .png
+                                                        </div>
+                                                        <div>
+                                                            <div class="row">
+                                                                <div class="col-8">{% render_field form.document class="form-control" %}</div>
+                                                                <div class="col-4">
+                                                                    <label class="btn btn-primary btn-maya" for="id_document">
+                                                                        <i class="fa fa-folder-open" aria-hidden="true"></i>
+                                                                        <span class="ps-1">انتخاب...</span>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer border-0">
+                                                        <button type="button"
+                                                                id="register-document"
+                                                                class="btn btn-success btn-forest"
+                                                                data-bs-dismiss="modal">ثبت مستندات</button>
+                                                        <button type="button"
+                                                                id="close-modal"
+                                                                class="btn btn-danger btn-cinnabar"
+                                                                data-bs-dismiss="modal">انصراف</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <table class="table table-striped table-hover table-bordered text-center table-responsive mt-4 d-table">
+                                        <thead class="text-white bg-navy">
+                                            <tr class="bg-navy">
+                                                <th>ردیف</th>
+                                                <th>نام سند</th>
+                                                <th>پسوند فایل</th>
+                                                <th>عملیات</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr id="file-container"></tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="m-5 text-center" id="empty-table-alert">
+                                        <svg width="64"
+                                             height="41"
+                                             viewBox="0 0 64 41"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <title>No data</title>
+                                            <g transform="translate(0 1)" fill="none" fill-rule="evenodd">
+                                            <ellipse fill="#f5f5f5" cx="32" cy="33" rx="32" ry="7"></ellipse>
+                                            <g fill-rule="nonzero" stroke="#d9d9d9">
+                                            <path d="M55 12.76L44.854 1.258C44.367.474 43.656 0 42.907 0H21.093c-.749 0-1.46.474-1.947 1.257L9 12.761V22h46v-9.24z">
+                                            </path>
+                                            <path d="M41.613 15.931c0-1.605.994-2.93 2.227-2.931H55v18.137C55 33.26 53.68 35 52.05 35h-40.1C10.32 35 9 33.259 9 31.137V13h11.16c1.233 0 2.227 1.323 2.227 2.928v.022c0 1.605 1.005 2.901 2.237 2.901h14.752c1.232 0 2.237-1.308 2.237-2.913v-.007z" fill="#fafafa">
+                                            </path>
+                                            </g>
+                                            </g>
+                                        </svg>
+                                        <p class="mt-3">
+                                            <small class="pt-3">موجود نیست</small>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-sm-flex justify-content-end">
+                                <div class="m-2">
+                                    <button type="button" class="btn  btn-success btn-forest">
+                                        <i class="fa fa-info-circle fs-24" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                                <div class="m-2">
+                                    <a href="{% url 'currency_allocation:requests' %}"
+                                       class="btn  btn-primary btn-maya">
+                                        <i class="fa fa-sign-out"></i>
+                                        <span class="ps-1">انصراف</span>
+                                    </a>
+                                </div>
+                                <div class="m-2">
+                                    <button href="{% url 'currency_allocation:requests' %}"
+                                            id="request-currency-prev"
+                                            type="button"
+                                            class="btn  btn-primary btn-maya">
+                                        <i class="fa fa-step-forward"></i>
+                                        <span class="ps-1">قبلی</span>
+                                    </button>
+                                </div>
+                                <div class="m-2 me-0">
+                                    <button class="btn  btn-success btn-forest" type="submit">ثبت</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock main %}
+{% block js %}
+    <script src="{% static 'currency_allocation/create_request.js' %}"></script>
+{% endblock js %}

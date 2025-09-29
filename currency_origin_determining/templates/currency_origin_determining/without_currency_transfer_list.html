@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% load static %}
+{% load date_filters %}
+{% load ui_template_tag %}
+{% load widget_tweaks %}
+{% block title %}
+    منشا ارز بدون انتقال ارز
+{% endblock title %}
+{% block page-title %}
+    منشا ارز بدون انتقال ارز
+{% endblock page-title %}
+{% block breadcrumbs %}
+    {% breadcrumbs 'عملیات ارزی' '#' 'تعیین منشا ارز' '#' 'منشا ارز بدون انتقال ارز' '#' %}
+{% endblock breadcrumbs %}
+{% block main %}
+    <div class="container-fluid bg-white py-4">
+        <form methode="get"
+              action="{% url 'currency_origin_determining:without_currency_transfer_create' %}">
+            <div class="row">
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon2">{{ form.main_data.label }}</span>
+                        {% render_field form.main_data class="form-control p-0" placeholder="جست جو کنید" %}
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="d-md-flex">
+                        <div class="">
+                            <button type="button"
+                                    class="btn  btn-primary btn-maya"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#CreateOrigin">
+                                <i class="fa fa-plus-square" aria-hidden="true"></i>
+                                <span class="ps-1">ایجاد منشا ارز جدید</span>
+                            </button>
+                            <!-- Modal -->
+                            <div class="modal fade"
+                                 id="CreateOrigin"
+                                 tabindex="-1"
+                                 aria-labelledby="CreateOriginLabel"
+                                 aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="CreateOriginLabel">پیغام سیستم</h1>
+                                            <button type="button"
+                                                    class="btn-close"
+                                                    data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p class="message">می توانید منشا ارز بسازید و نیاز به سند حمل دارید.</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a href="#" class="btn btn-primary btn-forest" id="create-origin">ایجاد منشا ارز جدید</a>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    {% input_box 'تاریخ منشا ارز از' '' False 'date' 'col-12 col-md-3 col-lg-3' %}
+                    {% input_box 'تاریخ منشا ارز تا' '' False 'date' 'col-12 col-md-3 col-lg-3' %}
+                    {% input_box 'وضعیت' '' False 'date' 'col-12 col-md-3 col-lg-3' %}
+                    <div class="col-12 col-md-3 col-lg-3">
+                        <button class="btn  btn-primary btn-maya">جستجو منشا ارز</button>
+                    </div>
+                </div>
+            </form>
+            <div class="border shadow-sm">
+                <table class="table table-striped table-hover table-bordered text-center">
+                    <thead class="text-white bg-navy">
+                        <tr>
+                            <th>ردیف</th>
+                            <th>شماره ثبت سفارش</th>
+                            <th>کد یکتای منشا ارز</th>
+                            <th>تاریخ منشا ارز</th>
+                            <th>شماره SATA</th>
+                            <th>مبلغ منشا ارز</th>
+                            <th>وضعیت</th>
+                            <th>تاریخ ترخیص</th>
+                            <th>جزئیات منشا ارز</th>
+                            <th>جزئیات شناسه رهگیری</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for r in object_list %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ r.main_data }}</td>
+                                <td>{{ r.identifier }}</td>
+                                <td>{{ r.created_at|to_jalali }}</td>
+                                <td>{{ r.sata }}</td>
+                                <td>{{ r.total_price }}</td>
+                                <td>{{ r.get_status_display }}</td>
+                                <td>{{ r.created_at|to_jalali }}</td>
+                                <td>
+                                    <a class="btn btn-sm  btn-primary btn-maya"
+                                       href="{{ r.get_absolute_url }}">
+                                        <span class="pe-1">جزئیات</span>
+                                        <i class="fa fa-info"></i>
+                                    </a>
+                                </td>
+                                <td></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endblock main %}
+    {% block js %}
+        <script>
+        $('#id_main_data').selectize({})
+        const CreateOrigin = document.getElementById('CreateOrigin');
+        if (CreateOrigin) {
+        CreateOrigin.addEventListener('show.bs.modal', event => {
+        const msg = CreateOrigin.querySelector('.modal-body p')
+        selectize = $('#id_main_data')[0].selectize;
+        let mainDataId= selectize.getValue();
+        if(mainDataId) {
+        msg.textContent = 'میتوانید منشا ارز بسازید و نیاز به ارائه سند حمل دارید. ';
+        }else
+        msg.textContent = 'برای ایجاد منشا ارز باید یک پرونده انتخاب کنید.'
+        });
+        }
+        document.getElementById('create-origin').addEventListener('click',e=>{
+        selectize = $('#id_main_data')[0].selectize;
+        let mainDataId= selectize.getValue();
+        if(mainDataId){
+        let creationLink = '{% url 'currency_origin_determining:without_currency_transfer_create' %}';
+        let l = `${mainURL}${creationLink}?main_data=${mainDataId}`;
+        location.href = l
+        }
+        });
+        </script>
+    {% endblock js %}
