@@ -18,7 +18,7 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', cast=bool, default=False)
 
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost','demo.pouyabehzadnia.com','185.63.113.238']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost','demo.pouyabehzadnia.com']
 
 if not IS_DEVELOPMENT_ENVIRONMENT:
     CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', cast=Csv())
