@@ -40,6 +40,7 @@ urlpatterns += [
     path('shenase/', include('shenase.urls')),
     path('foreintrade/', include('foreintrade.urls')),
     path('production_operations/', include('production_operations.urls')),
+    path('anbar/', include('anbar.urls')),
 ]
 
 # redirect from home to login

@@ -19,7 +19,7 @@
                             <div class="input-container" id="showpassword" style="display: none;">
                                 <label class="label" for="Input_UserName">کلمه عبور</label>
                                 <img class="icon" src="{% static 'login/images/user-icon.svg'%}" />
-                                 {% render_field form.password class="form-control input input-with-icon input-number" placeholder="کلمه عبور خود را وارد نمایید" %}
+                                 {% render_field form.password class="form-control" placeholder="کلمه عبور خود را وارد نمایید" %}
                                 <span class="validate-error field-validation-valid" data-valmsg-for="Input.UserName" data-valmsg-replace="true"></span>
                             </div>
 
@@ -42,7 +42,7 @@
 
                             <div class="signup-container d-none-js">
                                 <span>حساب کاربری ندارید؟</span>
-                                <a class="link" href="#"> ثبت نام </a>
+                                <a class="link" href="{% url 'users:register' %}"> ثبت نام </a>
                             </div>
 
                             
@@ -65,18 +65,3 @@
                     </form>
 
 {% endblock main %}
-
-{% block js %}
-
-<script>
-    $("#fakebutton").click(function(){
-        $("#showusername").hide();
-        $(".d-none-js").css("display", "none", "important");
-        $("#showpassword").show()
-
-        $(this).hide();
-        $("#mainbutton").show()
-    })
-</script>
-
-{% endblock js %}

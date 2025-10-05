@@ -2,112 +2,108 @@
 {% load static %}
 {% load widget_tweaks %}
 {% block title %}
-    ثبت نام
+  
 {% endblock title %}
 {% block head %}
     <link rel="stylesheet"
           href="{% static 'persianDatepicker/css/persianDatepicker-default.css' %}">
 {% endblock head %}
 {% block main %}
-    <div class="bg-white rounded shadow">
-        <h4 class="text-white p-2 mb-0 rounded-top section-header">ثبت نام</h4>
-        <form method="post" class="p-4 needs-validation register-form" novalidate>
-            {% csrf_token %}
-            <div class="row">
-                <div class="col-12">{{ form.errors }}</div>
-                <div class="col">
-                    <div class="input-group mb-3">
-                        <span class="input-group-text" id="basic-addon2">{{ form.national_code.label }}*</span>
-                        {% render_field form.national_code class="form-control" %}
-                    </div>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text" id="basic-addon2">{{ form.birthday.label }}*</span>
-                        {% render_field form.birthday class="form-control" %}
-                    </div>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text" id="basic-addon2">{{ form.username.label }}*</span>
-                        {% render_field form.username class="form-control" %}
-                    </div>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text" id="basic-addon2">{{ form.password1.label }}*</span>
-                        {% render_field form.password1 class="form-control" %}
-                        <button id="toggle-password1"
-                                type="button"
-                                class="toggle-password rounded bg-white border"
-                                aria-label="Show password as plain text. Warning: this will display your password on the screen.">
-                        </button>
-                    </div>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text" id="basic-addon2">{{ form.password2.label }}*</span>
-                        {% render_field form.password2 class="form-control" %}
-                        <button id="toggle-password-repeate"
-                                type="button"
-                                class="toggle-password rounded bg-white border"
-                                aria-label="Show password as plain text. Warning: this will display your password on the screen.">
-                        </button>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="input-group mb-3">
-                        <span class="input-group-text" id="basic-addon2">{{ form.mobile.label }}*</span>
-                        {% render_field form.mobile class="form-control"  placeholder="مثال: 09121111111" %}
-                    </div>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text" id="{{ form.phone.auto_id }}">{{ form.phone.label }}*</span>
-                        {% render_field form.phone class="form-control"  placeholder="مثال:02188888888" %}
-                    </div>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text" id="{{ form.postal_code.auto_id }}">{{ form.postal_code.label }}*</span>
-                        {% render_field form.postal_code class="form-control" %}
-                    </div>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text" id="{{ form.email.auto_id }}">{{ form.email.label }}</span>
-                        {% render_field form.email class="form-control" %}
-                    </div>
-                    <div class="form-check">
-                        {% render_field form.use_2fa class="form-check-input" %}
-                        <label class="form-check-label" for="{{ form.use_2fa.auto_id }}">{{ form.use_2fa.label }}</label>
-                    </div>
-                </div>
-                <div class="col">
-                    <p>تصویر پرسنلی</p>
-                    <div>
-                        <div class="w-50">
-                            <img src="{% static 'images/avatar.png' %}"
-                                 class="img-fluid rounded-top"
-                                 alt="تصویر پرسنل"
-                                 id="img-preview"
-                                 width="100%"
-                                 height="100%%">
-                            <label class="btn  btn-primary btn-maya w-100 rounded-0 rounded-bottom"
-                                   role="button">
-                                <span style="font-size:1.3rem !important;"><i class="fa fa-folder-open"></i> انتخاب تصویر...</span>
-                                {% render_field form.avatar class="hidden-image-input d-none" id="choose-file" %}
-                            </label>
-                        </div>
-                    </div>
-                    <p>
-                        <small>اندازه تصویر بایستی کمتر از ۲۰۰KB باشد</small>
-                    </p>
-                </div>
+<div class="container">
+    <form method="post" enctype="multipart/form-data" novalidate class="needs-validation">
+        {% csrf_token %}
+        <div>
+          
+          <!-- ستون اول -->
+          <div class="col-md-12">
+            <div class="mb-3">
+              <label for="id_national_code" class="form-label">{{ form.national_code.label }}*</label>
+              {% render_field form.national_code class="form-control" %}
             </div>
-            <div class="d-flex justify-content-between mt-5">
-                <div>
-                    <a href="{% url 'users:login' %}" class="btn btn-light">بازگشت</a>
-                </div>
-                <div>
-                    <button type="submit"
-                            class="btn  btn-primary btn-maya"
-                            style="font-size:1.1rem">
-                        <i class="btn-label fa fa-step-backward btn-submit"
-                           style="border-left: 1px solid rgb(83, 160, 230);
-                                  border-radius: 2px 0px 0px 2px"></i>
-                        ذخیره اطلاعات و ادامه
-                    </button>
-                </div>
+
+            <div class="mb-3">
+              <label for="id_first_name" class="form-label">{{ form.first_name.label }}*</label>
+              {% render_field form.first_name class="form-control" %}
             </div>
-        </form>
-    </div>
+
+            <div class="mb-3">
+              <label for="id_last_name" class="form-label">{{ form.last_name.label }}*</label>
+              {% render_field form.last_name class="form-control" %}
+            </div>
+
+            <div class="mb-3">
+              <label for="id_birthday" class="form-label">{{ form.birthday.label }}*</label>
+              {% render_field form.birthday class="form-control" %}
+            </div>
+            <div class="mb-3">
+              <label for="id_username" class="form-label">{{ form.username.label }}*</label>
+              {% render_field form.username class="form-control" %}
+            </div>
+            <div class="mb-3">
+              <label for="id_password1" class="form-label">{{ form.password1.label }}*</label>
+              <div class="input-group">
+                {% render_field form.password1 class="form-control" %}
+                <!-- <button type="button" id="toggle-password1" class="btn btn-outline-secondary">
+                  <i class="fa fa-eye"></i>
+                </button> -->
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="id_password2" class="form-label">{{ form.password2.label }}*</label>
+              <div class="input-group">
+                {% render_field form.password2 class="form-control" %}
+                <!-- <button type="button" id="toggle-password2" class="btn btn-outline-secondary">
+                  <i class="fa fa-eye"></i>
+                </button> -->
+              </div>
+            </div>
+          </div>
+
+          <!-- ستون دوم -->
+          <div class="col-md-12">
+            <div class="mb-3">
+              <label for="id_mobile" class="form-label">{{ form.mobile.label }}*</label>
+              {% render_field form.mobile class="form-control" placeholder="09121111111" %}
+            </div>
+            <div class="mb-3">
+              <label for="id_phone" class="form-label">{{ form.phone.label }}*</label>
+              {% render_field form.phone class="form-control" placeholder="02188888888" %}
+            </div>
+            <div class="mb-3">
+              <label for="id_postal_code" class="form-label">{{ form.postal_code.label }}*</label>
+              {% render_field form.postal_code class="form-control" %}
+            </div>
+            <div class="mb-3">
+              <label for="id_email" class="form-label">{{ form.email.label }}</label>
+              {% render_field form.email class="form-control" %}
+            </div>
+            <div class="form-check mb-3">
+              {% render_field form.use_2fa class="form-check-input" %}
+              <label class="form-check-label" for="{{ form.use_2fa.auto_id }}" style="margin-right: 22px;">{{ form.use_2fa.label }}</label>
+            </div>
+            <div class="mb-3 text-center">
+              <img src="{% static 'images/avatar.png' %}" class="rounded-circle border mb-2" id="img-preview" width="120" height="120" alt="تصویر پرسنلی">
+              <label class="btn btn-outline-primary w-100">
+                انتخاب تصویر...
+                {% render_field form.avatar class="d-none" id="choose-file" %}
+              </label>
+              <small class="text-muted d-block mt-1">اندازه تصویر باید کمتر از ۲۰۰KB باشد</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- دکمه‌ها -->
+        <div>
+            <button type="submit" class="btn btn-primary">
+            ذخیره اطلاعات و ادامه
+          </button>
+          <div><a style="height: 35px;border-radius: 8px;margin-top: 8px;" href="{% url 'users:login' %}" class="btn btn-outline-secondary">بازگشت</a></div>
+          
+        </div>
+      </form>
+</div>
+
+
 {% endblock main %}
 {% block js %}
     <script src="{% static 'js/jquery.min.js' %}"></script>

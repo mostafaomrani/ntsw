@@ -1,0 +1,1373 @@
+{% extends "base.html" %}
+{% load static %}
+{% load date_filters %}
+{% load widget_tweaks %}
+{% load ui_template_tag %}
+
+{% block title %}
+مدیریت واحدهای انبار کالا
+{% endblock title %}
+
+{% block breadcrumbs %}
+{% breadcrumbs 'عملیات لجستیک داخلی' '#' 'مدیریت واحدهای انبار کالا' '#' %}
+{% endblock breadcrumbs %}
+
+{% block page-title %}
+مدیریت واحدهای انبار کالا
+{% endblock page-title %}
+
+{% block main %}
+<link href="{% static 'bootstrap-datepicker/css/bootstrap-datepicker.min.css' %}" rel="stylesheet">
+<link rel='stylesheet' href='https://cdn.datatables.net/2.3.4/css/dataTables.dataTables.css' media='all' />
+<div class="container-fluid">
+    <div class="bg-white p-3 request-main-data">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+               
+                    <div class="row mb-4">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="form-group" style="display: block ruby;">
+                                <a data-bs-toggle="modal" data-bs-target="#addNewAnbarModal" type="button"
+                                    id="btnNewAnbar" class="btn btn-success" style="width: 150px"><i
+                                        class="fa fa-plus"></i>افزودن انبار جدید</a>
+                                <button type="button" id="btnUpdate" class="btn btn-primary" style="width: 150px"><i
+                                        class="fa fa-refresh"></i>بروزرسانی</button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                <table id="example" class="display">
+                                    <thead>
+                                        <tr>
+                                            <th>ردیف</th>
+                                            <th>نام انبار</th>
+                                            <th>کد پستی</th>
+                                            <th>آدرس</th>
+                                            <th>بهره بردار/سازمان متولی</th>
+                                            <th>بهره بردار</th>
+                                            <th>عملیات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for anbar in anbar_list %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>{{ anbar.name }}</td>
+                                            <td>{{ anbar.postal_code }}</td>
+                                            <td>{{ anbar.address }}</td>
+                                            <td>{{ anbar.user.get_full_name }}</td>
+                                            <td>
+                                                <div class="checkbox"><label><input type="checkbox" disabled="disabled" checked="checked"><span class="text"></span></label></div>
+                                            </td>
+                                            <td><a href="javascript:;" name="updateAnbar"
+                                                    class="btn btn-blue btn-xs search margin-left-5 margin-top-5"><i
+                                                        class="fa fa-edit margin-top-2"></i> ویرایش</a><a
+                                                    href="javascript:;" id="ViewPlaceInventory"
+                                                    name="ViewPlaceInventory"
+                                                    class="btn btn-primaryy margin-top-5 btn-xs margin-left-5"><i
+                                                        class="fa fa-bar-chart margin-top-2"></i>مشاهده موجودی</a><a
+                                                    href="javascript:;" name="ScanFromWherehouseAutomation"
+                                                    class="btn btn-purple btn-xs margin-top-5 search margin-left-5"><i
+                                                        class="fa fa-search margin-top-2"></i> استعلام از سامانه
+                                                    انبار</a><a href="javascript:;" name="UpdateInventory"
+                                                    class="btn btn-successs btn-xs margin-top-5 search margin-left-5"><i
+                                                        class="fa fa-search margin-top-2"></i> اصلاح موجودی</a><a
+                                                    href="javascript:;" name="removeFromList"
+                                                    class="btn btn-danger btn-xs margin-top-5 margin-left-5"><i
+                                                        class="fa fa-minus-circle margin-top-2"></i> حذف از لیست</a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+
+                                    </tbody>
+                                </table>
+
+
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="addNewAnbarModal" tabindex="-1"
+                                    aria-labelledby="addNewAnbarModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-xl">
+                                        <div class="modal-content fv-form fv-form-bootstrap">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="addNewAnbarModalLabel">افزودن انبار جدید
+                                                </h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+
+                                            <div class="modal-body">
+                                                <form method="post" action="{% url 'anbar:anbar_save' %}">
+                                                    {% csrf_token %}
+                                                    <div class="form-group">
+                                                        <div class="row">
+                                                            <div class="col-lg-6 mb-3">
+                                                                <div class="input-group">
+                                                                    <span class="input-group-text">کد پستی</span>
+                                                                    <input type="text" name="postalCode"
+                                                                        class="form-control" required maxlength="10">
+                                                                    <button type="button" class="btn btn-blue"><i
+                                                                            class="fa fa-search"></i></button>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-6 mb-3">
+                                                                <div class="input-group">
+                                                                    <span class="input-group-text">نام انبار</span>
+                                                                    <input type="text" name="anbarName"
+                                                                        class="form-control" required>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row mb-3">
+
+                                                            <div class="col-lg-6">
+                                                                <div class="form-check">
+                                                                    <input type="checkbox" name="ckNewAnbar"
+                                                                        class="form-check-input" id="ckNewAnbar">
+                                                                    <label class="form-check-label" for="ckNewAnbar">
+                                                                        معرفی و ثبت انبار جدید در سامانه جامع انبارها
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- بخش اطلاعات جدید انبار -->
+                                                        <div id="newAnbarInfoBox" class="d-none">
+                                                            <div class="row">
+                                                                <div class="col-lg-6 mb-3">
+                                                                    <div class="input-group">
+                                                                        <span class="input-group-text">نوع واحد</span>
+                                                                        <select name="CmbPlaceType"
+                                                                            class="form-control">
+                                                                            <option value="">انتخاب کنید</option>
+                                                                            <option value="2">معدن</option>
+                                                                            <option value="3">واحدهای صنعتی</option>
+                                                                            <option value="1">سایر واحدهای کشاورزی
+                                                                            </option>
+                                                                            <option value="12">واحدهای کشاورزی(پرورش دام
+                                                                                و ماکیان،کشتارگاه و کارخانه تولید خوراک
+                                                                                دام و طیور)</option>
+                                                                            <option value="6">واحد بهداشتی و درمانی
+                                                                            </option>
+                                                                            <option value="10">آبزی</option>
+                                                                            <option value="0">واحدهای عمده فروشی و خرده
+                                                                                فروشی</option>
+                                                                            <option value="4">انبارها و مراکز نگهداری
+                                                                            </option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6 mb-3">
+                                                                    <div class="input-group">
+                                                                        <span class="input-group-text">حوزه فعالیت
+                                                                            واحد</span>
+                                                                        <select name="activity" class="form-control">
+                                                                            <option value="">انتخاب کنید</option>
+                                                                            <option value="2220">تولید فراورده های
+                                                                                پلاستیکی- به جز کفش</option>
+                                                                            <option value="2392">تولید مواد ساختمانی از
+                                                                                خاک رس</option>
+                                                                            <option value="2395">تولید کالاها از بتون و
+                                                                                سیمان و گچ</option>
+                                                                            <option value="2410">تولید آهن و فولاد پایه
+                                                                            </option>
+                                                                            <option value="1073">تولید کاکائو، شکلات و
+                                                                                شیرینی های شکری</option>
+                                                                            <option value="0115">کاشت توتون و تنباکو
+                                                                            </option>
+                                                                            <option value="0123">کاشت مرکبات</option>
+                                                                            <option value="0128">کاشت ادویه جات، محصولات
+                                                                                معطر، مخدر و دارویی</option>
+                                                                            <option value="0170">شکار و تله گذاری و
+                                                                                فعالیت های خدماتی وابسته</option>
+                                                                            <option value="0311">ماهیگیري دریایی
+                                                                            </option>
+                                                                            <option value="0520">استخراج لیگنیت (زغال
+                                                                                قهوه ای)</option>
+                                                                            <option value="0729">استخراج سایر کانه های
+                                                                                فلزی غیر آهنی</option>
+                                                                            <option value="0899">استخراج سایر معادن طبقه
+                                                                                بندی نشده در جای دیگر</option>
+                                                                            <option value="1200">تولید فراورده های توتون
+                                                                                و تنباکو</option>
+                                                                            <option value="1392">تولید کالاهای نساجی
+                                                                                آماده- به جز پوشاک</option>
+                                                                            <option value="1410">تولید پوشاک، به جز
+                                                                                پوشاک از پوست خزدار</option>
+                                                                            <option value="1512">تولید چمدان، کیف دستی و
+                                                                                مشابه آن، زین و یراق</option>
+                                                                            <option value="1623">تولید ظروف و محفظه های
+                                                                                چوبی</option>
+                                                                            <option value="1709">تولید سایر کالاهای
+                                                                                کاغذي و مقوایی</option>
+                                                                            <option value="1910">تولید فراورده های کوره
+                                                                                کک پزی</option>
+                                                                            <option value="2013">تولید پلاستیک و لاستیک
+                                                                                مصنوعی در شکل نخستین</option>
+                                                                            <option value="2029">تولید سایر فراورده های
+                                                                                شیمیایی طبقه بندی نشده در جای دیگر
+                                                                            </option>
+                                                                            <option value="2511">تولید محصولات فلزی سازه
+                                                                                ای</option>
+                                                                            <option value="2591">چکش کاری، پرسکاری، قالب
+                                                                                زنی، پتک کاری، شکل دهی فلزات با غلتک
+                                                                                ومتالوژی گردها</option>
+                                                                            <option value="2610">ساخت تخته مدار و قطعات
+                                                                                الکترونیکی</option>
+                                                                            <option value="2640">ساخت کالاهای مصرفی
+                                                                                الکترونیکی</option>
+                                                                            <option value="2670">تولید ابزارهای اپتیکی و
+                                                                                تجهیزات عکاسی</option>
+                                                                            <option value="2710">تولید موتور برقی، دینام
+                                                                                و ترانسفورماتور و دستگاه های توزیع و
+                                                                                کنترل برق</option>
+                                                                            <option value="2740">تولید تجهیزات روشنایی
+                                                                                برقی</option>
+                                                                            <option value="1920">تولید فراورده های
+                                                                                پالایش شده نفت</option>
+                                                                            <option value="1074">تولید ماکارونی، نودل و
+                                                                                ورمیشل وفراورده های نشاسته ای</option>
+                                                                            <option value="1061">تولید فراورده های آسیاب
+                                                                                غلات</option>
+                                                                            <option value="1040">تولید روغن ها و چربی
+                                                                                های گیاهی و حیوانی- بجز روغن ذرت
+                                                                            </option>
+                                                                            <option value="1030">فراوری و نگهداری میوه و
+                                                                                سبزیجات</option>
+                                                                            <option value="0111">کاشت غلات (به جز برنج)،
+                                                                                حبوبات و دانه های روغنی</option>
+                                                                            <option value="0116">کاشت محصولات لیفی
+                                                                            </option>
+                                                                            <option value="0124">کاشت میوه های دانه دار
+                                                                                و میوه های هسته دار</option>
+                                                                            <option value="0129">کاشت سایر محصولات
+                                                                                چندساله (دائمی)</option>
+                                                                            <option value="0161">فعالیت های پشتیبانی
+                                                                                تولید محصولات کشاورزی</option>
+                                                                            <option value="0210">پرورش جنگل(جنگل کاری) و
+                                                                                سایر فعالیت های جنگل داری</option>
+                                                                            <option value="0312">ماهیگیری در آب های
+                                                                                شیرین (آب های داخلی)</option>
+                                                                            <option value="0610">استخراج نفت خام
+                                                                            </option>
+                                                                            <option value="0810">استخراج سنگ، شن و خاک
+                                                                                رس</option>
+                                                                            <option value="0910">فعالیت های پشتیبانی
+                                                                                استخراج نفت و گاز طبیعی</option>
+                                                                            <option value="1101">تقطیر، تصفیه و ترکیب
+                                                                                الکل سفید</option>
+                                                                            <option value="1311">آماده سازی و ریسندگی
+                                                                                الیاف نساجی</option>
+                                                                            <option value="1393">تولید قالی و قالیچه
+                                                                            </option>
+                                                                            <option value="1420">تولید کالاهای خزدار
+                                                                            </option>
+                                                                            <option value="1520">تولید کفش و پاپوش
+                                                                            </option>
+                                                                            <option value="1610">اره کشی و رنده کردن چوب
+                                                                            </option>
+                                                                            <option value="1629">تولید سایر فراورده ها
+                                                                                از چوب و تولید کالا از چوب پنبه و حصیر و
+                                                                                مواد حصیربافی</option>
+                                                                            <option value="1811">چاپ</option>
+                                                                            <option value="2021">تولید آفات کش ها و سایر
+                                                                                فراورده های شیمیایی مورد استفاده در
+                                                                                کشاورزی</option>
+                                                                            <option value="2030">تولید الیاف مصنوعی
+                                                                            </option>
+                                                                            <option value="2100">تولید داروها و فراورده
+                                                                                هاي دارویی شیمیایی وگیاهی</option>
+                                                                            <option value="2310">تولید شیشه و فراورده
+                                                                                های شیشه ای</option>
+                                                                            <option value="2393">تولید سایر فراورده های
+                                                                                چینی و سرامیکی</option>
+                                                                            <option value="2396">برش وشکل دهی و پرداخت
+                                                                                سنگ</option>
+                                                                            <option value="2420">تولید فلزهای پایه گران
+                                                                                بها و سایر فلزهای غیرآهنی</option>
+                                                                            <option value="2512">تولید منبع، مخزن
+                                                                                وکانتینرهای فلزی</option>
+                                                                            <option value="2593">تولید آلات برنده و
+                                                                                ابزار دستی و یراق آلات عمومی</option>
+                                                                            <option value="2620">تولید رایانه و تجهیزات
+                                                                                جانبی</option>
+                                                                            <option value="2651">ساخت تجهیزات اندازه
+                                                                                گیری، آزمون، راهبری و کنترل</option>
+                                                                            <option value="2680">تولید رسانه هاي نوری و
+                                                                                مغناطیسی</option>
+                                                                            <option value="2732">تولید سایر سیم ها و
+                                                                                کابل های الکترونیکی و برقی</option>
+                                                                            <option value="2733">تولید دستگاه های سیم
+                                                                                کشی</option>
+                                                                            <option value="2750">تولید وسایل برقی خانگی
+                                                                            </option>
+                                                                            <option value="0220">بریدن درختان</option>
+                                                                            <option value="0620">استخراج گاز طبیعی
+                                                                            </option>
+                                                                            <option value="1075">تولید غذاهای آماده
+                                                                            </option>
+                                                                            <option value="1062">تولید نشاسته و فراورده
+                                                                                های نشاسته ای</option>
+                                                                            <option value="0112">کاشت برنج</option>
+                                                                            <option value="0119">کاشت سایر محصولات
+                                                                                سالانه (غیر دائمی)</option>
+                                                                            <option value="0125">کاشت سایر میوه ها و
+                                                                                میوه های آجیلی، درختی و بوته ای</option>
+                                                                            <option value="0130">تکثیر گیاهان</option>
+                                                                            <option value="0162">فعالیت های پشتیبانی
+                                                                                تولید محصولات حیوانی</option>
+                                                                            <option value="0891">استخراج مواد معدنی
+                                                                                شیمیایی و کودهای معدنی</option>
+                                                                            <option value="0990">سایر فعالیت های
+                                                                                پشتیبانی استخراج معدن</option>
+                                                                            <option value="2423">توليد دارو و مواد
+                                                                                شيميايي مورد استفاده در پزشكي و محصولات
+                                                                                دارويي گياهي</option>
+                                                                            <option value="1312">بافندگی منسوجات
+                                                                            </option>
+                                                                            <option value="1394">تولید طناب، ریسمان، نخ
+                                                                                چند لایه و تور</option>
+                                                                            <option value="1430">تولید پوشاک کشباف و
+                                                                                قلاب بافی شده</option>
+                                                                            <option value="1621">تولید ورق های روکش شده
+                                                                                و صفحه هایی که اصل آن چوب است</option>
+                                                                            <option value="1701">تولید خمیرکاغذ، کاغذ و
+                                                                                مقوا</option>
+                                                                            <option value="1812">فعالیت های خدماتی
+                                                                                وابسته به چاپ</option>
+                                                                            <option value="2011">تولید مواد شیمیایی
+                                                                                اساسی</option>
+                                                                            <option value="2022">تولید انواع رنگ و روغن
+                                                                                جلا و پوشش های مشابه، جوهرچاپ و بتانه
+                                                                            </option>
+                                                                            <option value="2211">تولید تایر و تیوب هاي
+                                                                                لاستیکی، روکش کردن و بازسازی تایرهای
+                                                                                لاستیکی</option>
+                                                                            <option value="5134">عمده فروشي داروهاي
+                                                                                شيميايي و گياهي، عطريات، صابونهاي
+                                                                                آرايشي، مواد پاك كننده و ضد عفوني كننده
+                                                                            </option>
+                                                                            <option value="0230">جمع آوری محصولات جنگلی
+                                                                                غیرچوبی</option>
+                                                                            <option value="1071">تولید سایر فراورده های
+                                                                                غذایی</option>
+                                                                            <option value="1079">تولید سایر فراورده های
+                                                                                غذایی طبقه بندی نشده در جای دیگر
+                                                                            </option>
+                                                                            <option value="0113">کاشت سبزیجات و صیفی
+                                                                                جات، ریشه ها و غده ها</option>
+                                                                            <option value="0121">کاشت مو (انگور)
+                                                                            </option>
+                                                                            <option value="0126">کاشت میوه های روغنی
+                                                                            </option>
+                                                                            <option value="0163">فعالیت های پس از برداشت
+                                                                                محصول</option>
+                                                                            <option value="0710">استخراج کانه های آهن
+                                                                            </option>
+                                                                            <option value="0892">استخراج تورب</option>
+                                                                            <option value="1103">تولید مالتا و ماالشعیر
+                                                                            </option>
+                                                                            <option value="1313">تکمیل منسوجات</option>
+                                                                            <option value="2652">تولید انواع ساعت
+                                                                            </option>
+                                                                            <option value="1072">تولید قند و شکر
+                                                                            </option>
+                                                                            <option value="2219">تولید سایر فراورده های
+                                                                                لاستیکی</option>
+                                                                            <option value="1080">تولید غذای آماده
+                                                                                حیوانات</option>
+                                                                            <option value="1050">تولید فراورده های لبنی
+                                                                            </option>
+                                                                            <option value="0114">کاشت نیشکر</option>
+                                                                            <option value="0122">کاشت میوه های گرمسیری و
+                                                                                نیمه گرمسیری</option>
+                                                                            <option value="0127">کاشت محصولات نوشیدنی
+                                                                            </option>
+                                                                            <option value="5231">خرده فروشي كالاهاي
+                                                                                دارويي، پزشكي، مواد آرايشي و بهداشتي
+                                                                            </option>
+                                                                            <option value="0164">فراوری بذر برای تکثیر
+                                                                            </option>
+                                                                            <option value="0240">خدمات پشتیبانی جنگل
+                                                                                داری</option>
+                                                                            <option value="0510">استخراج زغال سنگ خشک
+                                                                            </option>
+                                                                            <option value="0721">استخراج کانه های
+                                                                                اورانیوم و توریوم</option>
+                                                                            <option value="0893">استخراج نمک</option>
+                                                                            <option value="1104">تولید نوشابه های بدون
+                                                                                الکل، آب معدنی و سایر آب های پرشده در
+                                                                                بطری</option>
+                                                                            <option value="1391">تولید پارچه های کشباف و
+                                                                                قلاب بافی</option>
+                                                                            <option value="1399">تولید سایر منسوجات طبقه
+                                                                                بندی نشده در جای دیگر</option>
+                                                                            <option value="1511">دباغی و پرداخت چرم،
+                                                                                پرداخت و رنگرزی خز</option>
+                                                                            <option value="1622">تولید کالاهاي نجاری
+                                                                                درودگری ساختمان</option>
+                                                                            <option value="1702">تولیدکاغذ فانوسی و
+                                                                                مقوای زنبوری و سایر وسایل بسته بندی
+                                                                                کاغذی و مقوایی</option>
+                                                                            <option value="1820">تکثیر رسانه های ضبط شده
+                                                                            </option>
+                                                                            <option value="2012">تولید کودشیمیایی و
+                                                                                ترکیبات نیتروژن</option>
+                                                                            <option value="2023">تولید صابون و شوینده
+                                                                                ها، ترکیبات تمیزکننده و براق کننده،
+                                                                                عطرها و مواد آرایشی</option>
+                                                                            <option value="2391">تولید فراورده های نسوز
+                                                                            </option>
+                                                                            <option value="2394">تولید سیمان و آهک و گچ
+                                                                            </option>
+                                                                            <option value="2399">تولید سایر فراورده های
+                                                                                معدنی غیرفلزی طبقه بندی نشده در جای دیگر
+                                                                            </option>
+                                                                            <option value="2431">ریخته گری آهن و فولاد
+                                                                            </option>
+                                                                            <option value="2513">تولید مولدهای بخار، بجز
+                                                                                دیگ های آب گرم حرارت مرکزی</option>
+                                                                            <option value="2599">تولید سایر محصولات فلزی
+                                                                                ساخته شده طبقه بندی نشده در جای دیگر
+                                                                            </option>
+                                                                            <option value="2630">ساخت تجهیزات مخابراتی
+                                                                            </option>
+                                                                            <option value="2660">ساخت تجهیزات پرتودهی،
+                                                                                الکتروپزشکی و الکترودرمانی</option>
+                                                                            <option value="2790">تولید سایر تجهیزات برقی
+                                                                            </option>
+                                                                            <option value="2811">تولید موتور و توربین -
+                                                                                بجز موتورهای وسایل نقلیه هوایی، خودرو و
+                                                                                موتورسیکلت</option>
+                                                                            <option value="2812">ساخت تجهیزات نیروی سیال
+                                                                            </option>
+                                                                            <option value="2813">تولید سایر پمپ ها،
+                                                                                کمپرسورها، شیرها و سوپاپ ها</option>
+                                                                            <option value="2814">تولید یاتاقان، چرخ دنده
+                                                                                و دیفرانسیل</option>
+                                                                            <option value="2815">تولید اجاق و کوره و
+                                                                                مشعل های کوره</option>
+                                                                            <option value="2816">تولید تجهیزات بالا بر و
+                                                                                جابجاکننده</option>
+                                                                            <option value="2817">تولید ماشین آلات و
+                                                                                تجهیزات دفتری (بجز رایانه و وسایل جانبی)
+                                                                            </option>
+                                                                            <option value="2818">تولید ابزار دستی
+                                                                                موتوردار</option>
+                                                                            <option value="2432">ریخته گری فلزات غیرآهنی
+                                                                            </option>
+                                                                            <option value="2819">تولید سایر ماشین آلات
+                                                                                با کاربرد عام</option>
+                                                                            <option value="2821">تولید ماشین آلات
+                                                                                کشاورزی و جنگلداری</option>
+                                                                            <option value="2822">تولید ماشین آلات شکل
+                                                                                دهی فلز و ماشین ابزارها</option>
+                                                                            <option value="2823">تولید ماشین آلات
+                                                                                متالوژی - ذوب فلزات</option>
+                                                                            <option value="2824">تولید ماشین آلات
+                                                                                استخراج معدن و ساختمان</option>
+                                                                            <option value="2825">تولید ماشین آلات عمل
+                                                                                آوری مواد غذایی، نوشیدنی ها و دخانیات
+                                                                            </option>
+                                                                            <option value="2826">تولید ماشین آلات برای
+                                                                                تولید منسوجات و البسه و چرم</option>
+                                                                            <option value="2829">تولید سایر ماشین آلات
+                                                                                با کاربرد خاص</option>
+                                                                            <option value="2910">تولید وسایل نقلیه
+                                                                                موتوری</option>
+                                                                            <option value="2920">تولید بدنه ( اتاق )
+                                                                                وسایل نقلیه موتوری و ساخت تریلر و نیم
+                                                                                تریلر</option>
+                                                                            <option value="2930">تولید قطعات و لوازم
+                                                                                الحاقی وسایل نقلیه موتوری</option>
+                                                                            <option value="3011">تولید کشتی و سازه های
+                                                                                شناور</option>
+                                                                            <option value="3012">تولید قایق های تفریحی و
+                                                                                ورزشی</option>
+                                                                            <option value="3020">تولید لوکوموتیوهای راه
+                                                                                آهن و وسایل نقلیه ریلی</option>
+                                                                            <option value="3030">تولید هواپیما و فضاپیما
+                                                                                و ماشین آلات وابسته</option>
+                                                                            <option value="3040">ساخت وسایل نقلیه جنگی
+                                                                            </option>
+                                                                            <option value="3091">تولید موتور سیکلت
+                                                                            </option>
+                                                                            <option value="3092">تولید دوچرخه و صندلی
+                                                                                چرخدار معلولین</option>
+                                                                            <option value="3099">تولید سایر وسایل حمل و
+                                                                                نقل طبقه بندي نشده در جاي دیگر</option>
+                                                                            <option value="3100">تولید مبلمان</option>
+                                                                            <option value="3211">تولید جواهرات و کالاهای
+                                                                                وابسته</option>
+                                                                            <option value="3212">تولید جواهرات بدلی و
+                                                                                کالاهای وابسته</option>
+                                                                            <option value="3220">تولید آلات موسیقی
+                                                                            </option>
+                                                                            <option value="3230">تولید کالاهای ورزشی
+                                                                            </option>
+                                                                            <option value="3240">تولید وسایل بازی و
+                                                                                اسباب بازی</option>
+                                                                            <option value="3250">ساخت ملزومات و وسایل
+                                                                                پزشکی و دندانپزشکی</option>
+                                                                            <option value="3290">تولید سایر مصنوعات طبقه
+                                                                                بندی نشده در جای دیگر</option>
+                                                                            <option value="3311">تعمیر محصولات فلزی
+                                                                                ساخته شده</option>
+                                                                            <option value="3312">تعمیر ماشین آلات
+                                                                            </option>
+                                                                            <option value="3313">تعمیر تجهیزات
+                                                                                الکترونیکی و اپتیکی</option>
+                                                                            <option value="3314">تعمیر تجهیزات برقی
+                                                                            </option>
+                                                                            <option value="3315">تعمیر تجهیزات حمل ونقل
+                                                                                - بجز وسایل نقلیه موتوری</option>
+                                                                            <option value="3319">تعمیر سایر تجهیزات
+                                                                            </option>
+                                                                            <option value="3320">نصب ماشین آلات و
+                                                                                تجهیزات صنعتی</option>
+                                                                            <option value="3400">فعالیت هاي کشت و صنعت
+                                                                            </option>
+                                                                            <option value="3510">تولید، انتقال و توزیع
+                                                                                برق</option>
+                                                                            <option value="3520">تولید گاز، توزیع سوخت
+                                                                                های گازی از طریق شاه لوله</option>
+                                                                            <option value="3530">تامین بخار و تهویه هوا
+                                                                            </option>
+                                                                            <option value="3600">جمع آوری، تصیفه و تامین
+                                                                                آب</option>
+                                                                            <option value="3700">فاضلاب</option>
+                                                                            <option value="3811">جمع آوری پسماند بی خطر
+                                                                            </option>
+                                                                            <option value="3812">جمع آوری پسماند خطرناك
+                                                                            </option>
+                                                                            <option value="3821">تصفیه و دفع پسماند بی
+                                                                                خطر</option>
+                                                                            <option value="3822">تصفیه و دفع پسماند
+                                                                                خطرناک</option>
+                                                                            <option value="3830">بازیافت مواد</option>
+                                                                            <option value="3900">فعالیت های تصفیه و سایر
+                                                                                خدمات مدیریت پسماند</option>
+                                                                            <option value="2731">تولید کابل های فیبر
+                                                                                نوری</option>
+                                                                            <option value="4100">ساخت بنا</option>
+                                                                            <option value="4210">ساخت جاده و راه آهن
+                                                                            </option>
+                                                                            <option value="4220">ساخت پروژه های تاسیسات
+                                                                                شهری</option>
+                                                                            <option value="4290">ساخت سایر پروژه های
+                                                                                مهندسی عمران</option>
+                                                                            <option value="4311">تخریب</option>
+                                                                            <option value="4312">آماده سازی محوطه
+                                                                            </option>
+                                                                            <option value="4321">تاسیسات برق</option>
+                                                                            <option value="4322">تاسیسات لوله کشی،
+                                                                                گرمایش و تهویه هوا</option>
+                                                                            <option value="4329">سایر تاسیسات ساختمان
+                                                                            </option>
+                                                                            <option value="4330">پایان دهی و تکمیل بنا
+                                                                            </option>
+                                                                            <option value="4390">سایر فعالیت های تخصصی
+                                                                                ساختمان</option>
+                                                                            <option value="4510">فروش وسایل نقلیه موتوری
+                                                                            </option>
+                                                                            <option value="4520">تعمیر و نگهداری انواع
+                                                                                وسایل نقلیه موتوری</option>
+                                                                            <option value="8530">آموزش عالی</option>
+                                                                            <option value="4530">فروش قطعات و لوازم
+                                                                                الحاقی وسایل نقلیه موتوری</option>
+                                                                            <option value="4540">فروش، نگهداری و تعمیر
+                                                                                موتور سیکلت و قطعات یدکی و لوازم الحاقی
+                                                                                مربوط</option>
+                                                                            <option value="4610">عمده فروشی براساس حق
+                                                                                الزحمه یا قرارداد</option>
+                                                                            <option value="4620">عمده فروشی مواد خام
+                                                                                کشاورزی وحیوانات زنده</option>
+                                                                            <option value="4630">عمده فروشی مواد غذایی،
+                                                                                آشامیدنی ها، توتون و تنباکو</option>
+                                                                            <option value="4641">عمده فروشی منسوجات،
+                                                                                پوشاک، پاپوش</option>
+                                                                            <option value="4649">عمده فروشی سایر کالاهای
+                                                                                خانگی</option>
+                                                                            <option value="4651">عمده فروشی رایانه،
+                                                                                تجهیزات جانبی رایانه و نرم افزار
+                                                                            </option>
+                                                                            <option value="4652">عمده فروشی تجهیزات و
+                                                                                قطعات الکترونیکی و مخابراتی</option>
+                                                                            <option value="4653">عمده فروشی ماشین آلات،
+                                                                                تجهیزات و ملزومات کشاورزی</option>
+                                                                            <option value="4659">عمده فروشی سایر ماشین
+                                                                                آلات و تجهیزات</option>
+                                                                            <option value="4661">عمده فروشی سوخت های
+                                                                                جامد، مایع و گاز و محصولات مربوط
+                                                                            </option>
+                                                                            <option value="4662">عمده فروشی فلزات و کانه
+                                                                                های فلزی</option>
+                                                                            <option value="4663">عمده فروشی مصالح
+                                                                                ساختمانی، یراق آلات، تجهیزات و ملزومات
+                                                                                لوله کشی و گرمایشی ساختمان</option>
+                                                                            <option value="4669">عمده فروشی پسماند و
+                                                                                نخاله و سایر محصولات طبقه بندی نشده در
+                                                                                جای دیگر</option>
+                                                                            <option value="4690">عمده فروشی غیر تخصصی
+                                                                            </option>
+                                                                            <option value="4711">خرده فروشی در فروشگاه
+                                                                                های غیرتخصصی با برتری فروش مواد غذایی و
+                                                                                دخانیات</option>
+                                                                            <option value="4719">سایر خرده فروشی ها در
+                                                                                فروشگاه هاي غیر تخصصی</option>
+                                                                            <option value="4721">خرده فروشی مواد غذایی
+                                                                                در فروشگاه های تخصصی</option>
+                                                                            <option value="4722">خرده فروشی آشامیدنی ها
+                                                                                در فروشگاه های تخصصی</option>
+                                                                            <option value="4723">خرده فروشی محصولات
+                                                                                دخانی در فروشگاه هاي تخصصی</option>
+                                                                            <option value="4730">خرده فروشی سوخت خودرو
+                                                                                در فروشگاه های تخصصی</option>
+                                                                            <option value="4741">خرده فروشی رایانه،
+                                                                                وسایل جانبی، نرم افزار و تجهیزات
+                                                                                مخابراتی در فروشگاه های تخصصی</option>
+                                                                            <option value="4742">خرده فروشی تجهیزات صوتی
+                                                                                و تصویری در فروشگاه های تخصصی</option>
+                                                                            <option value="4751">خرده فروشی منسوجات در
+                                                                                فروشگاه های تخصصی</option>
+                                                                            <option value="4752">خرده فروشی یراق آلات،
+                                                                                رنگ و شیشه در فروشگاه های تخصصی</option>
+                                                                            <option value="4753">خرده فروشی قالی،
+                                                                                قالیچه، پوشش کف و دیوار در فروشگاه های
+                                                                                تخصصی</option>
+                                                                            <option value="4759">خرده فروشی وسایل خانگی
+                                                                                برقی، مبلمان، تجهیزات روشنایی و سایر
+                                                                                کالاهای خانگی در فروشگاه های تخصصی
+                                                                            </option>
+                                                                            <option value="4761">خرده فروشی کتاب،
+                                                                                روزنامه و نوشت افزار در فروشگاه های
+                                                                                تخصصی</option>
+                                                                            <option value="4762">خرده فروشی موسیقی و
+                                                                                تصویرهای ضبط شده در فروشگاه های تخصصی
+                                                                            </option>
+                                                                            <option value="4763">خرده فروشی تجهیزات
+                                                                                ورزشی در فروشگاه های تخصصی</option>
+                                                                            <option value="4764">خرده فروشی وسایل بازی و
+                                                                                اسباب بازی در فروشگاه های تخصصی</option>
+                                                                            <option value="4771">خرده فروشی پوشاک، پاپوش
+                                                                                و کالاهای چرمی در فروشگاه های تخصصی
+                                                                            </option>
+                                                                            <option value="4772">خرده فروشی کالاهای
+                                                                                دارویی و پزشکی، آرایشی و بهداشتی در
+                                                                                فروشگاه های تخصصی</option>
+                                                                            <option value="4773">سایر خرده فروشی های
+                                                                                کالاهای نو در فروشگاه های تخصصی</option>
+                                                                            <option value="4774">خرده فروشی کالاهای دست
+                                                                                دوم</option>
+                                                                            <option value="4781">خرده فروشی مواد غذایی،
+                                                                                آشامیدنی و محصولات دخانی در دکه ها و
+                                                                                بازار ها</option>
+                                                                            <option value="4782">خرده فروشی منسوجات،
+                                                                                پوشاک و پاپوش در دکه ها و بازار ها
+                                                                            </option>
+                                                                            <option value="4789">خرده فروشی سایر کالاها
+                                                                                در دکه ها و بازارها</option>
+                                                                            <option value="4791">خرده فروشی از طریق
+                                                                                موسسات قبول سفارش پستی یا اینترنت
+                                                                            </option>
+                                                                            <option value="4799">سایر خرده فروشی های
+                                                                                بیرون از فروشگاه ها، دکه ها و بازار ها
+                                                                            </option>
+                                                                            <option value="4911">حمل و نقل ریلی مسافر -
+                                                                                بین شهری</option>
+                                                                            <option value="4912">حمل و نقل ریلی بار
+                                                                            </option>
+                                                                            <option value="4921">حمل و نقل زمینی مسافر
+                                                                                درون شهری و حومه شهر</option>
+                                                                            <option value="4922">سایر حمل و نقل زمینی
+                                                                                مسافر</option>
+                                                                            <option value="4923">حمل و نقل بار از طریق
+                                                                                جاده</option>
+                                                                            <option value="4930">حمل و نقل از طریق خط
+                                                                                لوله</option>
+                                                                            <option value="5011">حمل و نقل دریایی و آب
+                                                                                های ساحلی مسافر</option>
+                                                                            <option value="5012">حمل و نقل دریایی و آب
+                                                                                های ساحلی بار</option>
+                                                                            <option value="5021">حمل و نقل آبی داخلی
+                                                                                مسافر</option>
+                                                                            <option value="5022">حمل و نقل آبی داخلی بار
+                                                                            </option>
+                                                                            <option value="2720">تولید باتری و انباره
+                                                                            </option>
+                                                                            <option value="5110">حمل و نقل هوایی مسافر
+                                                                            </option>
+                                                                            <option value="5120">حمل و نقل هوایی بار
+                                                                            </option>
+                                                                            <option value="5210">انبارداری و ذخیره سازی
+                                                                            </option>
+                                                                            <option value="5221">فعالیت های خدمات
+                                                                                پشتیبانی حمل و نقل زمینی</option>
+                                                                            <option value="5222">فعالیت های خدمات
+                                                                                پشتیبانی حمل و نقل آبی</option>
+                                                                            <option value="5223">فعالیت های خدمات
+                                                                                پشتیبانی حمل و نقل هوایی</option>
+                                                                            <option value="5224">جابجایی محموله</option>
+                                                                            <option value="5229">سایر فعالیت های
+                                                                                پشتیبانی حمل ونقل</option>
+                                                                            <option value="5310">فعالیت های پست</option>
+                                                                            <option value="5510">فعالیت های تامین جا
+                                                                                برای اقامت کوتاه مدت</option>
+                                                                            <option value="5520">اردوگاه های توریستی،
+                                                                                پارک های وسایل نقلیه تفریحی و پارك های
+                                                                                تریلر ها</option>
+                                                                            <option value="5590">سایر فعالیت های مربوط
+                                                                                به تأمین جا</option>
+                                                                            <option value="5610">رستوران ها و فعالیت های
+                                                                                خدماتی مربوط به تأمین غذای سیار</option>
+                                                                            <option value="5621">تهیه غذای مراسم
+                                                                            </option>
+                                                                            <option value="5629">سایر فعالیت های خدماتی
+                                                                                غذایی</option>
+                                                                            <option value="5630">فعالیت های خدماتی مربوط
+                                                                                به ارائه آشامیدنی ها</option>
+                                                                            <option value="5811">انتشار کتاب</option>
+                                                                            <option value="5812">انتشار راهنمای تلفن و
+                                                                                فهرست های پستی</option>
+                                                                            <option value="5813">انتشار روزنامه و مجله و
+                                                                                نشریات ادواری</option>
+                                                                            <option value="5819">سایر فعالیت های
+                                                                                انتشاراتی</option>
+                                                                            <option value="5820">انتشار نرم افزار
+                                                                            </option>
+                                                                            <option value="5911">فعالیت های تولید فیلم
+                                                                                سینمایی، ویدیویی و برنامه های تلویزیونی
+                                                                            </option>
+                                                                            <option value="5912">فعالیت های پس از تولید
+                                                                                فیلم سینمایی، ویدیویی و برنامه های
+                                                                                تلویزیونی</option>
+                                                                            <option value="5913">فعالیت های توزیع فیلم
+                                                                                سینمایی، ویدیویی و برنامه های تلویزیونی
+                                                                            </option>
+                                                                            <option value="5914">فعالیت نمایش فیلم
+                                                                                سینمایی</option>
+                                                                            <option value="5920">فعالیت های ضبط صدا و
+                                                                                انتشار موسیقی</option>
+                                                                            <option value="6010">پخش برنامه های رادیویی
+                                                                            </option>
+                                                                            <option value="6020">فعالیت های برنامه ریزی
+                                                                                و پخش برنامه های تلویزیونی</option>
+                                                                            <option value="6100">فعالیت های مخابراتی با
+                                                                                سیم، بی سیم و ماهواره ای</option>
+                                                                            <option value="6190">سایر فعالیت های
+                                                                                مخابراتی</option>
+                                                                            <option value="6201">فعالیت های برنامه نویسی
+                                                                                رایانه</option>
+                                                                            <option value="6202">فعالیت های مشاوره مربوط
+                                                                                به رایانه و مدیریت تسهیلات رایانه ای
+                                                                            </option>
+                                                                            <option value="6209">سایر فعالیت های خدماتی
+                                                                                فناوری اطلاعات و رایانه</option>
+                                                                            <option value="6311">پردازش و میزبانی داده
+                                                                                ها و فعالیت های مربوط</option>
+                                                                            <option value="6312">پورتال های (درگاه های)
+                                                                                وب</option>
+                                                                            <option value="6391">فعالیت های بنگاه های
+                                                                                خبری</option>
+                                                                            <option value="6399">سایر فعالیت های خدماتی
+                                                                                اطلاع رسانی طبقه بندی نشده در جای دیگر
+                                                                            </option>
+                                                                            <option value="6411">بانکداری مرکزی</option>
+                                                                            <option value="6419">سایر واسطه گری های پولی
+                                                                            </option>
+                                                                            <option value="6420">فعالیت های شرکت های
+                                                                                صاحب سهم</option>
+                                                                            <option value="6430">تراست ها، صندوق ها و
+                                                                                واحدهای مالی مشابه</option>
+                                                                            <option value="6491">اجاره داری مالی
+                                                                                (لیزینگ)</option>
+                                                                            <option value="6492">اعطای سایر اعتبارها
+                                                                            </option>
+                                                                            <option value="6499">سایر فعالیت های خدمات
+                                                                                مالی، بجز فعالیت های تامین وجوه
+                                                                                بازنشستگی و بیمه، طبقه بندی نشده در جای
+                                                                                دیگر</option>
+                                                                            <option value="6511">بیمه عمر</option>
+                                                                            <option value="6512">بیمه غیر از بیمه عمر
+                                                                            </option>
+                                                                            <option value="6520">بیمه اتکایی</option>
+                                                                            <option value="6530">تامین وجوه بازنشستگی
+                                                                            </option>
+                                                                            <option value="6611">سرپرستی بازارهای مالی
+                                                                            </option>
+                                                                            <option value="6612">کارگزاری در بازارهای
+                                                                                اوراق بهادار و کالا</option>
+                                                                            <option value="6619">سایر فعالیت های جنبی
+                                                                                فعالیت های خدمات مالی</option>
+                                                                            <option value="6621">ارزشیابی مخاطره و خسارت
+                                                                            </option>
+                                                                            <option value="6622">فعالیت های کارگزاران و
+                                                                                نمایندگان بیمه</option>
+                                                                            <option value="6629">سایر فعالیت های جنبی
+                                                                                تامین وجوه بازنشستگی وبیمه</option>
+                                                                            <option value="6630">فعالیت های مدیریت وجوه
+                                                                            </option>
+                                                                            <option value="6810">فعالیت های مربوط به
+                                                                                املاک و مستغلات با مالکیت شخصی یا اجاره
+                                                                                ای</option>
+                                                                            <option value="6820">فعالیت های مربوط به
+                                                                                املاک و مستغلات براساس دستمزد یا قرارداد
+                                                                            </option>
+                                                                            <option value="6910">فعالیت های حقوقی
+                                                                            </option>
+                                                                            <option value="6920">فعالیت های حسابداری،
+                                                                                دفترداری و حسابرسی و مشاوره مالیاتی
+                                                                            </option>
+                                                                            <option value="7010">فعالیت های دفترهای
+                                                                                مرکزی</option>
+                                                                            <option value="7020">فعالیت های مشاوره ای
+                                                                                مربوط به مدیریت</option>
+                                                                            <option value="7110">فعالیت های معماری و
+                                                                                مهندسی و مشاور ههای فنی مربوط</option>
+                                                                            <option value="7120">تحلیل و آزمایش فنی
+                                                                            </option>
+                                                                            <option value="8522">آموزش متوسطه فنی و حرفه
+                                                                                ای</option>
+                                                                            <option value="7210">تحقیق و توسعه تجربی در
+                                                                                علوم طبیعی و مهندسی</option>
+                                                                            <option value="7220">تحقیق و توسعه تجربی در
+                                                                                علوم اجتماعی و انسانی</option>
+                                                                            <option value="7310">تبلیغات</option>
+                                                                            <option value="7320">بازار پژوهشی و سنجش
+                                                                                افکار عمومی</option>
+                                                                            <option value="7410">فعالیت های طراحی تخصصی
+                                                                            </option>
+                                                                            <option value="7420">فعالیت های عکاسی
+                                                                            </option>
+                                                                            <option value="7490">سایر فعالیت های حرفه
+                                                                                ای، علمی و فنی طبقه بندی نشده در جای
+                                                                                دیگر</option>
+                                                                            <option value="7500">فعالیت های دامپزشکی
+                                                                            </option>
+                                                                            <option value="7710">کرایه وسایل نقلیه
+                                                                                موتوری</option>
+                                                                            <option value="7721">کرایه کالاهای تفریحی و
+                                                                                ورزشی</option>
+                                                                            <option value="7722">کرایه نوارها و دیسک های
+                                                                                تصویری</option>
+                                                                            <option value="7729">کرایه سایر کالاهای شخصی
+                                                                                و خانگی</option>
+                                                                            <option value="7730">کرایه سایر ماشین آلات،
+                                                                                تجهیزات و کالاهای ملموس</option>
+                                                                            <option value="7740">کرایه دارایی فکری و
+                                                                                محصولات مشابه، به جز کارهایی با حقوق
+                                                                                محفوظ</option>
+                                                                            <option value="7800">فعالیت های آژانس های
+                                                                                استخدام و کاریابی</option>
+                                                                            <option value="7911">فعالیت های آژانس های
+                                                                                مسافرتی</option>
+                                                                            <option value="7912">فعالیت های گردانندگان
+                                                                                تور</option>
+                                                                            <option value="7990">رزرو کردن و سایر خدمات
+                                                                                مربوط</option>
+                                                                            <option value="8010">فعالیت های مربوط به
+                                                                                امنیت خصوصی</option>
+                                                                            <option value="8020">فعالیت های خدماتی سیستم
+                                                                                های امنیتی</option>
+                                                                            <option value="8030">فعالیت های بازجویی
+                                                                            </option>
+                                                                            <option value="8110">فعالیت های پشتیبانی
+                                                                                ترکیبی تسهیلات</option>
+                                                                            <option value="8121">نظافت کلی ساختمان
+                                                                            </option>
+                                                                            <option value="8129">سایر فعالیت های مربوط
+                                                                                به نظافت ساختمان و نظافت صنعتی</option>
+                                                                            <option value="8130">فعالیت های خدماتی
+                                                                                مراقبت و نگهداری فضای سبز</option>
+                                                                            <option value="8211">فعالیت های ترکیبی خدمات
+                                                                                اداری دفتر کار</option>
+                                                                            <option value="8219">فتوکپی، آماده سازی
+                                                                                اسناد و سایر فعالیت های پشتیبانی تخصصی
+                                                                                دفتر کار</option>
+                                                                            <option value="8220">فعالیت های مراکز تلفن
+                                                                            </option>
+                                                                            <option value="8230">سازمان دهی همایش ها و
+                                                                                نمایشگاه های بازرگانی</option>
+                                                                            <option value="8291">فعالیت های سازمان های
+                                                                                وصول کننده و دفاتر اطلاعات اعتباری
+                                                                            </option>
+                                                                            <option value="8292">فعالیت های بسته بندی
+                                                                            </option>
+                                                                            <option value="8299">سایر فعالیت های کسب و
+                                                                                کار طبقه بندی نشده در جای دیگر</option>
+                                                                            <option value="8411">فعالیت های اداره امور
+                                                                                عمومی</option>
+                                                                            <option value="8412">تنظیم فعالیت های تامین
+                                                                                خدمات مراقبت های بهداشتی، آموزشی، فرهنگی
+                                                                                و سایر خدمات اجتماعی به استثنای تامین
+                                                                                اجتماعی</option>
+                                                                            <option value="8413">تنظیم امور و کمک به
+                                                                                عملکرد کارآمدتر بنگاه های اقتصادی
+                                                                            </option>
+                                                                            <option value="8421">امور خارجه</option>
+                                                                            <option value="8422">فعالیت های دفاعی
+                                                                            </option>
+                                                                            <option value="8423">فعالیت های ایمنی و نظم
+                                                                                عمومی</option>
+                                                                            <option value="8430">فعالیت های تامین
+                                                                                اجتماعی اجباری</option>
+                                                                            <option value="8510">آموزش پیش دبستانی و
+                                                                                ابتدایی</option>
+                                                                            <option value="8521">آموزش متوسطه عمومی
+                                                                            </option>
+                                                                            <option value="8541">آموزش ورزش و تفریح
+                                                                            </option>
+                                                                            <option value="8542">آموزش فرهنگی</option>
+                                                                            <option value="8549">سایر آموزش های طبقه
+                                                                                بندی نشده در جای دیگر</option>
+                                                                            <option value="8550">فعالیت های پشتیبانی
+                                                                                آموزش</option>
+                                                                            <option value="8610">فعالیت های بیمارستانی
+                                                                            </option>
+                                                                            <option value="8620">فعالیت های پزشکی و
+                                                                                دندانپزشکی</option>
+                                                                            <option value="8690">سایر فعالیت های مربوط
+                                                                                به سلامت انسان</option>
+                                                                            <option value="8710">امکانات مراقبت های
+                                                                                پرستاری در منزل</option>
+                                                                            <option value="8720">فعالیت های مراقبت در
+                                                                                منزل برای عقب ماندگان ذهنی، سلامت روان و
+                                                                                اعتیاد</option>
+                                                                            <option value="8730">فعالیت های مراقبت در
+                                                                                منزل برای افراد سالمند و ناتوان</option>
+                                                                            <option value="8790">سایر فعالیت های مراقبت
+                                                                                در منزل</option>
+                                                                            <option value="8810">فعالیت های مددکاری
+                                                                                اجتماعی بدون تامین محل اقامت برای افراد
+                                                                                سالمند و ناتوان</option>
+                                                                            <option value="8890">سایر فعالیت های مددکاری
+                                                                                اجتماعی بدون تامین محل اقامت</option>
+                                                                            <option value="9000">فعالیت های خلاق، هنر و
+                                                                                سرگرمی</option>
+                                                                            <option value="9101">فعالیت های کتابخانه ها
+                                                                                و آرشیوها</option>
+                                                                            <option value="9102">فعالیت های موزه ها و
+                                                                                اداره ساختمان ها و مکان های تاریخی
+                                                                            </option>
+                                                                            <option value="9103">فعالیت های باغ های گیاه
+                                                                                شناسی و جانورشناسی و فعالیت هاي مربوط به
+                                                                                ذخایر طبیعی</option>
+                                                                            <option value="9311">اداره تسهیلات ورزشی
+                                                                            </option>
+                                                                            <option value="9312">فعالیت های باشگاه های
+                                                                                ورزشی</option>
+                                                                            <option value="9319">سایر فعالیت های ورزشی
+                                                                            </option>
+                                                                            <option value="9321">فعالیت های شهربازی ها و
+                                                                                پارك های تک منظوره</option>
+                                                                            <option value="9329">سایر فعالیت های سرگرمی
+                                                                                و تفریحی طبقه بندی نشده در جای دیگر
+                                                                            </option>
+                                                                            <option value="9411">فعالیت های سازمان های
+                                                                                دارای عضو مربوط به کسب و کار و
+                                                                                کارفرمایان</option>
+                                                                            <option value="9412">فعالیت های سازمان های
+                                                                                حرفه اي دارای عضو</option>
+                                                                            <option value="9420">فعالیت های اتحادیه های
+                                                                                اصناف</option>
+                                                                            <option value="9491">فعالیت سازمان های مذهبی
+                                                                            </option>
+                                                                            <option value="9492">فعالیت های سازمان های
+                                                                                سیاسی</option>
+                                                                            <option value="9499">فعالیت های سایر سازمان
+                                                                                های دارای عضو طبقه بندی نشده در جای دیگر
+                                                                            </option>
+                                                                            <option value="9511">تعمیر رایانه و وسایل
+                                                                                جانبی</option>
+                                                                            <option value="9512">تعمیر تجهیزات ارتباطی
+                                                                            </option>
+                                                                            <option value="9521">تعمیر وسایل مصرفی
+                                                                                الکترونیک</option>
+                                                                            <option value="9522">تعمیر وسایل برقی خانگی
+                                                                                و تجهیزات خانه و باغچه</option>
+                                                                            <option value="9523">تعمیر پاپوش و کالاهای
+                                                                                چرمی</option>
+                                                                            <option value="9524">تعمیر مبلمان و اثاثیه
+                                                                                منزل</option>
+                                                                            <option value="9529">تعمیر سایر کالاهای شخصی
+                                                                                و خانگی</option>
+                                                                            <option value="9601">شستشو و خشک شویی
+                                                                                منسوجات و محصولات خزدار</option>
+                                                                            <option value="9602">آرایش مو و خدمات مربوط
+                                                                                به زیبایی</option>
+                                                                            <option value="9603">مراسم خاکسپاری و فعالیت
+                                                                                هاي وابسته به آن</option>
+                                                                            <option value="9609">سایر فعالیت های خدماتی
+                                                                                شخصی طبقه بندی نشده در جای دیگر</option>
+                                                                            <option value="9700">فعالیت های خانوارها به
+                                                                                عنوان کارفرمایان کارکنان خانگی</option>
+                                                                            <option value="9810">فعالیت های تفکیک ناپذیر
+                                                                                تولید کالا توسط خانوارهای معمولی برای
+                                                                                خودمصرفی</option>
+                                                                            <option value="9820">فعالیت های تفکیک ناپذیر
+                                                                                تولید خدمات توسط خانوارهای معمولی برای
+                                                                                خودمصرفی</option>
+                                                                            <option value="9900">فعالیت های سازمان ها و
+                                                                                هیئت های برون مرزی</option>
+                                                                            <option value="1102">تولید انواع نوشیدنی ها
+                                                                            </option>
+                                                                            <option value="0146">پرورش ماکیان</option>
+                                                                            <option value="0144">پرورش گوسفند و بز
+                                                                            </option>
+                                                                            <option value="0143">پرورش شتر و شترسانان
+                                                                            </option>
+                                                                            <option value="0141">پرورش گاو و گاومیش
+                                                                            </option>
+                                                                            <option value="0142">پرورش اسب و اسب سانان
+                                                                            </option>
+                                                                            <option value="0149">پرورش سایر حیوانات
+                                                                            </option>
+                                                                            <option value="0150">بهره برداری توام
+                                                                                کشاورزی و دامداری</option>
+                                                                            <option value="0321">آبزی پروری دریایی
+                                                                            </option>
+                                                                            <option value="0322">آبزی پروری در آب هاي
+                                                                                شیرین</option>
+                                                                            <option value="1010">فراوری و نگهداری گوشت
+                                                                            </option>
+                                                                            <option value="1020">فراوری و نگهداری ماهی،
+                                                                                سخت پوستان و نرم تنان</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6 mb-3">
+                                                                    <div class="input-group">
+                                                                        <span class="input-group-text">دستگاه
+                                                                            متولی</span>
+                                                                        <select name="motavali" class="form-control">
+                                                                            <option value="">انتخاب کنید</option>
+                                                                            <option value="115">سازمان آموزش فنی و حرفه
+                                                                                ای کشور</option>
+                                                                            <option value="116">ریاست جمهوری</option>
+                                                                            <option value="108">شرکت ملی صنایع پتروشیمی
+                                                                                ایران</option>
+                                                                            <option value="1">دفتر مقام معظم
+                                                                                رهبری(مدظله)</option>
+                                                                            <option value="117">بنیاد مستضعفان انقلاب
+                                                                                اسلامی</option>
+                                                                            <option value="120">وزارت دفاع و پشتیبانی
+                                                                                نیروهای مسلح</option>
+                                                                            <option value="20">جهاد کشاورزی</option>
+                                                                            <option value="21">سازمان دامپزشکی</option>
+                                                                            <option value="62">وزارت راه و شهرسازی
+                                                                            </option>
+                                                                            <option value="11">سازمان حمایت از مصرف
+                                                                                کنندگان و تولیدکنندگان</option>
+                                                                            <option value="13">مرکز برنامه ریزی و نظارت
+                                                                                بر دخانیات</option>
+                                                                            <option value="14">گمرک جمهوری اسلامی ایران
+                                                                            </option>
+                                                                            <option value="22">سازمان تعاونی روستایی
+                                                                            </option>
+                                                                            <option value="41">سازمان غذا و دارو
+                                                                            </option>
+                                                                            <option value="51">شرکت پخش فراورده های نفتی
+                                                                            </option>
+                                                                            <option value="52">شرکت ملی پالایش نفت
+                                                                            </option>
+                                                                            <option value="61">شرکت حمل و نقل پایانه ها
+                                                                            </option>
+                                                                            <option value="71">شهرداری</option>
+                                                                            <option value="72">سازمان بنادر و دریانوردی
+                                                                            </option>
+                                                                            <option value="73">وزارت فرهنگ و ارشاد
+                                                                                اسلامی</option>
+                                                                            <option value="74">کمیته امداد امام خمینی
+                                                                                (ره)</option>
+                                                                            <option value="12">مرکز امور اصناف</option>
+                                                                            <option value="3">سازمان صنایع کوچک و
+                                                                                شهرکهای صنعتی ایران</option>
+                                                                            <option value="24">شرکت بازرگانی دولتی ایران
+                                                                            </option>
+                                                                            <option value="10">وزارت صنعت معدن تجارت
+                                                                            </option>
+                                                                            <option value="76">وزارت تعاون، کار و رفاه
+                                                                                اجتماعی</option>
+                                                                            <option value="77">سازمان میراث فرهنگی،
+                                                                                صنایع دستی و گردشگری</option>
+                                                                            <option value="78">وزارت آموزش و پرورش
+                                                                            </option>
+                                                                            <option value="79">هلال احمر</option>
+                                                                            <option value="80">وزارت نیرو</option>
+                                                                            <option value="81">شرکت پست</option>
+                                                                            <option value="83">سازمان راهداری و حمل و
+                                                                                نقل جاده ای</option>
+                                                                            <option value="84">قوه قضائیه</option>
+                                                                            <option value="85">راه آهن جمهوری اسلامی
+                                                                                ایران</option>
+                                                                            <option value="86">بانک مرکزی جمهوری اسلامی
+                                                                                ایران</option>
+                                                                            <option value="87">شرکت پشتیبانی امور دام
+                                                                                کشور</option>
+                                                                            <option value="88">شرکت خدمات حمایتی کشاورزی
+                                                                            </option>
+                                                                            <option value="89">سازمان جمع‌آوری و فروش
+                                                                                اموال تملیکی</option>
+                                                                            <option value="90">وزارت علوم، تحقیقات و
+                                                                                فناوری</option>
+                                                                            <option value="91">آستان قدس رضوی</option>
+                                                                            <option value="92">سازمان امور عشایر ایران
+                                                                            </option>
+                                                                            <option value="93">وزارت کشور</option>
+                                                                            <option value="94">سازمان حفاظت محیط زیست
+                                                                            </option>
+                                                                            <option value="95">شرکت انبارهای عمومی و
+                                                                                خدمات گمرکی ایران</option>
+                                                                            <option value="15">دبیرخانه شورای عالی مناطق
+                                                                                آزاد تجاری ـ صنعتی و ویژه اقتصادی
+                                                                            </option>
+                                                                            <option value="112">سازمان برنامه و بودجه
+                                                                            </option>
+                                                                            <option value="113">وزارت ورزش و جوانان
+                                                                            </option>
+                                                                            <option value="114">سازمان انرژی اتمی ایران
+                                                                            </option>
+                                                                            <option value="96">وزارت امور اقتصادی و
+                                                                                دارایی</option>
+                                                                            <option value="98">سازمان نظام صنفی رایانه
+                                                                                ای کشور</option>
+                                                                            <option value="99">شورای عالی انفورماتیک
+                                                                            </option>
+                                                                            <option value="100">شورای عالی انقلاب فرهنگی
+                                                                            </option>
+                                                                            <option value="101">سازمان تنظیم مقررات و
+                                                                                ارتباطات رادیویی</option>
+                                                                            <option value="102">سازمان ملی استاندارد
+                                                                                ایران</option>
+                                                                            <option value="103">ستاد اجرایی فرمان امام
+                                                                            </option>
+                                                                            <option value="104">شرکت شهرک های صنعتی
+                                                                            </option>
+                                                                            <option value="105">شرکت ملی گاز ایران
+                                                                            </option>
+                                                                            <option value="106">سازمان نوسازی، توسعه و
+                                                                                تجهیز مدارس</option>
+                                                                            <option value="107">اداره کل تربیت بدنی
+                                                                            </option>
+                                                                            <option value="109">وزارت بهداشت، درمان و
+                                                                                آموزش پزشکی</option>
+                                                                            <option value="110">وزارت نفت</option>
+                                                                            <option value="111">وزارت ارتباطات و فناوری
+                                                                                اطلاعات</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6 mb-3">
+                                                                    <div class="input-group">
+                                                                        <span class="input-group-text">نوع کاربری
+                                                                            واحد</span>
+                                                                        <select name="cmbUnitUsageType"
+                                                                            class="form-control">
+                                                                            <option value="">انتخاب کنید</option>
+                                                                            <option value="0">عمومی</option>
+                                                                            <option value="1">اختصاصی</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- فیلدهای دیگر می‌توانند مشابه همین ساختار اضافه شوند -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="modal-footer">
+                                                        <button type="submit" class="btn btn-primary">ثبت</button>
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">بستن</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <script>
+                                    // نمایش یا پنهان کردن بخش اطلاعات جدید انبار با تیک زدن چک باکس
+                                    document.getElementById('ckNewAnbar').addEventListener('change', function () {
+                                        const box = document.getElementById('newAnbarInfoBox');
+                                        if (this.checked) box.classList.remove('d-none');
+                                        else box.classList.add('d-none');
+                                    });
+                                </script>
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+         
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .input-group-text {
+        font-size: 10px;
+    }
+
+    .modal-dialog.custom-xs {
+        max-width: 700px;
+        /* عرض دلخواه */
+    }
+
+    .input-group-text.bg-light {
+        width: 120px;
+    }
+
+    .btn-purple-csm {
+        background-color: #6f42c1 !important;
+        color: #fff;
+    }
+
+    .btn-purple-csm:hover {
+        background-color: #5a32a3 !important;
+    }
+
+    .dropdown-menu {
+        min-width: 100%;
+    }
+
+    .text-align-center {
+        text-align: center !important;
+    }
+
+    .bg-themeprimary {
+        background-color: #024158 !important;
+        color: white;
+    }
+
+    .bg-themeprimary th {
+        text-align: center !important;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    div.dt-container div.dt-layout-row div.dt-layout-cell.dt-layout-start {
+        margin-right: initial !important;
+    }
+
+    div.dt-container div.dt-layout-row div.dt-layout-cell.dt-layout-end {
+        margin-left: initial !important;
+    }
+
+    .btn-blue,
+    .btn-blue:focus {
+        background-color: #5db2ff !important;
+        border-color: #5db2ff;
+        color: #fff;
+    }
+
+    .btn.btn-primaryy {
+        background-color: #449cec !important;
+        border-color: #3d90db !important;
+        background-image: none;
+        outline: 0;
+        -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125) !important;
+        box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
+        width: 133px;
+    }
+
+    .btn-successs,
+    .btn-success:focus {
+        background-color: #53a93f !important;
+        border-color: #53a93f !important;
+        color: #fff;
+    }
+
+    .btn-purple,
+    .btn-purple:focus {
+        background-color: #7e3794 !important;
+        border-color: #7e3794;
+        color: #fff;
+    }
+
+    .btn-success,
+    .btn-success:focus {
+        background-color: #53a93f !important;
+        border-color: #53a93f !important;
+        color: #fff;
+    }
+
+    .btn-danger,
+    .btn-danger:focus {
+        background-color: #d73d32 !important;
+        border-color: #d73d32;
+        color: #fff;
+    }
+
+    .btn {
+        font-size: 13px;
+        margin: 2px;
+    }
+
+    .btn-xs {
+        font-size: 11px;
+        padding: 2px 7px;
+    }
+
+    .input-group .form-control:last-child, .input-group-addon:last-child, .input-group-btn:last-child > .btn, .input-group-btn:last-child > .btn-group > .btn, .input-group-btn:last-child > .dropdown-toggle, .input-group-btn:first-child > .btn:not(:first-child), .input-group-btn:first-child > .btn-group:not(:first-child) > .btn {
+	border-bottom-left-radius: 4px;
+	border-top-left-radius: 4px;
+	border-bottom-right-radius: 0;
+	border-top-right-radius: 0;
+}
+</style>
+{% endblock main %}
+
+{% block js %}
+<!-- بارگذاری jQuery و DataTables -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/2.3.4/js/dataTables.js"></script>
+<!-- بارگذاری Persian Datepicker (در صورت نیاز) -->
+
+<script>
+    $(document).ready(function () {
+
+
+        // اینیشیالایز DataTable
+        $('#example').DataTable({
+            paging: true,
+            searching: true,
+            info: true,
+            ordering: false,
+            pageLength: 10,
+            language: {
+                "sEmptyTable": "هیچ داده‌ای در جدول وجود ندارد",
+                "sInfo": "نمایش _START_ تا _END_ از _TOTAL_ رکورد",
+                "sInfoEmpty": "نمایش 0 تا 0 از 0 رکورد",
+                "sInfoFiltered": "(فیلتر شده از _MAX_ رکورد)",
+                "sLengthMenu": "نمایش _MENU_ رکورد",
+                "sLoadingRecords": "در حال بارگذاری...",
+                "sProcessing": "در حال پردازش...",
+                "sSearch": "جستجو:",
+                "sZeroRecords": "رکوردی مطابق جستجوی شما پیدا نشد",
+                "oPaginate": {
+                    "sFirst": "اولین",
+                    "sLast": "آخرین",
+                    "sNext": "بعدی",
+                    "sPrevious": "قبلی"
+                }
+            },
+
+        });
+
+    });
+</script>
+{% endblock js %}

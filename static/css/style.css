@@ -1617,3 +1617,33 @@ tr.introjs-showElement>th {
 	color: #134e63;
 	font-weight: bold;
 }
+
+.allbtn {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.allbtn .btn {
+	font-size: 10px;
+	display: flex;
+	flex-wrap: inherit;
+	padding: 7px;
+	line-height: 16px;
+	text-align: center !important;
+	margin: 3px;
+	height: 31px;
+}
+
+section main{
+    background: url('/static/login/images/logo-2-300x284.png') no-repeat center center;
+}
+.btn-blue, .btn-blue:focus {
+  background-color: #5db2ff !important;
+  border-color: #5db2ff;
+  color: #fff;
+}
+.btn-danger, .btn-danger:focus {
+	background-color: #d73d32 !important;
+	border-color: #d73d32;
+	color: #fff;
+}

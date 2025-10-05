@@ -26,16 +26,23 @@ def convert_currncy(amount, origin=0, destination=0):
 def send_sms(receptor, token):
     url = config('KAVENEGAR_SMS_URL')
     url = url.format(receptor=receptor, token=token)
-    if config('IS_DEVELOPMENT_ENVIRONMENT', cast=bool):
-        print(receptor, token)
-        return {'status': 200, 'message': 'کد تایید چاپ شد'}
-    try:
-        response = requests.get(url)
-    except Exception as e:
-        return {
-            'status': 500,
-            'message': e
-        }
+    print(receptor, token,url)
+    response = requests.get(url)
+
+
+    # if config('IS_DEVELOPMENT_ENVIRONMENT', cast=bool):
+    #     return {'status': 200, 'message': 'کد تایید چاپ شد'}
+
+
+    # try:
+    #     response = requests.get(url)
+    #     print(url)
+    # except Exception as e:
+        # print(e)
+        # return {
+        #     'status': 500,
+        #     'message': e
+        # }
     kavenegar_staus_code = [
         418,  # اعتبار حساب شما کافی نیست
         422,  # داده ها به دلیل وجود کاراکتر نامناسب قابل پردازش نیست
@@ -48,7 +55,10 @@ def send_sms(receptor, token):
     ]
     response_dict = json.loads(response.text)
     if response.status_code in kavenegar_staus_code:
+        print(response_dict['return'])
         return response_dict['return']
+    
+    print(4444444)
     return {
         'status': response.status_code,
         'message': response_dict.get('message', 'خطای نا مشخص در ارسال کد تایید')

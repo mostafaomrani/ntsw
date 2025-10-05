@@ -5,15 +5,15 @@
 {% load ui_template_tag %}
 
 {% block title %}
-جستجوی موجودی
+مدیریت کالاها (سطح شناسه کالا)
 {% endblock title %}
 
 {% block breadcrumbs %}
-{% breadcrumbs 'عملیات تجارت داخلی' '#' 'جستجوی موجودی' '#' %}
+{% breadcrumbs 'عملیات تجارت داخلی' '#' 'مدیریت کالاها (سطح شناسه کالا) ' '#' %}
 {% endblock breadcrumbs %}
 
 {% block page-title %}
-جستجوی موجودی
+مدیریت کالاها (سطح شناسه کالا)
 {% endblock page-title %}
 
 {% block main %}
@@ -28,8 +28,8 @@
                 <form id="frmSearch" novalidate="novalidate" class="fv-form fv-form-bootstrap">
                     <div class="row mb-4">
                         <div class="col-12">
-                            <div class="card border-primary">
-                                <div class="card-header bg-primary text-white">
+                            <div class="card">
+                                <div class="card-header">
                                     <h5 class="mb-0"><i class="fa fa-search"></i> نوار ابزار جستجو</h5>
                                 </div>
                                 <div class="card-body">
@@ -39,20 +39,25 @@
                                             <div class="input-group">
                                                 <span class="input-group-text bg-light">انتخاب انبار</span>
                                                 <select name="cmbPlaceID" class="form-control">
-                                                    <option value="0" selected="selected">همه انبارها</option>
-                                                    <option value="46578" postalcode="2222222222">انبار موقت</option>
-                                                    <option value="119883" postalcode="5189151875">فرآیند شیمی صدرا</option>
+                                                    <option value="" selected="selected">همه انبارها</option>
+                                                    {% for anbar in user_anbars %}
+                                                    <option value="{{ anbar.id }}" postalcode="{{ anbar.postal_code }}">
+                                                        {{ anbar.name }}</option>
+                                                    {% endfor %}
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col-md-3 mb-3">
                                             <div class="input-group">
-                                                <input type="text" name="searchText" class="form-control" placeholder="متن جستجو">
+                                                <input type="text" name="searchText" class="form-control"
+                                                    placeholder="متن جستجو">
                                             </div>
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <div class="input-group">
-                                                <button type="button" name="exportexcelsanad" class="btn btn-purple-csm me-2"><i class="fa fa-upload"></i> خروجی اکسل</button>
+                                                <button type="button" name="exportexcelsanad"
+                                                    class="btn btn-purple-csm me-2"><i class="fa fa-upload"></i> خروجی
+                                                    اکسل</button>
                                                 <a class="btn btn-info" href="InternalTradeStuffsStock.aspx">
                                                     <i class="btn-label fa fa-server" style="color: #57b5e3"></i>
                                                     مشاهده کالاهای قابل استفاده در سطح طبقه کالا
@@ -80,22 +85,39 @@
                                                 </div>
                                                 <div class="col-md-3 mb-3">
                                                     <div class="input-group">
-                                                        <input type="text" name="searchText_TrackingLevel" class="form-control" placeholder="متن جستجو">
+                                                        <input type="text" name="searchText_TrackingLevel"
+                                                            class="form-control" placeholder="متن جستجو">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3 mb-3">
                                                     <div class="input-group">
-                                                        <button type="button" name="search" class="btn btn-primary me-2"><i class="fa fa-search"></i> جستجو</button>
-                                                        <button type="button" name="resetFilter" class="btn btn-warning me-2"><i class="fa fa-remove"></i> لغو فیلتر</button>
-                                                        <button type="button" name="exportexcelsanad" class="btn btn-purple-csm"><i class="fa fa-upload"></i> خروجی اکسل</button>
+                                                        <button type="button" name="search"
+                                                            class="btn btn-primary me-2"><i class="fa fa-search"></i>
+                                                            جستجو</button>
+                                                        <button type="button" name="resetFilter"
+                                                            class="btn btn-warning me-2"><i class="fa fa-remove"></i>
+                                                            لغو فیلتر</button>
+                                                        <button type="button" name="exportexcelsanad"
+                                                            class="btn btn-purple-csm"><i class="fa fa-upload"></i>
+                                                            خروجی اکسل</button>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12 mb-3">
                                                     <div class="input-group">
-                                                        <button type="button" name="transferSelf" class="btn btn-primary me-2"><i class="fa fa-exchange-alt"></i> فروش به تاجر</button>
-                                                        <button type="button" name="transferSelf" class="btn btn-primary me-2"><i class="fa fa-shopping-cart"></i> فروش به مصرف کننده</button>
-                                                        <button type="button" name="selectWithExcel" class="btn btn-success me-2"><i class="fa fa-plus-square"></i> انتخاب با فایل اکسل</button>
-                                                        <button type="button" name="registerWithExcel" class="btn btn-success"><i class="fa fa-download"></i> ثبت با فایل اکسل</button>
+                                                        <button type="button" name="transferSelf"
+                                                            class="btn btn-primary me-2"><i
+                                                                class="fa fa-exchange-alt"></i> فروش به تاجر</button>
+                                                        <button type="button" name="transferSelf"
+                                                            class="btn btn-primary me-2"><i
+                                                                class="fa fa-shopping-cart"></i> فروش به مصرف
+                                                            کننده</button>
+                                                        <button type="button" name="selectWithExcel"
+                                                            class="btn btn-success me-2"><i
+                                                                class="fa fa-plus-square"></i> انتخاب با فایل
+                                                            اکسل</button>
+                                                        <button type="button" name="registerWithExcel"
+                                                            class="btn btn-success"><i class="fa fa-download"></i> ثبت
+                                                            با فایل اکسل</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -109,495 +131,39 @@
                     <!-- جدول نتایج جستجو -->
                     <div class="row mt-4">
                         <div class="col-12">
-                            <div class="card border-primary">
-                                <div class="card-header bg-primary text-white">
-                                    <h5 class="mb-0"><i class="fa fa-table"></i> نتایج جستجو</h5>
-                                </div>
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table id="example" class="display">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Position</th>
-                <th>Office</th>
-                <th>Age</th>
-                <th>Start date</th>
-                <th>Salary</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Tiger Nixon</td>
-                <td>System Architect</td>
-                <td>Edinburgh</td>
-                <td>61</td>
-                <td>2011-04-25</td>
-                <td>$320,800</td>
-            </tr>
-            <tr>
-                <td>Garrett Winters</td>
-                <td>Accountant</td>
-                <td>Tokyo</td>
-                <td>63</td>
-                <td>2011-07-25</td>
-                <td>$170,750</td>
-            </tr>
-            <tr>
-                <td>Ashton Cox</td>
-                <td>Junior Technical Author</td>
-                <td>San Francisco</td>
-                <td>66</td>
-                <td>2009-01-12</td>
-                <td>$86,000</td>
-            </tr>
-            <tr>
-                <td>Cedric Kelly</td>
-                <td>Senior JavaScript Developer</td>
-                <td>Edinburgh</td>
-                <td>22</td>
-                <td>2012-03-29</td>
-                <td>$433,060</td>
-            </tr>
-            <tr>
-                <td>Airi Satou</td>
-                <td>Accountant</td>
-                <td>Tokyo</td>
-                <td>33</td>
-                <td>2008-11-28</td>
-                <td>$162,700</td>
-            </tr>
-            <tr>
-                <td>Brielle Williamson</td>
-                <td>Integration Specialist</td>
-                <td>New York</td>
-                <td>61</td>
-                <td>2012-12-02</td>
-                <td>$372,000</td>
-            </tr>
-            <tr>
-                <td>Herrod Chandler</td>
-                <td>Sales Assistant</td>
-                <td>San Francisco</td>
-                <td>59</td>
-                <td>2012-08-06</td>
-                <td>$137,500</td>
-            </tr>
-            <tr>
-                <td>Rhona Davidson</td>
-                <td>Integration Specialist</td>
-                <td>Tokyo</td>
-                <td>55</td>
-                <td>2010-10-14</td>
-                <td>$327,900</td>
-            </tr>
-            <tr>
-                <td>Colleen Hurst</td>
-                <td>JavaScript Developer</td>
-                <td>San Francisco</td>
-                <td>39</td>
-                <td>2009-09-15</td>
-                <td>$205,500</td>
-            </tr>
-            <tr>
-                <td>Sonya Frost</td>
-                <td>Software Engineer</td>
-                <td>Edinburgh</td>
-                <td>23</td>
-                <td>2008-12-13</td>
-                <td>$103,600</td>
-            </tr>
-            <tr>
-                <td>Jena Gaines</td>
-                <td>Office Manager</td>
-                <td>London</td>
-                <td>30</td>
-                <td>2008-12-19</td>
-                <td>$90,560</td>
-            </tr>
-            <tr>
-                <td>Quinn Flynn</td>
-                <td>Support Lead</td>
-                <td>Edinburgh</td>
-                <td>22</td>
-                <td>2013-03-03</td>
-                <td>$342,000</td>
-            </tr>
-            <tr>
-                <td>Charde Marshall</td>
-                <td>Regional Director</td>
-                <td>San Francisco</td>
-                <td>36</td>
-                <td>2008-10-16</td>
-                <td>$470,600</td>
-            </tr>
-            <tr>
-                <td>Haley Kennedy</td>
-                <td>Senior Marketing Designer</td>
-                <td>London</td>
-                <td>43</td>
-                <td>2012-12-18</td>
-                <td>$313,500</td>
-            </tr>
-            <tr>
-                <td>Tatyana Fitzpatrick</td>
-                <td>Regional Director</td>
-                <td>London</td>
-                <td>19</td>
-                <td>2010-03-17</td>
-                <td>$385,750</td>
-            </tr>
-            <tr>
-                <td>Michael Silva</td>
-                <td>Marketing Designer</td>
-                <td>London</td>
-                <td>66</td>
-                <td>2012-11-27</td>
-                <td>$198,500</td>
-            </tr>
-            <tr>
-                <td>Paul Byrd</td>
-                <td>Chief Financial Officer (CFO)</td>
-                <td>New York</td>
-                <td>64</td>
-                <td>2010-06-09</td>
-                <td>$725,000</td>
-            </tr>
-            <tr>
-                <td>Gloria Little</td>
-                <td>Systems Administrator</td>
-                <td>New York</td>
-                <td>59</td>
-                <td>2009-04-10</td>
-                <td>$237,500</td>
-            </tr>
-            <tr>
-                <td>Bradley Greer</td>
-                <td>Software Engineer</td>
-                <td>London</td>
-                <td>41</td>
-                <td>2012-10-13</td>
-                <td>$132,000</td>
-            </tr>
-            <tr>
-                <td>Dai Rios</td>
-                <td>Personnel Lead</td>
-                <td>Edinburgh</td>
-                <td>35</td>
-                <td>2012-09-26</td>
-                <td>$217,500</td>
-            </tr>
-            <tr>
-                <td>Jenette Caldwell</td>
-                <td>Development Lead</td>
-                <td>New York</td>
-                <td>30</td>
-                <td>2011-09-03</td>
-                <td>$345,000</td>
-            </tr>
-            <tr>
-                <td>Yuri Berry</td>
-                <td>Chief Marketing Officer (CMO)</td>
-                <td>New York</td>
-                <td>40</td>
-                <td>2009-06-25</td>
-                <td>$675,000</td>
-            </tr>
-            <tr>
-                <td>Caesar Vance</td>
-                <td>Pre-Sales Support</td>
-                <td>New York</td>
-                <td>21</td>
-                <td>2011-12-12</td>
-                <td>$106,450</td>
-            </tr>
-            <tr>
-                <td>Doris Wilder</td>
-                <td>Sales Assistant</td>
-                <td>Sydney</td>
-                <td>23</td>
-                <td>2010-09-20</td>
-                <td>$85,600</td>
-            </tr>
-            <tr>
-                <td>Angelica Ramos</td>
-                <td>Chief Executive Officer (CEO)</td>
-                <td>London</td>
-                <td>47</td>
-                <td>2009-10-09</td>
-                <td>$1,200,000</td>
-            </tr>
-            <tr>
-                <td>Gavin Joyce</td>
-                <td>Developer</td>
-                <td>Edinburgh</td>
-                <td>42</td>
-                <td>2010-12-22</td>
-                <td>$92,575</td>
-            </tr>
-            <tr>
-                <td>Jennifer Chang</td>
-                <td>Regional Director</td>
-                <td>Singapore</td>
-                <td>28</td>
-                <td>2010-11-14</td>
-                <td>$357,650</td>
-            </tr>
-            <tr>
-                <td>Brenden Wagner</td>
-                <td>Software Engineer</td>
-                <td>San Francisco</td>
-                <td>28</td>
-                <td>2011-06-07</td>
-                <td>$206,850</td>
-            </tr>
-            <tr>
-                <td>Fiona Green</td>
-                <td>Chief Operating Officer (COO)</td>
-                <td>San Francisco</td>
-                <td>48</td>
-                <td>2010-03-11</td>
-                <td>$850,000</td>
-            </tr>
-            <tr>
-                <td>Shou Itou</td>
-                <td>Regional Marketing</td>
-                <td>Tokyo</td>
-                <td>20</td>
-                <td>2011-08-14</td>
-                <td>$163,000</td>
-            </tr>
-            <tr>
-                <td>Michelle House</td>
-                <td>Integration Specialist</td>
-                <td>Sydney</td>
-                <td>37</td>
-                <td>2011-06-02</td>
-                <td>$95,400</td>
-            </tr>
-            <tr>
-                <td>Suki Burks</td>
-                <td>Developer</td>
-                <td>London</td>
-                <td>53</td>
-                <td>2009-10-22</td>
-                <td>$114,500</td>
-            </tr>
-            <tr>
-                <td>Prescott Bartlett</td>
-                <td>Technical Author</td>
-                <td>London</td>
-                <td>27</td>
-                <td>2011-05-07</td>
-                <td>$145,000</td>
-            </tr>
-            <tr>
-                <td>Gavin Cortez</td>
-                <td>Team Leader</td>
-                <td>San Francisco</td>
-                <td>22</td>
-                <td>2008-10-26</td>
-                <td>$235,500</td>
-            </tr>
-            <tr>
-                <td>Martena Mccray</td>
-                <td>Post-Sales support</td>
-                <td>Edinburgh</td>
-                <td>46</td>
-                <td>2011-03-09</td>
-                <td>$324,050</td>
-            </tr>
-            <tr>
-                <td>Unity Butler</td>
-                <td>Marketing Designer</td>
-                <td>San Francisco</td>
-                <td>47</td>
-                <td>2009-12-09</td>
-                <td>$85,675</td>
-            </tr>
-            <tr>
-                <td>Howard Hatfield</td>
-                <td>Office Manager</td>
-                <td>San Francisco</td>
-                <td>51</td>
-                <td>2008-12-16</td>
-                <td>$164,500</td>
-            </tr>
-            <tr>
-                <td>Hope Fuentes</td>
-                <td>Secretary</td>
-                <td>San Francisco</td>
-                <td>41</td>
-                <td>2010-02-12</td>
-                <td>$109,850</td>
-            </tr>
-            <tr>
-                <td>Vivian Harrell</td>
-                <td>Financial Controller</td>
-                <td>San Francisco</td>
-                <td>62</td>
-                <td>2009-02-14</td>
-                <td>$452,500</td>
-            </tr>
-            <tr>
-                <td>Timothy Mooney</td>
-                <td>Office Manager</td>
-                <td>London</td>
-                <td>37</td>
-                <td>2008-12-11</td>
-                <td>$136,200</td>
-            </tr>
-            <tr>
-                <td>Jackson Bradshaw</td>
-                <td>Director</td>
-                <td>New York</td>
-                <td>65</td>
-                <td>2008-09-26</td>
-                <td>$645,750</td>
-            </tr>
-            <tr>
-                <td>Olivia Liang</td>
-                <td>Support Engineer</td>
-                <td>Singapore</td>
-                <td>64</td>
-                <td>2011-02-03</td>
-                <td>$234,500</td>
-            </tr>
-            <tr>
-                <td>Bruno Nash</td>
-                <td>Software Engineer</td>
-                <td>London</td>
-                <td>38</td>
-                <td>2011-05-03</td>
-                <td>$163,500</td>
-            </tr>
-            <tr>
-                <td>Sakura Yamamoto</td>
-                <td>Support Engineer</td>
-                <td>Tokyo</td>
-                <td>37</td>
-                <td>2009-08-19</td>
-                <td>$139,575</td>
-            </tr>
-            <tr>
-                <td>Thor Walton</td>
-                <td>Developer</td>
-                <td>New York</td>
-                <td>61</td>
-                <td>2013-08-11</td>
-                <td>$98,540</td>
-            </tr>
-            <tr>
-                <td>Finn Camacho</td>
-                <td>Support Engineer</td>
-                <td>San Francisco</td>
-                <td>47</td>
-                <td>2009-07-07</td>
-                <td>$87,500</td>
-            </tr>
-            <tr>
-                <td>Serge Baldwin</td>
-                <td>Data Coordinator</td>
-                <td>Singapore</td>
-                <td>64</td>
-                <td>2012-04-09</td>
-                <td>$138,575</td>
-            </tr>
-            <tr>
-                <td>Zenaida Frank</td>
-                <td>Software Engineer</td>
-                <td>New York</td>
-                <td>63</td>
-                <td>2010-01-04</td>
-                <td>$125,250</td>
-            </tr>
-            <tr>
-                <td>Zorita Serrano</td>
-                <td>Software Engineer</td>
-                <td>San Francisco</td>
-                <td>56</td>
-                <td>2012-06-01</td>
-                <td>$115,000</td>
-            </tr>
-            <tr>
-                <td>Jennifer Acosta</td>
-                <td>Junior JavaScript Developer</td>
-                <td>Edinburgh</td>
-                <td>43</td>
-                <td>2013-02-01</td>
-                <td>$75,650</td>
-            </tr>
-            <tr>
-                <td>Cara Stevens</td>
-                <td>Sales Assistant</td>
-                <td>New York</td>
-                <td>46</td>
-                <td>2011-12-06</td>
-                <td>$145,600</td>
-            </tr>
-            <tr>
-                <td>Hermione Butler</td>
-                <td>Regional Director</td>
-                <td>London</td>
-                <td>47</td>
-                <td>2011-03-21</td>
-                <td>$356,250</td>
-            </tr>
-            <tr>
-                <td>Lael Greer</td>
-                <td>Systems Administrator</td>
-                <td>London</td>
-                <td>21</td>
-                <td>2009-02-27</td>
-                <td>$103,500</td>
-            </tr>
-            <tr>
-                <td>Jonas Alexander</td>
-                <td>Developer</td>
-                <td>San Francisco</td>
-                <td>30</td>
-                <td>2010-07-14</td>
-                <td>$86,500</td>
-            </tr>
-            <tr>
-                <td>Shad Decker</td>
-                <td>Regional Director</td>
-                <td>Edinburgh</td>
-                <td>51</td>
-                <td>2008-11-13</td>
-                <td>$183,000</td>
-            </tr>
-            <tr>
-                <td>Michael Bruce</td>
-                <td>JavaScript Developer</td>
-                <td>Singapore</td>
-                <td>29</td>
-                <td>2011-06-27</td>
-                <td>$183,000</td>
-            </tr>
-            <tr>
-                <td>Donna Snider</td>
-                <td>Customer Support</td>
-                <td>New York</td>
-                <td>27</td>
-                <td>2011-01-25</td>
-                <td>$112,000</td>
-            </tr>
-        </tbody>
-        <tfoot>
-            <tr>
-                <th>Name</th>
-                <th>Position</th>
-                <th>Office</th>
-                <th>Age</th>
-                <th>Start date</th>
-                <th>Salary</th>
-            </tr>
-        </tfoot>
-    </table>
+                            <div class="table-responsive">
+                                <table id="example" class="display">
+                                    <thead>
+                                        <tr>
+                                            <th>انتخاب</th>
+                                            <th>شناسه کالا</th>
+                                            <th>شرح کالا</th>
+                                            <th>مقدار قابل استفاده</th>
+                                            <th>مقدار واقعی</th>
+                                            <th>واحد اندازه گیری</th>
+                                            <th>جزییات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for item in anbar_items_list %}
+                                        <tr>
+                                            <td>
+                                                <input type="checkbox" class="item-checkbox"
+                                                    data-item-id="{{ item.id }}">
+                                            </td>
+                                            <td>{{ item.shenase.shenase }}</td>
+                                            <td>{{ item.description }}</td>
+                                            <td>{{ item.available_quantity }}</td>
+                                            <td>{{ item.actual_quantity }}</td>
+                                            <td>{{ item.get_unit_display }}</td>
+                                            <td></td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
 
-                                    </div>
-                                </div>
+
+                                </table>
+
                             </div>
                         </div>
                     </div>
@@ -606,6 +172,573 @@
 
 
                 </form>
+
+
+                <div class="" style="display: flex;flex-direction: row-reverse;">
+                    <div class="">
+                        <div class="dropdown" style="width: 100%;">
+                            <button class="btn btn-success dropdown-toggle" type="button" id="exportDropdown"
+                                data-bs-toggle="dropdown" aria-expanded="false" style="width: 100%;">
+                                <i class="fa fa-upload"></i> دریافت خروجی اکسل
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="exportDropdown">
+                                <li><button name="exportexcelsanad" id="exportexcelsanad" class="dropdown-item">به تفکیک
+                                        سند</button></li>
+                                <li><button name="exportexcelkala" id="exportexcelkala" class="dropdown-item">به تفکیک
+                                        کالا</button></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div style="display: flex;justify-content: center;width: 303px;margin-left: 12px;">
+                        <button type="button" class="btn btn btn-blue-csm w-100" data-bs-toggle="modal"
+                            data-bs-target="#TransferOwnershipModal" style="margin-left: 7px;"> انتقال
+                            مالکیت / فروش </button>
+                        <button type="button" class="btn btn btn-blue-csm w-100"> انتقال مکان / حمل </button>
+                    </div>
+                </div>
+
+
+
+
+                <!-- Modal برای انتقال مالکیت -->
+                <div class="modal fade" id="TransferOwnershipModal" tabindex="-1"
+                    aria-labelledby="TransferOwnershipModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-xxl">
+                        <div class="modal-content fv-form fv-form-bootstrap">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="TransferOwnershipModalLabel">انتقال مالکیت / فروش</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="#" method="post" novalidate="novalidate"
+                                    class="fv-form fv-form-bootstrap">
+                                    <button type="submit" class="fv-hidden-submit"
+                                        style="display: none; width: 0px; height: 0px;"></button>
+                                    <div class="row">
+                                        <div class="col-lg-7 col-md-12 col-sm-12 col-xs-12 padding-0-important">
+                                            <div class="form-group" style="justify-content: flex-start;">
+                                                <div class="radio-inline">
+                                                    <label data-toggle="tooltip" data-placement="bottom"
+                                                        title="در صورتیکه قصد فروش کالا به فعال تجاری (نظیر تولید کننده، عمده فروش و خرده فروش) را دارید از این گزینه استفاده نمایید">
+                                                        <input type="radio" id="rdbMerchant" name="rdbSellType"
+                                                            value="1" checked="checked">
+                                                        <span class="text">فروش به تاجر</span>
+                                                    </label>
+                                                </div>
+                                                <div class="radio-inline" id="dvConsumer">
+                                                    <label data-toggle="tooltip" data-placement="bottom"
+                                                        title="در صورتیکه قصد فروش به آخرین زنجیره تجاری یعنی مصرف کننده نهایی را دارید از این گزینه استفاده نمایید">
+                                                        <input type="radio" id="rdbConsumer" name="rdbSellType"
+                                                            value="2">
+                                                        <span class="text">فروش به مصرف کننده</span>
+                                                    </label>
+                                                </div>
+                                                <div class="radio-inline" id="dvReturnOfSell">
+                                                    <label data-toggle="tooltip" data-placement="bottom"
+                                                        title="در صورتیکه قصد بازگشت کالای خریداری شده به فروشنده را دارید از این گزینه استفاده نمایید">
+                                                        <input type="radio" id="rdbReturnOfSell" name="rdbSellType"
+                                                            value="3">
+                                                        <span class="text">برگشت از خرید</span>
+                                                    </label>
+                                                </div>
+                                                <div class="radio-inline" id="dvHGA">
+                                                    <label data-toggle="tooltip" data-placement="bottom"
+                                                        title="در صورتیکه قصد انتقال کالا(ها)ی تولید شده بصورت حق العمل کاری به مالک کالا را دارید از این گزینه استفاده نمایید">
+                                                        <input type="radio" id="rdbHagAmal" name="rdbSellType"
+                                                            value="4">
+                                                        <span class="text">تحویل حق العمل کاری</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-5 col-md-12 col-sm-12 col-xs-12 padding-0-important"
+                                            style="display: flex;">
+
+                                            <div style="width: 100%;">
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light"> شماره صورتحساب </span>
+                                                    <select name="cmbPlaceID" class="form-control">
+                                                        <option value="" selected="selected">همه انبارها</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div style="width: 100%;">
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light"> تاریخ سند (فروش) </span>
+                                                    <select name="cmbPlaceID" class="form-control">
+                                                        <option value="" selected="selected">همه انبارها</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 col-sm-3 col-lg-3 hidden">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <div id="chkSellType" class="checkbox">
+                                                        <label>
+                                                            <input type="checkbox">
+                                                            <span class="text">برگشت از خرید</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-6 col-md-5 col-lg-5">
+                                            <div class="form-group sellInfoInput">
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light"> کد/شناسه ملی خریدار </span>
+                                                    <input type="text" id="NationalCodeOthers" name="NationalCodeOthers"
+                                                        class="form-control" maxlength="11" required="required"
+                                                        data-fv-field="NationalCodeOthers">
+                                                    <div class="input-group-btn">
+                                                        <button type="button" id="btnCheckNationalCode"
+                                                            class="btn btn-blue active"><i
+                                                                class="fa fa-search"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="cmbRoleOfSellerOthersBox" class="col-xs-12 col-sm-7 col-md-7 col-lg-7">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light"> <span
+                                                            class="danger">*</span> نقش خریدار </span>
+                                                    <select id="cmbRoleOfSellerOthers" name="cmbRoleOfSellerOthers"
+                                                        class="form-control" required="required"
+                                                        data-fv-notempty-message="لطفا یکی از مقادیر را انتخاب نمایید"
+                                                        data-fv-field="cmbRoleOfSellerOthers">
+                                                        <option value="">انتخاب کنید</option>
+                                                    </select>
+                                                </div>
+                                                <small style="display: none;" class="help-block"
+                                                    data-fv-validator="notEmpty" data-fv-for="cmbRoleOfSellerOthers"
+                                                    data-fv-result="NOT_VALIDATED">لطفا یکی از مقادیر را انتخاب
+                                                    نمایید</small>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                            <div class="form-group col-lg-push-2">
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light"> توضیح </span>
+                                                    <input type="text" id="DescriptionOthers" name="Description"
+                                                        class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div id="mainPlaceBox" class="row">
+                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                            <div class="form-group col-lg-6 col-md-6 col-xs-12 col-sm-12">
+                                                <div class="input-group">
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input type="checkbox" id="chkTransferPlace">
+                                                            <span class="text">آیا می خواهید محل انبارش این کالاها را
+                                                                تغییر دهید؟</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <br>
+                                        <br>
+                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 hidden" id="placeBox">
+                                            <div class="row">
+                                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <span class="input-group-text bg-light"> انبار مبدا </span>
+                                                            <input type="text" id="txtSourcePostalCode"
+                                                                name="txtSourcePostalCode" class="form-control"
+                                                                disabled="disabled">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <span class="input-group-text bg-light">
+                                                                <span class="danger">*</span>
+                                                                انبار مقصد
+                                                            </span>
+                                                            <select
+                                                                class="form-control select2 select2-hidden-accessible"
+                                                                name="placeCombo"
+                                                                data-fv-notempty="لطفایک مقدار را انتخاب نمایید"
+                                                                data-fv-notempty-message="لطفا یکی از مقادیر را انتخاب نمایید"
+                                                                tabindex="-1" aria-hidden="true"
+                                                                data-fv-field="placeCombo">
+                                                                <option selected="selected" value="">انتخاب کنید
+                                                                </option>
+                                                            </select>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-2 col-sm-2 col-lg-2">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <div class="checkbox">
+                                                                <label>
+                                                                    <input type="checkbox" name="UnknownWherehouse"
+                                                                        id="UnknownWherehouse" value="on">
+                                                                    <span class="text">انبار نامشخص</span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="carrierInfoDiv" class="row">
+                                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <span class="input-group-text bg-light">
+                                                                <span class="danger">*</span>
+                                                                کد ملی حمل کننده / راننده</span>
+                                                            <input type="text" id="carrierNationalCode"
+                                                                name="carrierNationalCode" class="form-control"
+                                                                data-fv-nationalcode="true"
+                                                                data-fv-field="carrierNationalCode">
+                                                        </div>
+                                                        <small style="display: none;" class="help-block"
+                                                            data-fv-validator="notEmpty"
+                                                            data-fv-for="carrierNationalCode"
+                                                            data-fv-result="NOT_VALIDATED">لطفا یک مقدار وارد
+                                                            فرمایید</small>
+                                                        <small style="display: none;" class="help-block"
+                                                            data-fv-validator="nationalcode"
+                                                            data-fv-for="carrierNationalCode"
+                                                            data-fv-result="NOT_VALIDATED">This value is not
+                                                            valid</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <span class="input-group-text bg-light">
+                                                                <span class="danger">*</span>
+                                                                شماره همراه حمل کننده / راننده
+                                                            </span>
+                                                            <input type="text" id="carrierMobile" name="carrierMobile"
+                                                                class="form-control" data-fv-mobilephone="true"
+                                                                data-fv-field="carrierMobile">
+                                                        </div>
+                                                        <small style="display: none;" class="help-block"
+                                                            data-fv-validator="notEmpty" data-fv-for="carrierMobile"
+                                                            data-fv-result="NOT_VALIDATED">لطفا یک مقدار وارد
+                                                            فرمایید</small>
+                                                        <small style="display: none;" class="help-block"
+                                                            data-fv-validator="mobilephone" data-fv-for="carrierMobile"
+                                                            data-fv-result="NOT_VALIDATED">This value is not
+                                                            valid</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2 col-sm-2 col-lg-2">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <div class="checkbox">
+                                                                <label>
+                                                                    <input type="checkbox" name="carrierHasNoInfo"
+                                                                        id="carrierHasNoInfo">
+                                                                    <span class="text">فاقد اطلاعات حمل کننده /
+                                                                        راننده</span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="barnameBoxInEntegal" class="row">
+                                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                                    <div class="form-group">
+                                                        <div class="radio-inline">
+                                                            <label>
+                                                                <input type="radio" id="NoBarname"
+                                                                    name="rdbBarnameStatus" value="2" checked="checked">
+                                                                <span class="text">بدون بارنامه</span>
+                                                            </label>
+                                                        </div>
+                                                        <div class="radio-inline">
+                                                            <label>
+                                                                <input type="radio" id="HasBarname"
+                                                                    name="rdbBarnameStatus" value="1">
+                                                                <span class="text">دارای بارنامه</span>
+                                                            </label>
+                                                        </div>
+                                                        <div class="radio-inline">
+                                                            <label>
+                                                                <input type="radio" id="GetBarname"
+                                                                    name="rdbBarnameStatus" value="3">
+                                                                <span class="text">درخواست مجوز حمل</span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <span class="input-group-text bg-light">
+                                                                <span class="danger">*</span>
+                                                                شماره بارنامه
+                                                            </span>
+                                                            <input type="text" id="BarNumber1" name="BarNumber1"
+                                                                class="form-control" disabled="disabled">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row m-b15">
+                                                <div class="col-xs-4 col-sm-6 col-md-6 col-lg-6">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <span class="input-group-text bg-light">
+                                                                سریال بارنامه</span>
+                                                            <input type="text" id="BarSerial1" name="BarSerial1"
+                                                                class="form-control" disabled="disabled">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-4 col-sm-6 col-md-6 col-lg-6">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <span class="input-group-text bg-light">تاریخ بارنامه</span>
+                                                            <input type="text" id="ISSUDATE1" name="ISSUDATE1"
+                                                                class="persianDatePicker form-control max-date pwt-datepicker-input-element"
+                                                                style="direction: ltr;" autocomplete="off"
+                                                                disabled="disabled">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row" style="text-align: left;margin-bottom: 16px;">
+                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 margin-top-10">
+                                            <div class="form-group">
+                                                <button style="margin-left: 18px;" type="button" name="CheckBuyerStatus"
+                                                    class="btn btn-info"><i class="fa fa-search"></i>استعلام</button>
+                                                <button type="button" name="submit"
+                                                    class="btn btn-success margin-left-20">ثبت</button>
+                                                <button type="button" name="cancel"
+                                                    class="btn btn-danger">انصراف</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                            <table id="basktTableEntegal"
+                                                class="StuffSelfTransferdisplay table-bordered table-condensed"
+                                                style="width: 100%">
+                                                <thead style="height: 45px;">
+                                                    <tr class="bg-themeprimary">
+                                                        <th class="text-align-center" style="display: none;">StuffID
+                                                        </th>
+                                                        <th class="text-align-center">شناسه کالا</th>
+                                                        <th class="text-align-center" style="width: 30%;">شرح کالا</th>
+                                                        <th name="tdInventory" class="text-align-center">مقدار قابل
+                                                            استفاده</th>
+                                                        <th class="text-align-center" style="width: 7%;">واحد اندازه
+                                                            گیری</th>
+                                                        <th class="text-align-center"
+                                                            style="font-size: small; width: 7%;">تعداد/مقدار</th>
+                                                        <th class="text-align-center" id="basktTableEntegal_Price"
+                                                            style="width: 8%;">مبلغ واحد (ریال)</th>
+                                                        <th class="text-align-center"
+                                                            id="basktTableEntegal_DiscountPrice" style="width: 8%;">مبلغ
+                                                            تخفیف (ریال)</th>
+                                                        <th class="text-align-center" id="basktTableEntegal_OtherExtra"
+                                                            style="width: 8%;">سایر اضافات (ریال)</th>
+                                                        <th class="text-align-center" id="basktTableEntegal_TaxPrice"
+                                                            style="width: 12%;">مبلغ مالیات و عوارض (ریال)</th>
+                                                        <th class="text-align-center" id="basktTableEntegal_FinalPrice"
+                                                            style="width: 10%;">مبلغ نهایی (ریال)</th>
+                                                        <th class="text-align-center" id="basktTableEntegal_Description"
+                                                            style="width: 10%;">توضیحات</th>
+                                                        <th class="text-align-center">حذف</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td style="display:none;">تن</td>
+                                                        <td name="StuffID" style="display:none;">1283675</td>
+                                                        <td style="text-align:center">2220620470425</td>
+                                                        <td style="text-align:center">انواع لوازم و قطعات پلاستیکی وسایل
+                                                            نقلیه ‏(ISIC: 2520312559)</td>
+                                                        <td name="tdInventory" style="text-align:center">628000</td>
+                                                        <td style="text-align:center">کیلوگرم</td>
+                                                        <td name="tdCount" style="width: 140px;text-align:center">
+                                                            <div class="form-group">
+                                                                <div class="input-group">
+                                                                    <input type="text"
+                                                                        onkeyup="javascript: this.value = Comma(this.value);CalcFinalPrice(this,true);"
+                                                                        data-fv-maxvalue1="true" maxvalue="628000"
+                                                                        data-fv-minvalue1="true" minvalue="0.001"
+                                                                        class="form-control" name="txtCount" value="0"
+                                                                        data-fv-field="txtCount">
+                                                                </div>
+                                                                <small style="display: none;" class="help-block"
+                                                                    data-fv-validator="maxvalue1" data-fv-for="txtCount"
+                                                                    data-fv-result="NOT_VALIDATED">This value is not
+                                                                    valid</small>
+                                                                <small style="display: none;" class="help-block"
+                                                                    data-fv-validator="minvalue1" data-fv-for="txtCount"
+                                                                    data-fv-result="NOT_VALIDATED">This value is not
+                                                                    valid</small>
+                                                            </div>
+                                                        </td>
+                                                        <td name="tdPrice" style="width: 140px;">
+                                                            <div class="form-group">
+                                                                <div class="input-group">
+                                                                    <input type="text"
+                                                                        onkeyup="javascript: this.value = Comma(this.value);CalcFinalPrice(this,true);"
+                                                                        data-fv-minvalue="true" minvalue="1"
+                                                                        maxlength="15" value="0" class="form-control"
+                                                                        name="txtPrice">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td name="tdDiscount" style="width: 140px;">
+                                                            <div class="form-group">
+                                                                <div class="input-group">
+                                                                    <input type="text"
+                                                                        onkeyup="this.value = Comma(this.value);CalcFinalPrice(this,true);"
+                                                                        data-fv-monywithspace="true"
+                                                                        class="form-control" value="0"
+                                                                        name="txtDiscount" data-fv-field="txtDiscount">
+                                                                </div>
+                                                                <small style="display: none;" class="help-block"
+                                                                    data-fv-validator="monywithspace"
+                                                                    data-fv-for="txtDiscount"
+                                                                    data-fv-result="NOT_VALIDATED">This value is not
+                                                                    valid</small>
+                                                            </div>
+                                                        </td>
+                                                        <td name="tdOtherExtra" style="width: 140px;">
+                                                            <div class="form-group">
+                                                                <div class="input-group">
+                                                                    <input type="text"
+                                                                        onkeyup="javascript: this.value = Comma(this.value);CalcFinalPrice(this,true);"
+                                                                        class="form-control" value="00"
+                                                                        name="tdOtherExtra">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td name="tdTaxs" style="width: 140px;">
+                                                            <div class="form-group">
+                                                                <div class="input-group">
+                                                                    <input type="text"
+                                                                        onkeyup="javascript: this.value = Comma(this.value);CalcFinalPrice(this,false);"
+                                                                        class="form-control" value="0" name="txtTax">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td name="tdFinal" class="tdFinal" style="width: 140px;">
+                                                            <div class="form-group">
+                                                                <div class="input-group">
+                                                                    <input type="text"
+                                                                        onkeyup="javascript: this.value = Comma(this.value);"
+                                                                        class="form-control" value="0"
+                                                                        disabled="disabled" name="txtFinal">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td name="tdDescription" style="width: 140px;">
+                                                            <div class="form-group">
+                                                                <div class="input-group">
+                                                                    <input type="text" class="form-control" value=""
+                                                                        name="tdDescription">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td><button type="button" name="btnDelete"
+                                                                class="btn btn-xs btn-danger"><i
+                                                                    class="fa fa-remove"></i> حذف</button></td>
+                                                        <td name="tdstuffGroupID" style="display:none;">73</td>
+                                                        <td name="tdPayeInfoID" style="display:none;">131812</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <br>
+                                    <div class="row margin-top-30">
+                                        <div class="col-xs-12 col-sm-3 col-md-4 col-lg-4">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light">عنوان حساب شبا</span>
+                                                    <select class="form-control" name="shabaNumber" id="shabaNumber">
+                                                        <option selected="" value="">انتخاب کنید</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3 col-md-4 col-lg-4">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light"> جمع مبلغ صورتحساب</span>
+                                                    <input type="text" class="form-control" name="totalBillAmount"
+                                                        id="totalBillAmount" disabled="disabled">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3 col-md-4 col-lg-4">
+                                            <div class="form-group sellInfoInput1">
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light"
+                                                        style="background: #fefc05 !important;">
+                                                        <i id="BtnImgInfo" onmouseenter="mouseEnter()"
+                                                            onmouseleave="mouseLeave()" class="fa fa-info"
+                                                            style="background: #4e63cb; width: 23px; padding: 5px; border-radius: 100px; font-size: 12px; color: white;"></i>
+                                                        &nbsp;&nbsp;
+                                                        شماره مالیاتی
+                                                    </span>
+                                                    <input type="text" id="TaxNumber" name="TaxNumber"
+                                                        class="form-control" maxlength="22" data-fv-field="TaxNumber">
+                                                    <div class="input-group-btn">
+                                                        <button type="button" id="btnCheckTaxNumber"
+                                                            class="btn btn-blue active"><i
+                                                                class="fa fa-search"></i></button>
+                                                    </div>
+                                                </div>
+                                                <div id="SpnSuccess" style="padding-right: 140px; display: none">
+                                                    <span style="color: forestgreen"><i
+                                                            class="glyphicon glyphicon-ok"></i>شماره مالیاتی ثبت شد
+                                                    </span>
+                                                </div>
+                                                <small style="display: none;" class="help-block"
+                                                    data-fv-validator="stringLength" data-fv-for="TaxNumber"
+                                                    data-fv-result="NOT_VALIDATED">لطفا یک مقدار با طول صحیح وارد
+                                                    فرمایید</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="padding-10"></div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
             </div>
         </div>
     </div>
@@ -614,41 +747,105 @@
 
 
 <style>
-.input-group-text.bg-light {
-    width: 120px;
-}
-.btn-purple-csm {
-    background-color: #6f42c1 !important;
-    color: #fff;
-}
-.btn-purple-csm:hover {
-    background-color: #5a32a3 !important;
-}
-.dropdown-menu {
-    min-width: 100%;
-}
-.text-align-center {
-    text-align: center !important;
-}
-.bg-themeprimary {
-    background-color: #024158 !important;
-    color: white;
-}
-.bg-themeprimary th {
-    text-align: center !important;
-}
-.table-responsive {
-    overflow-x: auto;
-}
-.hidden {
-    display: none;
-}
-div.dt-container div.dt-layout-row div.dt-layout-cell.dt-layout-start {
-	margin-right: initial !important;
-}
-div.dt-container div.dt-layout-row div.dt-layout-cell.dt-layout-end {
-	margin-left: initial !important;
-}
+    .danger {
+        color: red;
+        margin: 3px;
+    }
+
+    .input-group-text.bg-light {
+        font-size: 11px;
+        width: 200px !important;
+    }
+
+    #placeBox,
+    #carrierInfoDiv,
+    #barnameBoxInEntegal,
+    .m-b15 {
+        margin-top: 15px;
+    }
+
+    .form-group {
+        display: flex;
+        justify-content: end;
+    }
+
+    .modal-dialog.modal-xxl {
+        max-width: 90%;
+        /* یا هر درصدی که می‌خواید */
+        width: auto;
+    }
+
+    .input-group-text.bg-light {
+        width: 120px;
+    }
+
+    .btn-purple-csm {
+        background-color: #6f42c1 !important;
+        color: #fff;
+    }
+
+    .btn-purple-csm:hover {
+        background-color: #5a32a3 !important;
+    }
+
+    .dropdown-menu {
+        min-width: 100%;
+    }
+
+    .text-align-center {
+        text-align: center !important;
+    }
+
+    .bg-themeprimary {
+        background-color: #024158 !important;
+        color: white;
+    }
+
+    .bg-themeprimary th {
+        text-align: center !important;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    div.dt-container div.dt-layout-row div.dt-layout-cell.dt-layout-start {
+        margin-right: initial !important;
+    }
+
+    div.dt-container div.dt-layout-row div.dt-layout-cell.dt-layout-end {
+        margin-left: initial !important;
+    }
+
+    .btn-blue-csm,
+    .btn-blue-csm:focus {
+        background-color: #57b5e3 !important;
+        border-color: #144f6c !important;
+        color: #fff;
+    }
+
+    .btn.btn-blue.active {
+        border: 0;
+        color: #fff;
+        border-bottom-left-radius: 4px;
+        border-top-left-radius: 4px;
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
+        background-color: #449cec !important;
+        border-color: #3d90db;
+    }
+
+    table .form-control {
+        border-radius: 0px;
+    }
+
+    .radio-inline {
+        margin-left: 32px;
+    }
 </style>
 
 
@@ -663,38 +860,81 @@ div.dt-container div.dt-layout-row div.dt-layout-cell.dt-layout-end {
 <!-- بارگذاری Persian Datepicker (در صورت نیاز) -->
 
 
-
 <script>
-$(document).ready(function() {
+    $(document).ready(function () {
 
+        // اینیشیالایز DataTable
+        $('#example').DataTable({
+            paging: true,
+            searching: true,
+            info: true,
+            ordering: false,
+            pageLength: 10,
+            language: {
+                "sEmptyTable": "هیچ داده‌ای در جدول وجود ندارد",
+                "sInfo": "نمایش _START_ تا _END_ از _TOTAL_ رکورد",
+                "sInfoEmpty": "نمایش 0 تا 0 از 0 رکورد",
+                "sInfoFiltered": "(فیلتر شده از _MAX_ رکورد)",
+                "sLengthMenu": "نمایش _MENU_ رکورد",
+                "sLoadingRecords": "در حال بارگذاری...",
+                "sProcessing": "در حال پردازش...",
+                "sSearch": "جستجو:",
+                "sZeroRecords": "رکوردی مطابق جستجوی شما پیدا نشد",
+                "oPaginate": {
+                    "sFirst": "اولین",
+                    "sLast": "آخرین",
+                    "sNext": "بعدی",
+                    "sPrevious": "قبلی"
+                }
+            },
+        });
 
-    // اینیشیالایز DataTable
-    $('#example').DataTable({
-        paging: true,
-        searching: true,
-        info: true,
-        ordering: false,
-        pageLength: 10,
-        language: {
-            "sEmptyTable": "هیچ داده‌ای در جدول وجود ندارد",
-            "sInfo": "نمایش _START_ تا _END_ از _TOTAL_ رکورد",
-            "sInfoEmpty": "نمایش 0 تا 0 از 0 رکورد",
-            "sInfoFiltered": "(فیلتر شده از _MAX_ رکورد)",
-            "sLengthMenu": "نمایش _MENU_ رکورد",
-            "sLoadingRecords": "در حال بارگذاری...",
-            "sProcessing": "در حال پردازش...",
-            "sSearch": "جستجو:",
-            "sZeroRecords": "رکوردی مطابق جستجوی شما پیدا نشد",
-            "oPaginate": {
-                "sFirst": "اولین",
-                "sLast": "آخرین",
-                "sNext": "بعدی",
-                "sPrevious": "قبلی"
+        // وقتی چک‌باکس تغییر کرد
+        $('.item-checkbox').on('change', function () {
+            var itemId = $(this).data('item-id');
+            if ($(this).is(':checked')) {
+                console.log('Selected item ID: ' + itemId);
+            } else {
+                console.log('Unselected item ID: ' + itemId);
             }
-        },
-      
-    });
+        });
 
-});
+
+        // وقتی دکمه انتقال کلیک شد
+        $('#enteghal').on('click', function () {
+            var selectedItems = $('.item-checkbox:checked');
+
+            if (selectedItems.length === 0) {
+                alert('لطفاً ابتدا حداقل یک آیتم را انتخاب کنید.');
+                return;
+            }
+
+            // اگر آیتم انتخاب شده، مودال را نمایش بده
+            var enteghalModal = new bootstrap.Modal(document.getElementById('enteghalModal'));
+            enteghalModal.show();
+
+            // مثال: چاپ id آیتم‌های انتخاب شده در کنسول
+            var ids = [];
+            selectedItems.each(function () {
+                ids.push($(this).data('item-id'));
+            });
+            console.log('Items to transfer:', ids);
+        });
+
+
+
+        $('#chkTransferPlace').change(function () {
+            if ($(this).is(':checked')) {
+                $('#placeBox').removeClass('hidden'); // نمایش
+            } else {
+                $('#placeBox').addClass('hidden'); // مخفی
+            }
+        });
+
+
+
+    });
 </script>
+
+
 {% endblock js %}

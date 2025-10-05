@@ -32,10 +32,18 @@ class RegisterView(CreateView):
         user = form.save(commit=False)
         user.is_active = False
         user.username = form.cleaned_data.get('national_code')
+        user.first_name = form.cleaned_data.get('first_name')
+        user.last_name = form.cleaned_data.get('last_name')
+        user.username = form.cleaned_data.get('national_code')
         birthday = form.cleaned_data.get('birthday')
         birthday_list = birthday.split('/')
         user.birth_date = JalaliDate(int(birthday_list[0]), int(
             birthday_list[1]), int(birthday_list[2])).to_gregorian()
+
+        from users.models import Role  # اگه نقش‌ها توی مدل جدا تعریف شدن
+        user.active_role = Role.objects.get(code='br') 
+
+
         user.save()
         return redirect('users:select_verification_mod', user_uuid=str(user.uuid))
 
@@ -49,6 +57,7 @@ class SelectVerificationMod(View):
 class VerifyPhoneView(FormView):
 
     def get(self, request, user_uuid, *args, **kwargs):
+        
         code = generate_random_number(6)
         user = get_object_or_404(User, uuid=user_uuid)
         verification_codes = VerificationCode.objects.filter(
@@ -57,6 +66,8 @@ class VerifyPhoneView(FormView):
         msg = 'کد تایید قبلا برای شما ارسال شده است. لطفا پس از اتمام سه دقیقه از آخرین ارسال کد تایید دوباره درخواست دهید.'
         if not verification_codes or not verification_code.is_valid:
             respons = send_sms(user.mobile, str(code))
+
+
             sms_status_code = respons.get('status', 0)
             msg = respons.get('message', 'undefined')
             if sms_status_code == 200:

@@ -210,6 +210,9 @@
 
     .login-form {
         padding: 12px 48px 24px 48px;
+        background: url('/static/login/images/logo-2-300x284.png') no-repeat center center;
+        background-size: auto;
+        background-size: contain;
     }
 }
 

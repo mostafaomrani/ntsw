@@ -31,6 +31,13 @@ class BusinessCardCreateView(SuccessMessageMixin, CreateView):
             'upload_qualifications:business_cards')
         query_params = {'active': 'bazorgan'}
         
+        user = self.request.user
+        # اضافه کردن نقش به کاربر
+        role = Role.objects.get(code="bc")
+        user.roles.add(role)
+        user.active_role = role
+        user.save()
+
         return f"{base_url}?{urlencode(query_params)}"
 
     def form_valid(self, form):
@@ -65,14 +72,14 @@ class BusinessCardListView(ListView):
         q = super().get_queryset()
         user = self.request.user
         card_type = 'p' if user.active_role == 'br' else 'c'
-        # print("mostafa omrani catd")
+
         return q.filter(user=user, card_type=card_type).order_by('-created_at')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # print(context)
+
         context["trade_roles"] = TraderRole.objects.filter(user=self.request.user).order_by('-created_at')
-        # context["inquiries"] = Inquiry.objects.filter(user=self.request.user).order_by('-created_at')
+
         return context
 
 
@@ -127,10 +134,16 @@ def save_trader_role(request):
         address = request.POST.get("addressPostalCodeStr", "")
 
         # تعیین نقش کاربر (مثلاً کد 'it' برای تاجر)
-        if request.POST.get("typeActivityID") == "تولید کننده":
-            role = Role.objects.get(code="bl")
-        elif request.POST.get("typeActivityID") == "وارد کننده":
+        # if request.POST.get("typeActivityID") == "تولید کننده":
+        #     role = Role.objects.get(code="bl")
+        # elif request.POST.get("typeActivityID") == "وارد کننده":
+        #     role = Role.objects.get(code="it")
+
+        if  request.POST.get('role_symbol') == 'it':
             role = Role.objects.get(code="it")
+        elif request.POST.get('role_symbol') == 'ih':
+            role = Role.objects.get(code="ih")
+
 
         # ذخیره در جدول TraderRole
         TraderRole.objects.create(

@@ -8,10 +8,14 @@ from django.core.validators import RegexValidator
 
 class RegisterForm(UserCreationForm):
     birthday = forms.CharField(label='تاریخ تولد')
+    first_name = forms.CharField(label='نام', max_length=150, required=True)
+    last_name = forms.CharField(label='نام‌خانوادگی', max_length=150, required=True)
 
     class Meta:
         model = CustomUser
         fields = (
+            'first_name',  # اضافه شد
+            'last_name',   # اضافه شد
             'national_code',
             'birthday',
             'username',

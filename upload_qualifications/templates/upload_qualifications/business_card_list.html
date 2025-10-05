@@ -152,7 +152,7 @@
                             </tr>
                             {% empty %}
                             <tr>
-                                <td colspan="7">هیچ استعلامی یافت نشد</td>
+                                <td colspan="9">هیچ استعلامی یافت نشد</td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -199,8 +199,9 @@
                     </div>
                     <div class="m-2">
                         <button class="btn  btn-primary btn-maya" data-bs-toggle="modal"
-                            data-bs-target="#exampleModal">بروزرسانی اطلاعات</button>
-                        {% if request.user.active_role == 'br' and not request.user.has_business_card %}
+                            data-bs-target="#exampleModal">بروزرسانی اطلاعات</button> 
+                        
+                        {% if request.user.active_role.code == 'br' and not request.user.has_business_card %}
                         <!-- Modal -->
                         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                             aria-hidden="true">
@@ -228,7 +229,7 @@
                                 <div class="modal-content">
                                     <div class="modal-header"></div>
                                     <div class="modal-body">پایه بازرگان حقوقی ایجاد شد.</div>
-                                    <div class="modal-footer justify-content-center">
+                                    <div class="modal-footer justify-content-center">   
                                         <form method="post"
                                             action="{% url 'upload_qualifications:create_business_card' %}">
                                             {% csrf_token %}
@@ -308,8 +309,8 @@
                                         <span class="input-group-text">
                                             <span class="text-danger">*</span> نام واحد فعالیت تجاری
                                         </span>
-                                        <input type="text" name="actionNameStr" class="form-control" maxlength="100"
-                                            required>
+                                        <input type="text" name="actionNameStr" class="form-control" maxlength="100" required>
+                                        <input type="hidden" name="role_symbol" class="form-control" maxlength="100" value="it">
                                     </div>
                                 </div>
                                 <!-- چک‌باکس -->
@@ -561,7 +562,7 @@
                             </tr>
                             {% empty %}
                             <tr>
-                                <td colspan="7">هیچ استعلامی یافت نشد</td>
+                                <td colspan="9">هیچ استعلامی یافت نشد</td>
                             </tr>
                             {% endfor %}
                         </tbody>

@@ -1,9 +1,10 @@
 from django.urls import path
 from . import views
 from .views import (
-    ForeintradeInputListView,
+    DocumentTradeOperationListView,
     ForeintradeOutputListView,
     ForeintradeManageKalaListView,
+    AnbarItemsListView,
     ForeintradeVoroodListView,
     ForeintradeKhoroojListView,
     ForeintradeExcelModiriatListView,
@@ -11,18 +12,20 @@ from .views import (
     ForeintradeMaliatSooratHesabListView,
     ForeintradeVaziatAmalkardListView,
     ForeintradeBoorsKalaListView,
-    ForeintradeCreateView
+    ForeintradeCreateView,
+    RegisterForeintradeKhoroojListView
 )
 
 app_name = 'foreintrade'
 
 
 urlpatterns = [
-    path('input-list/', ForeintradeInputListView.as_view(), name='foreintrade_input_list'),
+    path('input-list/', DocumentTradeOperationListView.as_view(), name='foreintrade_input_list'),
     path('output-list/', ForeintradeOutputListView.as_view(), name='foreintrade_output_list'),
-    path('managment-kala/', ForeintradeManageKalaListView.as_view(), name='foreintrade_manage_list'),
+    path('managment-kala/', AnbarItemsListView.as_view(), name='foreintrade_manage_list'),
     path('ezhar-vorood-kala/', ForeintradeVoroodListView.as_view(), name='foreintrade_vorood_kala'),
     path('ezhar-khorooj-kala/', ForeintradeKhoroojListView.as_view(), name='foreintrade_khorooj_kala'),
+    path('register-ezhar-khorooj-kala/', RegisterForeintradeKhoroojListView.as_view(), name='register_foreintrade_khorooj_kala'),
     path('modiriat-asnad-excel/', ForeintradeExcelModiriatListView.as_view(), name='foreintrade_asand_excel'),
     path('electronic-factors/', ForeintradeElectronicFactorListView.as_view(), name='foreintrade_electronic_factor'),
     path('maliat-sorathesab/', ForeintradeMaliatSooratHesabListView.as_view(), name='foreintrade_maliat_soorathesab'),

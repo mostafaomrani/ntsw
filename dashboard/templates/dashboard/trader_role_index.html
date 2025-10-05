@@ -1,6 +1,206 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block main %}
-    <h3>{{ message }}</h3>
-    <p>اطلاعات بیشتر برای کاربر تاجر</p>
+<div class="dashboard-page">
+    <div class="row mb-3">
+        <!-- کارت 1 -->
+        <div class="col-12 col-lg-4 mb-3">
+            <div class="d-flex align-items-center bg-white rounded shadow-sm overflow-hidden">
+                <div
+                    class="bg-themesecondary bg-fg text-white d-flex align-items-center justify-content-center px-3 py-4">
+                    <i class="white fa fa-bar-chart fa-w-20 fa-3x"></i>
+                </div>
+                <div class="flex-grow-1 px-3 py-3 d-flex align-items-center justify-content-between">
+                    <h5 class="m-0 text-bs color-themesecondary">مدیریت کالاها</h5>
+                    <div class="databox-state bg-twice"></div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- کارت 2 -->
+        <div class="col-12 col-lg-4 mb-3">
+            <div class="d-flex align-items-center bg-white rounded shadow-sm overflow-hidden">
+                <div
+                    class="bg-themethirdcolor bg-fg text-white d-flex align-items-center justify-content-center px-3 py-4">
+                    <i class="fa fa-arrow-circle-down fa-w-20 fa-3x"></i>
+                </div>
+                <div class="flex-grow-1 px-3 py-3 d-flex align-items-center justify-content-between">
+                    <h5 class="m-0 text-fg color-themethirdcolor">مدیریت اسناد ورودی</h5>
+                    <div class="databox-state bg-twice"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- کارت 3 -->
+        <div class="col-12 col-lg-4 mb-3">
+            <div class="d-flex align-items-center bg-white rounded shadow-sm overflow-hidden">
+                <div
+                    class="bg-themeprimary bg-mb text-white d-flex align-items-center justify-content-center px-3 py-4">
+                    <i class="fa fa-arrow-circle-up fa-w-20 fa-3x"></i>
+                </div>
+                <div class="flex-grow-1 px-3 py-3 d-flex align-items-center justify-content-between">
+                    <h5 class="m-0 text-mb color-themeprimary">مدیریت اسناد خروجی</h5>
+                    <div class="databox-state bg-themethird"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-4 mb-3">
+            <div class="d-flex align-items-center bg-white rounded shadow-sm overflow-hidden">
+                <div class="bg-green bg-mb text-white d-flex align-items-center justify-content-center px-3 py-4">
+                    <i class="white fa fa-plus-square fa-w-20 fa-3x"></i>
+                </div>
+                <div class="flex-grow-1 px-3 py-3 d-flex align-items-center justify-content-between">
+                    <h5 class="m-0 text-mb color-green">اظهار ورود کالا</h5>
+                    <div class="databox-state bg-themethird"></div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-12 col-lg-4 mb-3">
+            <div class="d-flex align-items-center bg-white rounded shadow-sm overflow-hidden">
+                <div class="bg-purple bg-mb text-white d-flex align-items-center justify-content-center px-3 py-4">
+                    <i class="fa fa-exchange fa-w-20 fa-3x"></i>
+                </div>
+                <div class="flex-grow-1 px-3 py-3 d-flex align-items-center justify-content-between">
+                    <h5 class="m-0 text-mb color-purple">انتقال مالکیت و مکان (فروش)</h5>
+                    <div class="databox-state bg-themethird"></div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-12 col-lg-4 mb-3">
+            <div class="d-flex align-items-center bg-white rounded shadow-sm overflow-hidden">
+                <div class="bg-danger bg-mb text-white d-flex align-items-center justify-content-center px-3 py-4">
+                    <i class="fa fa-minus-square fa-w-20 fa-3x"></i>
+                </div>
+                <div class="flex-grow-1 px-3 py-3 d-flex align-items-center justify-content-between">
+                    <h5 class="m-0 text-mb color-danger">اظهار خروج کالا </h5>
+                    <div class="databox-state bg-themethird"></div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="col-12 col-lg-4 mb-3">
+            <div class="d-flex align-items-center bg-white rounded shadow-sm overflow-hidden">
+                <div
+                    class="databox-right bg-sky hand bg-mb text-white d-flex align-items-center justify-content-center px-3 py-4">
+                    <i class="fa fa-cubes fa-w-20 fa-3x"></i>
+                </div>
+                <div class="flex-grow-1 px-3 py-3 d-flex align-items-center justify-content-between">
+                    <h5 class="m-0 text-mb color-">مدیریت واحدهای انبار</h5>
+                    <div class="databox-state bg-themethird"></div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-12 col-lg-4 mb-3">
+            <div class="d-flex align-items-center bg-white rounded shadow-sm overflow-hidden">
+                <div class="bg-mb text-white d-flex align-items-center justify-content-center px-3 py-4">
+                    <i class="white fa fa-truck fa-w-20 fa-3x"></i>
+                </div>
+                <div class="flex-grow-1 px-3 py-3 d-flex align-items-center justify-content-between">
+                    <h5 class="m-0 text-mb color-"> مدیریت اسناد حمل (بارنامه) </h5>
+                    <div class="databox-state bg-themethird"></div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-12 col-lg-4 mb-3">
+            <div class="d-flex align-items-center bg-white rounded shadow-sm overflow-hidden">
+                <div class="bg-mb text-white d-flex align-items-center justify-content-center px-3 py-4">
+                    <i class="fa fa-book fa-w-20 fa-3x"></i>
+                </div>
+                <div class="flex-grow-1 px-3 py-3 d-flex align-items-center justify-content-between">
+                    <h5 class="m-0 text-mb color-"> مدیریت اسناد انبار </h5>
+                    <div class="databox-state bg-themethird"></div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </div>
+    {% include "dashboard/partials/trader_role_index.html" %}
+</div>
+
+
+<style>
+    .bg-fg,
+    .bg-mb {
+        width: 100px !important;
+    }
+
+    .bg-purple {
+        background-color: #7e3794 !important;
+    }
+
+    .bg-green {
+        background-color: #8cc474 !important;
+    }
+
+    .bg-themesecondary {
+        background-color: #fb6e52 !important;
+    }
+
+    .bg-themethirdcolor {
+        background-color: #ffce55 !important;
+    }
+
+    .bg-themeprimary {
+        background-color: #024158 !important;
+    }
+
+
+    .bg-danger {
+        background-color: #d73d32 !important;
+    }
+
+
+    .color-purple {
+        color: #7e3794 !important;
+    }
+
+    .color-green {
+        color: #8cc474 !important;
+    }
+
+    .color-themesecondary {
+        color: #fb6e52 !important;
+    }
+
+    .color-themethirdcolor {
+        color: #ffce55 !important;
+    }
+
+    .color-themeprimary {
+        color: #024158 !important;
+    }
+
+
+    .color-danger {
+        color: #d73d32 !important;
+    }
+
+    .databox .databox-right {
+        position: relative;
+        display: inline-block;
+        vertical-align: top;
+        text-align: center;
+        margin: 0;
+        width: 65px;
+        height: 65px;
+        padding: 10px;
+        color: #024158;
+    }
+</style>
 {% endblock main %}

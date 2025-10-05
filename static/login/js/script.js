@@ -1,20 +1,3 @@
-// ======================== INPUT VALIDATION ========================
-$('input').on('keypress', function (e) {
-    const input = e.target
-    if ($(this).has('input-validation-error')) {
-        $(this).removeClass('input-validation-error')
-        $(this).parent().find('.validate-error').css({ visibility: "hidden" })
-    }
-    if (e.keyCode == 8 || e.keyCode == 13) return true
-    if (e.target.type == "number" && (e.which < 48 || e.which > 57)) e.preventDefault()
-    if (e.target.value < 0) e.preventDefault()
-    return this.value.length < $(this).attr("maxLength") || !!window.getSelection().toString()
-})
-
-$('input').keydown(e => {
-    if (e.keyCode == 40 || e.keyCode == 38) e.preventDefault()
-})
-
 // ======================== PASSWORD TOGGLE ========================
 $(".switchPassType").on('click', function (el) {
     const element = $(el.target)
@@ -311,4 +294,15 @@ document.addEventListener('DOMContentLoaded', () => {
             if (document.activeElement === this) e.preventDefault()
         })
     })
+})
+
+
+
+$("#fakebutton").click(function(){
+    $("#showusername").hide();
+    $(".d-none-js").css("display", "none", "important");
+    $("#showpassword").show()
+
+    $(this).hide();
+    $("#mainbutton").show()
 })

@@ -1,20 +1,38 @@
 from django.shortcuts import render
-from .models import Foreintrade
+from .models import Foreintrade,DocumentTradeOperation
 from django.views.generic import ListView, CreateView
 from django.urls import reverse_lazy
-# Create your views here.
+from anbar.models import Anbar
+from .models import AnbarItem
 
 
 
-class ForeintradeInputListView(ListView):
-    model = Foreintrade
+class DocumentTradeOperationListView(ListView):
+    model = DocumentTradeOperation
     template_name = 'foreintrade/input_list.html' 
-    context_object_name = 'foreintrade_list'
+    context_object_name = 'document_trade_list'
 
 class ForeintradeOutputListView(ListView):
     model = Foreintrade
     template_name = 'foreintrade/output_list.html' 
     context_object_name = 'foreintrade_list'
+
+class AnbarItemsListView(ListView):
+    model = AnbarItem
+    template_name = 'foreintrade/output_manage_list.html'  # حتما مسیر درست باشد
+    context_object_name = 'anbar_items_list'  # لیست آیتم‌ها
+
+    def get_queryset(self):
+        return AnbarItem.objects.filter(anbar__user=self.request.user).select_related('anbar', 'shenase')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user_anbars'] = Anbar.objects.filter(user=self.request.user)
+        # context['some_other_data'] = "می‌توانید هر کانتکس اضافی را اینجا اضافه کنید"
+
+        return context
+
+
 
 class ForeintradeManageKalaListView(ListView):
     model = Foreintrade
@@ -31,6 +49,12 @@ class ForeintradeVoroodListView(ListView):
 class ForeintradeKhoroojListView(ListView):
     model = Foreintrade
     template_name = 'foreintrade/vorood_khorooj_kala.html' 
+    context_object_name = 'foreintrade_list'
+
+
+class RegisterForeintradeKhoroojListView(ListView):
+    model = Foreintrade
+    template_name = 'foreintrade/register_vorood_khorooj_kala.html' 
     context_object_name = 'foreintrade_list'
 
 

@@ -1,0 +1,366 @@
+{% extends "base.html" %}
+{% load static %}
+{% load date_filters %}
+{% load widget_tweaks %}
+{% load ui_template_tag %}
+
+{% block title %}
+اظهار خروج کالا
+{% endblock title %}
+
+{% block breadcrumbs %}
+{% breadcrumbs 'عملیات تجارت داخلی' '#' 'اظهار خروج کالا' '#' %}
+{% endblock breadcrumbs %}
+
+{% block page-title %}
+اظهار خروج کالا
+{% endblock page-title %}
+
+{% block main %}
+<link rel='stylesheet' href='https://cdn.datatables.net/2.3.4/css/dataTables.dataTables.css' media='all' />
+
+<div class="container-fluid">
+    <div class="bg-white p-3 request-main-data">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                <form id="frmDeclareGoods" novalidate="novalidate" class="fv-form fv-form-bootstrap">
+                    <input name="__RequestVerificationToken" type="hidden"
+                        value="t9izNyxn764UNZ9lpvEgWylLWTwpp6SSNP4X0UDc1fjEddy9slA5I2QP2iGITJY9LUwDoI06LBYBLStshDP0Q40_QVk1">
+                    <div class="row mb-4">
+                         <!-- انبار -->
+                            <div class="form-group col-lg-6 col-md-6 col-sm-12 col-xs-12 mb-3">
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><span class="danger">*</span> انبار</span>
+                                    <select name="placeCombo" class="form-control" required="required"
+                                        data-fv-notempty="true"
+                                        data-fv-notempty-message="لطفا انبار مورد نظر را انتخاب نمایید"
+                                        data-fv-field="placeCombo">
+                                        <option value="">انتخاب کنید</option>
+                                        <option value="46578">انبار موقت</option>
+                                        <option value="119883">فرآیند شیمی صدرا (5189151875)</option>
+                                    </select>
+                                </div>
+                                <small style="display: none;" class="help-block" data-fv-validator="notEmpty"
+                                    data-fv-for="placeCombo" data-fv-result="NOT_VALIDATED">لطفا انبار مورد نظر را
+                                    انتخاب نمایید</small>
+                            </div>
+                            <div class="form-group col-lg-3 col-md-3 col-sm-12 col-xs-12 mb-3"> </div>
+                            <!-- تاریخ سند -->
+                            <div class="form-group col-lg-3 col-md-3 col-sm-12 col-xs-12 mb-3">
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light">تاریخ سند</span>
+                                    <input type="text" name="DocDate"
+                                        class="persianDatePicker2 form-control pwt-datepicker-input-element"
+                                        autocomplete="off">
+                                </div>
+                            </div>
+                            <!-- شرح سند -->
+                            <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12 margin-top-5 mb-3">
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light">شرح سند</span>
+                                    <input type="text" name="txtDescription" class="form-control">
+                                </div>
+                            </div>
+                            <!-- نوع سند -->
+                            <div class="form-group col-lg-4 col-md-4 col-sm-12 col-xs-12 margin-top-5 mb-3">
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><span class="danger">*</span> نوع
+                                        سند</span>
+                                    <select name="DocType" class="form-control" required="required"
+                                        data-fv-notempty-message="لطفا نوع سند را انتخاب نمایید"
+                                        data-fv-field="DocType">
+                                        <option value="">انتخاب کنید</option>
+                                        <option value="18">اسقاط / فساد کالا</option>
+                                        <option value="20">صادرات</option>
+                                        <option value="22">استفاده در تولید</option>
+                                        <option value="21">انبارگردانی(کاهشی)</option>
+                                        <option value="25">اُفت کالا</option>
+                                        <option value="39">فروش خارج از ضابطه</option>
+                                        <option value="41">خروج کالای تفکیک/تجمیع/بسته بندی</option>
+                                        <option value="51">مصارف داخلی</option>
+                                    </select>
+                                </div>
+                                <small style="display: none;" class="help-block" data-fv-validator="notEmpty"
+                                    data-fv-for="DocType" data-fv-result="NOT_VALIDATED">لطفا نوع سند را انتخاب
+                                    نمایید</small>
+                            </div>
+                            <!-- شماره کوتاژ -->
+                            <div id="CotageDiv" class="hidden">
+                                <div class="form-group col-lg-4 col-md-4 col-sm-12 col-xs-12 margin-top-5 mb-3">
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light"><span class="danger">*</span> شماره
+                                            کوتاژ</span>
+                                        <input type="text" name="Cotage" id="Cotage" placeholder="مثال : 1552614-35306"
+                                            class="form-control text-align-center">
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-4 col-md-4 col-sm-12 col-xs-12 margin-top-5 mb-3"
+                                    id="DvWarning">
+                                    <span class="danger">شماره کوتاژ و کد گمرک را با - جدا کنید</span>
+                                </div>
+                            </div>
+                            <!-- شماره سند تولید -->
+                            <div id="DocNODiv" class="hidden">
+                                <div class="form-group col-lg-4 col-md-4 col-sm-12 col-xs-12 margin-top-5 mb-3" id="S1">
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light" id="TITProdDocNO"></span>
+                                        <input type="text" name="ProdDocNO" id="ProdDocNO"
+                                            class="form-control text-align-center">
+                                        <div class="input-group-btn">
+                                            <button type="button" id="BtnAsnad" name="BtnAsnad"
+                                                class="btn btn-info active"><i class="fa fa-search"></i> لیست
+                                                اسناد</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-4 col-md-4 col-sm-12 col-xs-12 margin-top-5 mb-3" id="S2">
+                                    <button type="button" class="btn btn-success tooltip-success" data-toggle="tooltip"
+                                        data-placement="top" onclick="startJSHelp()" style="padding: 3px 10px"
+                                        data-original-title="" title=""><i class="fa fa-2x fa-question"
+                                            style="margin-left: 0px; font-size: 24px"></i></button>
+                                </div>
+                                <div class="form-group col-lg-4 col-md-4 col-sm-12 col-xs-12 margin-top-5 mb-3"
+                                    style="display: none" id="S3">
+                                    <button type="button" class="btn btn-success tooltip-success" data-toggle="tooltip"
+                                        data-placement="top" onclick="startJSHelpdescris()" style="padding: 3px 10px"
+                                        data-original-title="" title=""><i class="fa fa-2x fa-question"
+                                            style="margin-left: 0px; font-size: 24px"></i></button>
+                                </div>
+                            </div>
+                            <!-- شماره سند مرتبط -->
+                            <div id="docNumberDiv" class="hidden">
+                                <div class="form-group col-lg-4 col-md-4 col-sm-12 col-xs-12 margin-top-5 mb-3">
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light"><span class="danger">*</span> شماره سند
+                                            مرتبط</span>
+                                        <input type="number" name="docNumber" id="docNumber" required="required"
+                                            class="form-control text-align-center" data-fv-field="docNumber">
+                                        <div class="input-group-btn">
+                                            <button type="button" id="BtnAsna" name="BtnAsnad"
+                                                class="btn btn-info active"><i class="fa fa-search"></i> لیست
+                                                اسناد</button>
+                                        </div>
+                                    </div>
+                                    <small style="display: none;" class="help-block" data-fv-validator="integer"
+                                        data-fv-for="docNumber" data-fv-result="NOT_VALIDATED">لطفا یک عدد صحیح وارد
+                                        فرمایید</small>
+                                    <small style="display: none;" class="help-block" data-fv-validator="notEmpty"
+                                        data-fv-for="docNumber" data-fv-result="NOT_VALIDATED">لطفا یک مقدار وارد
+                                        فرمایید</small>
+                                </div>
+                                <div class="form-group col-lg-4 col-md-4 col-sm-12 col-xs-12 margin-top-5 mb-3">
+                                    <div class="input-group">
+                                        <button class="btn btn-success" data-html="true" data-toggle="tooltip"
+                                            data-container="body" data-placement="top" type="button"
+                                            data-original-title="شماره سند ورود کالای تفکیک/تجمیع/بسته بندی را ثبت نمائید"
+                                            style="padding-bottom: 0px;">
+                                            <i class="fa fa-question" style="font-size: 23px;"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- دکمه افزودن کالا -->
+                            
+                            <div class="row">
+                                <div class="form-group col-lg-2 col-md-2 col-sm-12 col-xs-12 margin-top-10 mb-3" style="width: 100%">
+                                    <button type="button" name="NewExiteStuffe" id="NewExiteStuffe"   class="btn btn-success"><i class="fa fa-plus-square"></i> افزودن
+                                        کالا</button>
+                                </div>
+                            </div>
+                    </div>
+                </form>
+
+
+                 <!-- جدول نتایج جستجو -->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                <table id="example" class="display">
+                                    <thead>
+                                        <tr>
+                                            <th>ردیف</th>
+                                            <th> گروه کالا </th>
+                                            <th> طبقه کالا </th>
+                                            <th> شناسه کالا </th>
+                                            <th> عنوان کالا </th>
+                                            <th>واحد اندازه گیری  </th>
+                                            <th> تعداد </th>
+                                            <th> مبلغ واحد </th>
+                                            <th> ویرایش </th>
+                                            <th> حذف </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- <tr>
+                                            <td>Tiger Nixon</td>
+                                            <td>System Architect</td>
+                                            <td>Edinburgh</td>
+                                            <td>61</td>
+                                            <td>2011-04-25</td>
+                                            <td>$320,800</td>
+                                            <td>$320,800</td>
+                                            <td>$320,800</td>
+                                            <td>
+
+
+                                                <a id="ViewPlaceInventory" name="ViewPlaceInventory"
+                                                    class="btn btn-blue  margin-top-5 btn-xs margin-left-5">
+                                                    <i class="fa fa-search margin-top-2"></i> جزئیات </a>
+                                               
+
+                                            </td>
+                                            <td>
+                                                 <a name="updateAnbar"
+                                                    class="btn btn-danger btn-xs search margin-left-5 margin-top-5">
+                                                    <i class="fa fa-remove margin-top-2"></i> ابطال </a>
+                                            </td>
+                                        </tr> -->
+
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .input-group-text.bg-light {
+        width: 120px;
+    }
+
+    .btn-purple-csm {
+        background-color: #6f42c1 !important;
+        color: #fff;
+    }
+
+    .btn-purple-csm:hover {
+        background-color: #5a32a3 !important;
+    }
+
+    .btn-primary {
+        background-color: #024158 !important;
+        border-color: #024158 !important;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: #013549 !important;
+    }
+
+    .btn-success {
+        background-color: #28a745 !important;
+        border-color: #28a745 !important;
+        color: white;
+    }
+
+    .btn-success:hover {
+        background-color: #218838 !important;
+    }
+
+    .btn-info {
+        background-color: #17a2b8 !important;
+        border-color: #17a2b8 !important;
+        color: white;
+    }
+
+    .btn-info:hover {
+        background-color: #138496 !important;
+    }
+
+    .form-control {
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+    }
+
+    .text-align-center {
+        text-align: center !important;
+    }
+
+    .danger {
+        color: #dc3545;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .input-group-btn .btn {
+        border-radius: 0 0.25rem 0.25rem 0;
+    }
+
+    .tooltip-success {
+        padding: 3px 10px;
+    }
+
+    @media (max-width: 767px) {
+        .input-group-text.bg-light {
+            width: 100px;
+            font-size: 0.9rem;
+        }
+
+        .form-group {
+            margin-bottom: 0.5rem;
+        }
+    }
+</style>
+
+{% endblock main %}
+
+{% block js %}
+<!-- بارگذاری jQuery و DataTables -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/2.3.4/js/dataTables.js"></script>
+<!-- بارگذاری Persian Datepicker (در صورت نیاز) -->
+
+
+
+
+<script>
+    $(document).ready(function () {
+
+
+        // اینیشیالایز DataTable
+        $('#example').DataTable({
+            paging: true,
+            searching: true,
+            info: true,
+            ordering: false,
+            pageLength: 10,
+            language: {
+                "sEmptyTable": "هیچ داده‌ای در جدول وجود ندارد",
+                "sInfo": "نمایش _START_ تا _END_ از _TOTAL_ رکورد",
+                "sInfoEmpty": "نمایش 0 تا 0 از 0 رکورد",
+                "sInfoFiltered": "(فیلتر شده از _MAX_ رکورد)",
+                "sLengthMenu": "نمایش _MENU_ رکورد",
+                "sLoadingRecords": "در حال بارگذاری...",
+                "sProcessing": "در حال پردازش...",
+                "sSearch": "جستجو:",
+                "sZeroRecords": "رکوردی مطابق جستجوی شما پیدا نشد",
+                "oPaginate": {
+                    "sFirst": "اولین",
+                    "sLast": "آخرین",
+                    "sNext": "بعدی",
+                    "sPrevious": "قبلی"
+                }
+            },
+
+        });
+
+    });
+</script>
+
+
+{% endblock js %}

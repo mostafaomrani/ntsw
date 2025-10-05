@@ -56,7 +56,7 @@
                 </div>
                 <div class="login-footer-contact">
                     <div>
-                        <span>ارتباط با مدیر سامانه: admin@ntsw.ir</span>
+                        <span>ارتباط با مدیر سامانه: info@pouyabehzadnia.com</span>
                         <a referrerpolicy="origin" target="_blank" class="" href="https://trustseal.enamad.ir/?id=177575&Code=mrlh9FNszGs9FvlErzmL">
                             <img id="enamad-img"
                                 src="{% static 'login/images/enamad.svg'%}"
@@ -65,7 +65,7 @@
                                 class="enamad_image">
                         </a>
                     </div>
-                    <span>کلیه حقوق این سامانه برای وزارت صنعت، معدن و تجارت محفوظ است.</span>
+                    <span>  کلیه حقوق این سامانه برای گروه خدمات بازرگانی بهزادنیا محفوظ است. </span>
                 </div>
             </div>
         </div>
@@ -138,18 +138,18 @@
         const dropdownOptions = document.getElementById("dropdownOptions")
         const chevIcon = document.getElementById("chevIcon")
 
-        userDropdown.addEventListener("click", (e) => {
-            e.stopPropagation()
-            dropdownOptions.classList.toggle("d-none")
-            chevIcon.classList.toggle("rotated")
-        })
+        // userDropdown.addEventListener("click", (e) => {
+        //     e.stopPropagation()
+        //     dropdownOptions.classList.toggle("d-none")
+        //     chevIcon.classList.toggle("rotated")
+        // })
 
-        document.addEventListener("click", (e) => {
-            if (!userDropdown.contains(e.target)) {
-                dropdownOptions.classList.add("d-none")
-                chevIcon.classList.remove("rotated")
-            }
-        })
+        // document.addEventListener("click", (e) => {
+        //     if (!userDropdown.contains(e.target)) {
+        //         dropdownOptions.classList.add("d-none")
+        //         chevIcon.classList.remove("rotated")
+        //     }
+        // })
 
         document.getElementById("confirmLogoutButton").addEventListener("click", function () {
             window.location.href = "account/logout"
@@ -260,8 +260,9 @@
 
 
                 <div class=" login-form-container">
-                    <div class="card-header">
+                    <div class="card-header" style="flex-wrap: wrap;">
                             <img class="logo" src="{% static 'login/images/logo.svg'%}" />
+                            <!-- <img class="logo" src="{% static 'login/images/logo-2-300x284.png'%}" /> -->
                     </div>
                     <div class="card login-form">
                         
@@ -269,7 +270,7 @@
 
                             <span class="title">ورود</span>
                             <span class="subtitle d-none-js">
-                                لطفا کدملی/شناسه فراگیر اتباع خود را وارد کنید
+                          لطفا کدملی/شناسه فراگیر اتباع خود را وارد کنید
                             </span>
                         </div>
 
@@ -293,8 +294,8 @@
                             </a>
                         </div>
                         <div class="login-footer-contact">
-                            <span>ارتباط با مدیر سامانه : admin@ntsw.ir</span>
-                            <span>کلیه حقوق این سامانه برای وزارت صنعت، معدن و تجارت محفوظ است.</span>
+                            <span>ارتباط با مدیر سامانه : info@pouyabehzadnia.com</span>
+                            <span>  کلیه حقوق این سامانه برای گروه خدمات بازرگانی بهزادنیا محفوظ است. </span>
                         </div>
                     </div>
                 </div>
@@ -371,8 +372,10 @@
         </div>
 
         <span id="version">v: 0.015</span>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-        <script src="{% static 'login/lib/jquery/dist/jquery.min.js'%}"></script>
+<!-- 
+        <script src="{% static 'login/lib/jquery/dist/jquery.min.js'%}"></script> -->
         <script src="{% static 'login/lib/bootstrap/dist/js/bootstrap.bundle.min.js'%}"></script>
         <script src="{% static 'login/js/script.js'%}"></script>
         <script src="{% static 'login/js/toast.js'%}"></script>
