@@ -11,22 +11,25 @@ from .models import (
     RequestType
 )
 
-
 class SelectMainDataForm(forms.ModelForm):
-
     class Meta:
         model = CurrencyRequest
         fields = ("main_data",)
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user')
-        super(SelectMainDataForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
+
         self.fields['main_data'].label = 'شماره ثبت سفارش'
         self.fields['main_data'].queryset = MainData.objects.filter(
             user=user,
             status='r'
         )
 
+        # این خط مهمه: نمایش فیلد registrations_number به جای __str__
+        self.fields['main_data'].label_from_instance = (
+            lambda obj: str(obj.registrations_number) if obj.registrations_number else f"بدون شماره ({obj.identifier})"
+        )
 
 class RequestForm(forms.ModelForm):
 

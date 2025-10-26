@@ -192,7 +192,7 @@ aside.clicked .sidebar-button-text::after {
 
 input:read-only:not([type="file"], [type="checkbox"], [type="radio"]),
 textarea:read-only {
-  background-color: #d9d9d92e !important;
+  background-color: #ffff002e !important;
   cursor: no-drop;
 }
 
@@ -700,13 +700,28 @@ thead {
 .request-form .input-group-text,
 .igtw-185 .input-group-text,
 .igtw-195 .input-group-text {
-  width: 185px;
+  width: 196px;
   text-align: center !important;
 }
 
 .igtw-195 .input-group-text {
   width: 195px;
 }
+
+.input-group-text {
+	font-size: 12px;
+	width: 184px;
+	padding: 9px;
+	white-space: normal !important;
+	word-break: break-word;
+}
+
+.input-group > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+	text-align: right;
+}
+
+
+
 
 .datepicker table tr td.today {
   background: #1de9b6 !important;
@@ -1078,7 +1093,7 @@ input[type="radio"]:focus {
 }
 
 tbody tr td {
-  text-align: center;
+  text-align: center !important;
 }
 
 .input-group-text.bg-light {
@@ -1646,4 +1661,35 @@ section main{
 	background-color: #d73d32 !important;
 	border-color: #d73d32;
 	color: #fff;
+}
+
+
+
+.btn.btn-orange {
+	background-color: orange;
+	border: 1px solid orange;
+	margin-right: 5px;
+}
+
+
+.form-control.selectize-control.single.rtl {
+	height: 38px;
+}
+
+.selectize-input.items.required.invalid.not-full.has-options ,.selectize-input.items.not-full.has-options{
+	height: auto;
+	top: -6px;
+	background-color: transparent;
+}
+
+.dt-length {
+	display: none;
+}
+
+.selectize-input.items.not-full {
+	background-color: transparent;
+}
+
+.selectize-input.items.full.has-options.has-items {
+	background-color: transparent;
 }

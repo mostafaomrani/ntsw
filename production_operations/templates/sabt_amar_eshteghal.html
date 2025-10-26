@@ -1,0 +1,546 @@
+{% extends "base.html" %}
+{% load static %}
+{% load date_filters %}
+{% load widget_tweaks %}
+{% load ui_template_tag %}
+{% block title %}
+ثبت اظهار
+{% endblock title %}
+{% block breadcrumbs %}
+{% breadcrumbs 'عملیات تولید' '#' 'ثبت اظهار' '#' %}
+{% endblock breadcrumbs %}
+{% block page-title %}
+ثبت اظهار
+{% endblock page-title %}
+{% block main %}
+{% if messages %}
+{% for message in messages %}
+<div class="text-center alert alert-{{ message.tags }}">{{ message|safe }}</div>
+{% endfor %}
+{% endif %}
+
+
+<link
+  rel="stylesheet"
+  href="https://cdn.datatables.net/2.3.4/css/dataTables.dataTables.css"
+  media="all"
+/>
+
+<div class="container-fluid">
+  <nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+      <button
+        class="nav-link active button-breadcrumbs py-3 border-bottom border-top"
+        id="nav-home-tab"
+        data-bs-toggle="tab"
+        data-bs-target="#nav-home"
+        type="button"
+        role="tab"
+        aria-controls="nav-home"
+        aria-selected="true"
+      >
+        <span class="outline-badge">1</span> ثبت آمار اشتغال
+      </button>
+      <button
+        class="nav-link button-breadcrumbs py-3 border-bottom border-top ps-5"
+        id="nav-profile-tab"
+        data-bs-toggle="tab"
+        data-bs-target="#nav-profile"
+        type="button"
+        role="tab"
+        aria-controls="nav-profile"
+        aria-selected="false"
+      >
+        <span class="outline-badge">2</span> ثبت آمار تولید
+      </button>
+    </div>
+  </nav>
+  <div class="tab-content" id="nav-tabContent">
+    <div
+      class="tab-pane fade show active"
+      id="nav-home"
+      role="tabpanel"
+      aria-labelledby="nav-home-tab"
+    >
+      <div class="container-fluid bg-white">
+        <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+          <form
+            id="frmRequestSearch"
+            class="fv-form fv-form-bootstrap"
+            novalidate="novalidate"
+          >
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <div class="input-group">
+                  <span class="input-group-text bg-light"> سال </span>
+                  <select
+                    name="year"
+                    class="form-control"
+                  >
+                    <option value="" selected="selected">انتخاب کنید</option>
+                    <option value="1404">1404</option>
+                    <option value="1403">1403</option>
+                    <option value="1402">1402</option>
+                    <option value="1401">1401</option>
+                    <option value="1400">1400</option>
+                    <option value="1399">1399</option>
+                    <option value="1398">1398</option>
+                    <option value="1397">1397</option>
+                    <option value="1396">1396</option>
+                    <option value="1395">1395</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-md-4 mb-3">
+                <div class="input-group">
+                  <span class="input-group-text bg-light"> ماه </span>
+                  <select
+                    name="month"
+                    class="form-control"
+                  >
+                    <option value="" selected="selected">انتخاب کنید</option>
+                    <option value="1">فروردین</option>
+                    <option value="2">اردیبهشت</option>
+                    <option value="3">خرداد</option>
+                    <option value="4">تیر</option>
+                    <option value="5">مرداد</option>
+                    <option value="6">شهریور</option>
+                    <option value="7">مهر</option>
+                    <option value="8">آبان</option>
+                    <option value="9">آذر</option>
+                    <option value="10">دی</option>
+                    <option value="11">بهمن</option>
+                    <option value="12">اسفند</option>
+                  </select>
+                </div>
+              </div>
+
+
+
+              <div class="col-md-4 mb-3">
+                <div class="input-group">
+                  <span
+                    class="input-group-text bg-light"
+                    style="width: 216px !important"
+                    > تعداد کارکنان رسمی </span
+                  >
+                  <input
+                    type="text"
+                    name="toDate"
+                    placeholder="تعداد کارکنان رسمی"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+
+              <div class="col-md-4 mb-3">
+                <div class="input-group">
+                  <span
+                    class="input-group-text bg-light"
+                    style="width: 216px !important"
+                    > تعداد کارکنان پیمانکاری</span
+                  >
+                  <input
+                    type="text"
+                    name="toDate"
+                    placeholder="تعداد کارکنان پیمانکاری"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+
+
+              <div class="col-md-4 mb-3">
+                <div class="input-group">
+                  <span
+                    class="input-group-text bg-light"
+                    style="width: 216px !important"
+                    > تعداد کارکنان قراردادی</span
+                  >
+                  <input
+                    type="text"
+                    name="toDate"
+                    placeholder="تعداد کارکنان قراردادی"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+
+
+
+
+              <div class="col-md-12 mb-3">
+                <div class="input-group">
+                  <span
+                    class="input-group-text bg-light"
+                    style="width: 216px !important"
+                    > توضیحات</span
+                  >
+                  <input
+                    type="text"
+                    name="toDate"
+                    placeholder="توضیحات"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+
+
+              
+              <div class="row mt-4">
+                  <div class="col-12">
+                      <div class="d-flex justify-content-end">
+                          <button type="button" id="btnSelectNext" name="btnSelectNext"
+                              class="btn btn-primary btnSelectNext">
+                              <i class="fa fa-step-backward me-2"></i>  بعدی
+                          </button>
+                      </div>
+                  </div>
+              </div>
+
+            </div>
+
+       
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="tab-pane fade"
+      id="nav-profile"
+      role="tabpanel"
+      aria-labelledby="nav-profile2-tab"
+    >
+      <div class="container-fluid">
+        <div class="p-3 bg-white"></div>
+      </div>
+    </div>
+
+
+
+
+  </div>
+</div>
+
+<!-- Modal افزودن کالا -->
+<div
+  class="modal fade"
+  id="addKalaModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="addKalaModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addKalaModalLabel">
+          <i class="fa fa-plus"></i> افزودن کالا
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div
+          id="searchtypr"
+          class="col-sm-12 col-xs-12 col-lg-12 col-md-12"
+          style="width: 100%; text-align: right"
+        >
+          <div class="row" style="margin-right: 39px; font-size: 15px">
+            <div class="col-md-2">
+              <input
+                type="radio"
+                id="groupsearchstuff"
+                name="selectsearchtype"
+                value="1"
+                checked="checked"
+              />
+              <span class="text">انتخاب با گروه کالا</span>
+            </div>
+
+            <div class="col-md-2">
+              <input
+                type="radio"
+                id="codesearchstuffe"
+                name="selectsearchtype"
+                value="2"
+              />
+              <span class="text">انتخاب با شناسه کالا</span>
+            </div>
+          </div>
+
+          <br>
+
+          <div class="row">
+            <div class="col-md-3 mb-3">
+              <div class="input-group">
+                <span class="input-group-text bg-light"> گروه کالا </span>
+                <select name="status" id="status" class="form-control">
+                  <option value="" selected="selected">انتخاب کنید</option>
+                  <option value="97">مواد شیمیایی آلی و معدنی</option>
+                  <option value="98">ملزومات پزشکی و آزمایشگاهی</option>
+                  <option value="99">مواد غذایی</option>
+                  <option value="100">ابزارآلات و تجهیزات کارگاهی</option>
+                  <option value="101">تجهیزات حمل و نقل ریلی و کابلی</option>
+                  <option value="102">ملزومات خدمات</option>
+                  <option value="103">
+                    ملزومات صنایع زراعی، باغبانی و جنگل داری
+                  </option>
+                  <option value="104">محصولات شیمیایی خطرناک</option>
+                  <option value="256">
+                    ملزومات ورزشی، بازی، سرگرمی و شکار
+                  </option>
+                  <option value="257">مواد اولیه معدنی</option>
+                  <option value="258">تجهیزات اندازه گیری و شناسایی</option>
+                  <option value="259">
+                    تجهیزات ابزار دقیق و کنترل و اتوماسیون صنعتی
+                  </option>
+                  <option value="260">
+                    کانی های غیر فلزی، خاک ها و سنگ ها
+                  </option>
+                  <option value="261">پوست و چرم</option>
+                  <option value="262">
+                    فلزات، آلیاژ هاز فلزی، کانی های فلزی و محصولات واسط
+                  </option>
+                  <option value="263">سوخت ها، روغن ها و حامل های انرژی</option>
+                  <option value="264">
+                    مصالح عمومی ساختمان و اقلام پیش ساخته
+                  </option>
+                  <option value="265">محصولات سلولزی</option>
+                  <option value="266">
+                    وسایل نقلیه دریایی، تجهیزات ناوبری، اسکله ای، سکو ها و حوضچه
+                    ها
+                  </option>
+                  <option value="267">
+                    اقلام دامپزشکی و ملزومات نگهداری و پرورش حیوانات
+                  </option>
+                  <option value="268">قطعات لوازم خانگی</option>
+                  <option value="269">صنایع پایین دست پتروشیمی</option>
+                  <option value="270">شناسه عمومی خدمات</option>
+                  <option value="271">
+                    وسایل نقلیه هوایی و تجهیزات ناوبری و فرودگاهی
+                  </option>
+                  <option value="272">خوراک دام و طیور و آبزیان</option>
+                  <option value="273">
+                    پوشش ها، چسب ها، کامپوزیت ها و مواد پیشرفته
+                  </option>
+                  <option value="274">
+                    مواد اولیه و تجهیزات بسته بندی داروها و فرآورده های بیولوژیک
+                  </option>
+                  <option value="276">
+                    دارو، فرآورده هاي بيولوژيك و مكمل هاي دارويي و غذايي
+                  </option>
+                  <option value="277">
+                    زيورآلات، اوراق بهادار و اشياي قيمتي
+                  </option>
+                  <option value="19188">مواد آرايشي و بهداشتي</option>
+                  <option value="19189">
+                    تجهيزات و ملزومات آرايشي و بهداشتي
+                  </option>
+                  <option value="19190">
+                    ملزومات عمران و راه سازي و تجهيزات ويژه تخريب با مكانيزم
+                    انفجاري
+                  </option>
+                  <option value="19191">البسه و تجهيزات ورزشي و شكار</option>
+                  <option value="19192">صنايع دستي، هنري و ادوات موسيقي</option>
+                  <option value="19193">فرآورده هاي گياهي و حيواني</option>
+                  <option value="19194">شناسه عمومی کالا</option>
+                  <option value="19195">محصولات انتشاري</option>
+                  <option value="19197">
+                    صنايع دستي و هنري و ادوات موسيقي
+                  </option>
+                  <option value="19199">موجودات زنده</option>
+                  <option value="19200">
+                    مواد اوليه و تجهيزات بسته بندي داروها و فرآورده هاي بيولوژيك
+                  </option>
+                  <option value="19201">
+                    دارو، فرآورده هاي بيولوژيك و مكمل هاي دارويي دامپزشكي
+                  </option>
+                  <option value="19202">قطعات خاص مشترك صنايع</option>
+                  <option value="96">ابزار آلات دستی</option>
+                  <option value="95">مصالح ساختمانی</option>
+                  <option value="93">دکوراسیون، مبلمان و اثاثیه</option>
+                  <option value="91">تاسیسات گرمایش و سرمایش ساختمانی</option>
+                  <option value="90">کالای مشمول سامانه انبار</option>
+                  <option value="89">ملزومات خاص صنایع</option>
+                  <option value="87">تجهیزات لوله کشی و شیرآلات</option>
+                  <option value="86">
+                    ملزومات آتش نشانی و امداد و نجات و بهداشت حرفه ای
+                  </option>
+                  <option value="85">برق و مخابرات</option>
+                  <option value="84">ملزومات عمومی صنایع</option>
+                  <option value="83">قطعات جنرال</option>
+                  <option value="82">مقاطع چوبی</option>
+                  <option value="81">نهاده های دامی</option>
+                  <option value="80">لوازم التحریر</option>
+                  <option value="79">مبلمان و ملزومات اداری</option>
+                  <option value="9">دخانیات</option>
+                  <option value="40">لوازم یدکی و قطعات مصرفی خودرو</option>
+                  <option value="7">محصولات کشاورزی</option>
+                  <option value="4">تلفن همراه و تبلت</option>
+                  <option value="70">سایر تجهیزات سیم کارت خور</option>
+                  <option value="8">فرآورده های نفت، گاز و پتروشیمی</option>
+                  <option value="10">پوشاک</option>
+                  <option value="41">اسباب بازی</option>
+                  <option value="49">لوازم خانگی</option>
+                  <option value="51">
+                    داروها و فراورده های دامی (غیرفعال)
+                  </option>
+                  <option value="55">خودروهای سواری</option>
+                  <option value="59">اجزا و ملحقات پوشاک</option>
+                  <option value="60">کفش</option>
+                  <option value="61">پارچه</option>
+                  <option value="62">منسوجات خانگی</option>
+                  <option value="63">خودروهای تجاری (حمل بار)</option>
+                  <option value="64">خودروهای تجاری (حمل مسافر)</option>
+                  <option value="65">موتورسیکلت و دوچرخه موتوردار</option>
+                  <option value="66">ماشین آلات راه سازی</option>
+                  <option value="67">وسایل نقلیه خاص</option>
+                  <option value="69">ماشین آلات کشاورزی</option>
+                  <option value="72">دوچرخه های پدالی (بدون موتور)</option>
+                  <option value="78">ملزومات تاسیسات</option>
+                  <option value="88">مواد نساجی و الیاف</option>
+                  <option value="75">محصولات آرایشی و بهداشتی</option>
+                  <option value="76">اقلام دیجیتال</option>
+                  <option value="77">مقاطع فلزی</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          لغو
+        </button>
+        <button type="button" class="btn btn-success">افزودن به جدول</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock main %} {% block js %}
+
+<script>
+
+    $('.btnSelectNext').on('click', function () {
+      var $tabs = $('.nav-tabs .nav-link');
+      var $activeTab = $tabs.filter('.active');
+      var index = $tabs.index($activeTab);
+      console.log(index);
+
+      if (index == 2) {
+          var value = $('[name="unit"]').val();
+          if (!value) { // اگر هیچ چیزی انتخاب نشده
+              alert('لطفا  واحد شمارش  انتخاب کنید!');
+              $('[name="unit"]').focus();
+              return;
+          }
+      } else if (index == 1) {
+          var hs = $('[name="hs"]').val();
+          var isic = $('[name="isic"]').val();
+          if (!hs) { // اگر هیچ چیزی انتخاب نشده
+              alert('لطفا  کد HS  انتخاب کنید!');
+              $('[name="hs"]').focus();
+              return;
+          }
+          if (!isic) { // اگر هیچ چیزی انتخاب نشده
+              alert('لطفا  کد ISIC  انتخاب کنید!');
+              $('[name="isic"]').focus();
+              return;
+          }
+      }
+      // اگر تب بعدی وجود داره
+      if (index + 1 < $tabs.length) {
+          $tabs.eq(index + 1).tab('show');
+      }
+  });
+
+
+
+  // اینیشیالایز DataTable
+  $("#example").DataTable({
+    paging: true,
+    searching: true,
+    info: true,
+    ordering: false,
+    pageLength: 10,
+    language: {
+      sEmptyTable: "هیچ داده‌ای در جدول وجود ندارد",
+      sInfo: "نمایش _START_ تا _END_ از _TOTAL_ رکورد",
+      sInfoEmpty: "نمایش 0 تا 0 از 0 رکورد",
+      sInfoFiltered: "(فیلتر شده از _MAX_ رکورد)",
+      sLengthMenu: "نمایش _MENU_ رکورد",
+      sLoadingRecords: "در حال بارگذاری...",
+      sProcessing: "در حال پردازش...",
+      sSearch: "جستجو:",
+      sZeroRecords: "رکوردی مطابق جستجوی شما پیدا نشد",
+      oPaginate: {
+        sFirst: "اولین",
+        sLast: "آخرین",
+        sNext: "بعدی",
+        sPrevious: "قبلی",
+      },
+    },
+  });
+
+  // مدیریت نمایش/مخفی کردن فیلدهای خاص بر اساس نوع سند
+  $(document).ready(function () {
+    function toggleFields() {
+      const selectedValue = $("#status").val();
+      $(".showezharkharid, .showezharvaredat, .showezharbargashtforosh").hide();
+      switch (selectedValue) {
+        case "5":
+          $(".showezharkharid").show();
+          break;
+        case "6":
+          $(".showezharvaredat").show();
+          break;
+        case "12":
+          $(".showezharbargashtforosh").show();
+          break;
+      }
+    }
+
+    toggleFields();
+    $("#status").on("change", toggleFields);
+
+    // باز کردن مودال با کلیک روی افزودن کالا
+    $("#addkala").on("click", function () {
+      $("#addKalaModal").modal("show");
+    });
+
+    // مدیریت radio buttons در مودال
+    $('input[name="selectsearchtype"]').on("change", function () {
+      if ($(this).val() === "1") {
+        $("#grpsearch").removeClass("hidden").show();
+        $("#cdsearch").hide();
+      } else {
+        $("#cdsearch").show();
+        $("#grpsearch").addClass("hidden").hide();
+      }
+    });
+  });
+
+  // تابع Comma برای فرمت اعداد
+  function Comma(Num) {
+    Num += "";
+    Num = Num.replace(",", "");
+    Num = Num.replace(",", "");
+    var x = Num.split(".");
+    var x1 = x[0];
+    var x2 = x.length > 1 ? "." + x[1] : "";
+    var rgx = /(\d+)(\d{3})/;
+    while (rgx.test(x1)) x1 = x1.replace(rgx, "$1" + "," + "$2");
+    return x1 + x2;
+  }
+</script>
+
+{% endblock js %}
+

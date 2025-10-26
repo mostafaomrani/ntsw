@@ -18,6 +18,7 @@
 
 {% block main %}
 
+<link rel="stylesheet" href="{% static 'persianDatepicker/css/persianDatepicker-default.css' %}">
 <link rel='stylesheet' href='https://cdn.datatables.net/2.3.4/css/dataTables.dataTables.css' media='all' />
 
 
@@ -28,18 +29,14 @@
                 <form id="frmSearch" novalidate="novalidate" class="fv-form fv-form-bootstrap">
                     <div class="row mb-4">
                         <div class="col-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5 class="mb-0"><i class="fa fa-search"></i> نوار ابزار جستجو</h5>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
+                            <div class="row">
                                         <!-- بخش InventoryOnStuffCodeLevel -->
                                         <div class="col-md-3 mb-3">
                                             <div class="input-group">
                                                 <span class="input-group-text bg-light">انتخاب انبار</span>
-                                                <select name="cmbPlaceID" class="form-control">
-                                                    <option value="" selected="selected">همه انبارها</option>
+                                                <select name="seleranbar" id="seleranbar" class="form-control">
+                                                    <option value="" selected="selected"> انتخاب ...</option>
+                                                    <option value="0" selected="selected"> انبار موقت</option>
                                                     {% for anbar in user_anbars %}
                                                     <option value="{{ anbar.id }}" postalcode="{{ anbar.postal_code }}">
                                                         {{ anbar.name }}</option>
@@ -49,7 +46,7 @@
                                         </div>
                                         <div class="col-md-3 mb-3">
                                             <div class="input-group">
-                                                <input type="text" name="searchText" class="form-control"
+                                                <input type="text" name="searchText" class="form-control" style="height:40px"
                                                     placeholder="متن جستجو">
                                             </div>
                                         </div>
@@ -123,8 +120,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
+                    
                         </div>
                     </div>
 
@@ -145,16 +141,15 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {% for item in anbar_items_list %}
+                                        {% for item in anbar_items_list %} 
                                         <tr>
                                             <td>
-                                                <input type="checkbox" class="item-checkbox"
-                                                    data-item-id="{{ item.id }}">
+                                                <input type="checkbox" class="item-checkbox" data-id="{{ item.id }}" data-shenase="{{ item.shenase.shenase }}" data-usableamount="{{ item.usable_amount }}" data-actualamount="{{ item.actual_amount }}" data-description="{{ item.description }}">
                                             </td>
                                             <td>{{ item.shenase.shenase }}</td>
                                             <td>{{ item.description }}</td>
-                                            <td>{{ item.available_quantity }}</td>
-                                            <td>{{ item.actual_quantity }}</td>
+                                            <td>{{ item.usable_amount }}</td>
+                                            <td>{{ item.actual_amount }}</td>
                                             <td>{{ item.get_unit_display }}</td>
                                             <td></td>
                                         </tr>
@@ -190,7 +185,7 @@
                         </div>
                     </div>
                     <div style="display: flex;justify-content: center;width: 303px;margin-left: 12px;">
-                        <button type="button" class="btn btn btn-blue-csm w-100" data-bs-toggle="modal"
+                        <button id="openTransferModal" type="button" class="btn btn btn-blue-csm w-100" data-bs-toggle="modal"
                             data-bs-target="#TransferOwnershipModal" style="margin-left: 7px;"> انتقال
                             مالکیت / فروش </button>
                         <button type="button" class="btn btn btn-blue-csm w-100"> انتقال مکان / حمل </button>
@@ -211,10 +206,8 @@
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <form action="#" method="post" novalidate="novalidate"
-                                    class="fv-form fv-form-bootstrap">
-                                    <button type="submit" class="fv-hidden-submit"
-                                        style="display: none; width: 0px; height: 0px;"></button>
+                                <form action="#" method="post" novalidate="novalidate" class="fv-form fv-form-bootstrap">
+                                    {% csrf_token %}
                                     <div class="row">
                                         <div class="col-lg-7 col-md-12 col-sm-12 col-xs-12 padding-0-important">
                                             <div class="form-group" style="justify-content: flex-start;">
@@ -252,23 +245,18 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-lg-5 col-md-12 col-sm-12 col-xs-12 padding-0-important"
-                                            style="display: flex;">
+                                        <div class="col-lg-5 col-md-12 col-sm-12 col-xs-12 padding-0-important"  style="display: flex;">
 
-                                            <div style="width: 100%;">
+                                            <div style="width: 100%;margin-left: 39px;">
                                                 <div class="input-group">
                                                     <span class="input-group-text bg-light"> شماره صورتحساب </span>
-                                                    <select name="cmbPlaceID" class="form-control">
-                                                        <option value="" selected="selected">همه انبارها</option>
-                                                    </select>
+                                                    <input name="soorathesab" class="form-control">
                                                 </div>
                                             </div>
-                                            <div style="width: 100%;">
+                                            <div style="width: 100%">
                                                 <div class="input-group">
                                                     <span class="input-group-text bg-light"> تاریخ سند (فروش) </span>
-                                                    <select name="cmbPlaceID" class="form-control">
-                                                        <option value="" selected="selected">همه انبارها</option>
-                                                    </select>
+                                                    <input name="cmbPlaceID" class="form-control persianDatePicker1">
                                                 </div>
                                             </div>
                                         </div>
@@ -295,7 +283,7 @@
                                                         class="form-control" maxlength="11" required="required"
                                                         data-fv-field="NationalCodeOthers">
                                                     <div class="input-group-btn">
-                                                        <button type="button" id="btnCheckNationalCode"
+                                                        <button type="button" id="btnCheckNationalCode" style="padding: 9px;"
                                                             class="btn btn-blue active"><i
                                                                 class="fa fa-search"></i></button>
                                                     </div>
@@ -314,10 +302,28 @@
                                                         <option value="">انتخاب کنید</option>
                                                     </select>
                                                 </div>
-                                                <small style="display: none;" class="help-block"
-                                                    data-fv-validator="notEmpty" data-fv-for="cmbRoleOfSellerOthers"
-                                                    data-fv-result="NOT_VALIDATED">لطفا یکی از مقادیر را انتخاب
-                                                    نمایید</small>
+                                            </div>
+                                        </div>
+
+                                        <div id="nameofbuyer" class="col-xs-12 col-sm-7 col-md-7 col-lg-7">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light">  نام خریدار </span>
+                                                    <input id="nameofbuyer" type="text" name="nameofbuyer" class="form-control" >
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+                                        <div style="margin-top: 15px;">
+                                            <div id="usermobile" class="col-xs-12 col-sm-7 col-md-7 col-lg-7">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-text bg-light"> <span class="danger">*</span> موبایل </span>
+                                                        <input id="usermobile" type="text" name="usermobile" class="form-control" >
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -336,7 +342,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <hr>
+                                    <hr style="margin-top: 7px;">
+                                    
                                     <div id="mainPlaceBox" class="row">
                                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                             <div class="form-group col-lg-6 col-md-6 col-xs-12 col-sm-12">
@@ -377,6 +384,7 @@
                                                             <select
                                                                 class="form-control select2 select2-hidden-accessible"
                                                                 name="placeCombo"
+                                                                id="buyer_anbar"
                                                                 data-fv-notempty="لطفایک مقدار را انتخاب نمایید"
                                                                 data-fv-notempty-message="لطفا یکی از مقادیر را انتخاب نمایید"
                                                                 tabindex="-1" aria-hidden="true"
@@ -526,15 +534,18 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <hr>
+                                    <hr style="margin-top: 10px;">   
+
+                                </div>
+
+                                    
                                     <div class="row" style="text-align: left;margin-bottom: 16px;">
                                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 margin-top-10">
-                                            <div class="form-group">
+                                            <div class="form-group" style="justify-content: end;">
                                                 <button style="margin-left: 18px;" type="button" name="CheckBuyerStatus"
                                                     class="btn btn-info"><i class="fa fa-search"></i>استعلام</button>
                                                 <button type="button" name="submit"
-                                                    class="btn btn-success margin-left-20">ثبت</button>
+                                                    class="btn btn-success margin-left-20" id="senddata">ثبت</button>
                                                 <button type="button" name="cancel"
                                                     class="btn btn-danger">انصراف</button>
                                             </div>
@@ -542,138 +553,42 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                            <table id="basktTableEntegal"
-                                                class="StuffSelfTransferdisplay table-bordered table-condensed"
-                                                style="width: 100%">
-                                                <thead style="height: 45px;">
-                                                    <tr class="bg-themeprimary">
-                                                        <th class="text-align-center" style="display: none;">StuffID
-                                                        </th>
-                                                        <th class="text-align-center">شناسه کالا</th>
-                                                        <th class="text-align-center" style="width: 30%;">شرح کالا</th>
-                                                        <th name="tdInventory" class="text-align-center">مقدار قابل
-                                                            استفاده</th>
-                                                        <th class="text-align-center" style="width: 7%;">واحد اندازه
-                                                            گیری</th>
-                                                        <th class="text-align-center"
-                                                            style="font-size: small; width: 7%;">تعداد/مقدار</th>
-                                                        <th class="text-align-center" id="basktTableEntegal_Price"
-                                                            style="width: 8%;">مبلغ واحد (ریال)</th>
-                                                        <th class="text-align-center"
-                                                            id="basktTableEntegal_DiscountPrice" style="width: 8%;">مبلغ
-                                                            تخفیف (ریال)</th>
-                                                        <th class="text-align-center" id="basktTableEntegal_OtherExtra"
-                                                            style="width: 8%;">سایر اضافات (ریال)</th>
-                                                        <th class="text-align-center" id="basktTableEntegal_TaxPrice"
-                                                            style="width: 12%;">مبلغ مالیات و عوارض (ریال)</th>
-                                                        <th class="text-align-center" id="basktTableEntegal_FinalPrice"
-                                                            style="width: 10%;">مبلغ نهایی (ریال)</th>
-                                                        <th class="text-align-center" id="basktTableEntegal_Description"
-                                                            style="width: 10%;">توضیحات</th>
-                                                        <th class="text-align-center">حذف</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td style="display:none;">تن</td>
-                                                        <td name="StuffID" style="display:none;">1283675</td>
-                                                        <td style="text-align:center">2220620470425</td>
-                                                        <td style="text-align:center">انواع لوازم و قطعات پلاستیکی وسایل
-                                                            نقلیه ‏(ISIC: 2520312559)</td>
-                                                        <td name="tdInventory" style="text-align:center">628000</td>
-                                                        <td style="text-align:center">کیلوگرم</td>
-                                                        <td name="tdCount" style="width: 140px;text-align:center">
-                                                            <div class="form-group">
-                                                                <div class="input-group">
-                                                                    <input type="text"
-                                                                        onkeyup="javascript: this.value = Comma(this.value);CalcFinalPrice(this,true);"
-                                                                        data-fv-maxvalue1="true" maxvalue="628000"
-                                                                        data-fv-minvalue1="true" minvalue="0.001"
-                                                                        class="form-control" name="txtCount" value="0"
-                                                                        data-fv-field="txtCount">
-                                                                </div>
-                                                                <small style="display: none;" class="help-block"
-                                                                    data-fv-validator="maxvalue1" data-fv-for="txtCount"
-                                                                    data-fv-result="NOT_VALIDATED">This value is not
-                                                                    valid</small>
-                                                                <small style="display: none;" class="help-block"
-                                                                    data-fv-validator="minvalue1" data-fv-for="txtCount"
-                                                                    data-fv-result="NOT_VALIDATED">This value is not
-                                                                    valid</small>
-                                                            </div>
-                                                        </td>
-                                                        <td name="tdPrice" style="width: 140px;">
-                                                            <div class="form-group">
-                                                                <div class="input-group">
-                                                                    <input type="text"
-                                                                        onkeyup="javascript: this.value = Comma(this.value);CalcFinalPrice(this,true);"
-                                                                        data-fv-minvalue="true" minvalue="1"
-                                                                        maxlength="15" value="0" class="form-control"
-                                                                        name="txtPrice">
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td name="tdDiscount" style="width: 140px;">
-                                                            <div class="form-group">
-                                                                <div class="input-group">
-                                                                    <input type="text"
-                                                                        onkeyup="this.value = Comma(this.value);CalcFinalPrice(this,true);"
-                                                                        data-fv-monywithspace="true"
-                                                                        class="form-control" value="0"
-                                                                        name="txtDiscount" data-fv-field="txtDiscount">
-                                                                </div>
-                                                                <small style="display: none;" class="help-block"
-                                                                    data-fv-validator="monywithspace"
-                                                                    data-fv-for="txtDiscount"
-                                                                    data-fv-result="NOT_VALIDATED">This value is not
-                                                                    valid</small>
-                                                            </div>
-                                                        </td>
-                                                        <td name="tdOtherExtra" style="width: 140px;">
-                                                            <div class="form-group">
-                                                                <div class="input-group">
-                                                                    <input type="text"
-                                                                        onkeyup="javascript: this.value = Comma(this.value);CalcFinalPrice(this,true);"
-                                                                        class="form-control" value="00"
-                                                                        name="tdOtherExtra">
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td name="tdTaxs" style="width: 140px;">
-                                                            <div class="form-group">
-                                                                <div class="input-group">
-                                                                    <input type="text"
-                                                                        onkeyup="javascript: this.value = Comma(this.value);CalcFinalPrice(this,false);"
-                                                                        class="form-control" value="0" name="txtTax">
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td name="tdFinal" class="tdFinal" style="width: 140px;">
-                                                            <div class="form-group">
-                                                                <div class="input-group">
-                                                                    <input type="text"
-                                                                        onkeyup="javascript: this.value = Comma(this.value);"
-                                                                        class="form-control" value="0"
-                                                                        disabled="disabled" name="txtFinal">
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td name="tdDescription" style="width: 140px;">
-                                                            <div class="form-group">
-                                                                <div class="input-group">
-                                                                    <input type="text" class="form-control" value=""
-                                                                        name="tdDescription">
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td><button type="button" name="btnDelete"
-                                                                class="btn btn-xs btn-danger"><i
-                                                                    class="fa fa-remove"></i> حذف</button></td>
-                                                        <td name="tdstuffGroupID" style="display:none;">73</td>
-                                                        <td name="tdPayeInfoID" style="display:none;">131812</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                                            <div class="table-responsive">
+                                                <table id="basktTableEntegal"
+                                                    class="StuffSelfTransferdisplay table-bordered table-condensed"
+                                                    style="width: 100%">
+                                                    <thead style="height: 45px;">
+                                                        <tr class="bg-themeprimary">
+                                                            <th class="text-align-center" style="display: none;">StuffID
+                                                            </th>
+                                                            <th class="text-align-center">شناسه کالا</th>
+                                                            <th class="text-align-center" style="width: 30%;">شرح کالا</th>
+                                                            <th name="tdInventory" class="text-align-center">مقدار قابل
+                                                                استفاده</th>
+                                                            <th class="text-align-center" style="width: 7%;">واحد اندازه
+                                                                گیری</th>
+                                                            <th class="text-align-center"
+                                                                style="font-size: small; width: 7%;">تعداد/مقدار</th>
+                                                            <th class="text-align-center" id="basktTableEntegal_Price"
+                                                                style="width: 8%;">مبلغ واحد (ریال)</th>
+                                                            <th class="text-align-center"
+                                                                id="basktTableEntegal_DiscountPrice" style="width: 8%;">مبلغ
+                                                                تخفیف (ریال)</th>
+                                                            <th class="text-align-center" id="basktTableEntegal_OtherExtra"
+                                                                style="width: 8%;">سایر اضافات (ریال)</th>
+                                                            <th class="text-align-center" id="basktTableEntegal_TaxPrice"
+                                                                style="width: 12%;">مبلغ مالیات و عوارض (ریال)</th>
+                                                            <th class="text-align-center" id="basktTableEntegal_FinalPrice"
+                                                                style="width: 10%;">مبلغ نهایی (ریال)</th>
+                                                            <th class="text-align-center" id="basktTableEntegal_Description"
+                                                                style="width: 10%;">توضیحات</th>
+                                                            <th class="text-align-center">حذف</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -766,7 +681,7 @@
 
     .form-group {
         display: flex;
-        justify-content: end;
+        justify-content: start;
     }
 
     .modal-dialog.modal-xxl {
@@ -846,23 +761,282 @@
     .radio-inline {
         margin-left: 32px;
     }
+    #chkTransferPlace {
+        margin-bottom: 16px;
+    }
+    #basktTableEntegal {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    #basktTableEntegal td,#basktTableEntegal th {
+        padding: 7px;
+    }
+    #cmbRoleOfSellerOthersBox {
+        display: none;
+    }
+    .input-group-text.bg-light {
+        font-size: 13px;
+        padding: 0;
+        height: 40px;
+    }
 </style>
-
-
 
 {% endblock main %}
 
 
+
 {% block js %}
-<!-- بارگذاری jQuery و DataTables -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.datatables.net/2.3.4/js/dataTables.js"></script>
-<!-- بارگذاری Persian Datepicker (در صورت نیاز) -->
-
-
 <script>
-    $(document).ready(function () {
+    $('.persianDatePicker1, .persianDatePicker2').each(function () {
+        $(this).persianDatepicker({
+            format: 'YYYY/MM/DD',
+            autoClose: true,
+            toolbox: {
+                calendarSwitch: {
+                    enabled: false
+                }
+            }
+        });
+    });
 
+    // تابع برای افزودن یا حذف کاما از مقادیر عددی
+    function Comma(value) {
+        value = value.replace(/,/g, ''); // حذف کاماها
+        if (isNaN(value) || value === '') return '0';
+        return parseFloat(value).toLocaleString('en-US'); // افزودن کاما
+    }
+
+    // تابع محاسبه مبلغ نهایی برای هر ردیف و جمع کل صورتحساب
+    function CalcFinalPrice(element, updateTotal) {
+        var $row = $(element).closest('tr');
+        var count = parseFloat($row.find('input[name="txtCount"]').val().replace(/,/g, '')) || 0;
+        var price = parseFloat($row.find('input[name="txtPrice"]').val().replace(/,/g, '')) || 0;
+        var discount = parseFloat($row.find('input[name="txtDiscount"]').val().replace(/,/g, '')) || 0;
+        var extra = parseFloat($row.find('input[name="tdOtherExtra"]').val().replace(/,/g, '')) || 0;
+        var tax = parseFloat($row.find('input[name="txtTax"]').val().replace(/,/g, '')) || 0;
+        var finalPrice = (count * price) - discount + extra + tax;
+        if (finalPrice < 0) {
+            finalPrice = 0;
+        }
+        $row.find('input[name="txtFinal"]').val(finalPrice.toLocaleString('en-US'));
+        if (updateTotal) {
+            updateTotalBillAmount();
+        }
+    }
+
+    // تابع برای محاسبه جمع کل صورتحساب
+    function updateTotalBillAmount() {
+        var total = 0;
+        $('#basktTableEntegal tbody tr').each(function() {
+            var finalPrice = parseFloat($(this).find('input[name="txtFinal"]').val().replace(/,/g, '')) || 0;
+            total += finalPrice;
+        });
+        $('#totalBillAmount').val(total.toLocaleString('en-US'));
+    }
+
+    // تابع حذف ردیف
+    function deleteRow(button) {
+        $(button).closest('tr').remove();
+        updateTotalBillAmount();
+    }
+
+    // تابع برای فعال/غیرفعال کردن فیلدهای بارنامه
+    function toggleBarnameFields() {
+        var hasBarname = $('#HasBarname').is(':checked');
+        $('#BarNumber1').prop('disabled', !hasBarname);
+        $('#BarSerial1').prop('disabled', !hasBarname);
+        $('#ISSUDATE1').prop('disabled', !hasBarname);
+    }
+
+    // تابع برای ارسال درخواست AJAX بررسی کد ملی
+    function checkNationalCode(nationalCode) {
+        console.log('Sending AJAX request for national code:', nationalCode);
+        $.ajax({
+            url: '/users/check-national-code/',
+            type: 'POST',
+            data: {
+                'national_code': nationalCode,
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+            },
+            success: function(response) {
+                console.log('AJAX response:', response);
+                if (response.status === 'success') {
+                    $('#nameofbuyer input').val(response.data.name || '');
+                    $('#usermobile input').val(response.data.mobile || '');
+
+                    // پر کردن نقش‌های خریدار
+                    var $roleSelect = $('#cmbRoleOfSellerOthers');
+                    $roleSelect.empty().append('<option value="">انتخاب کنید</option>');
+                    if (response.data.roles && response.data.roles.length > 0) {
+                        $.each(response.data.roles, function(index, role) {
+                            $roleSelect.append(`<option value="${role.id}">${role.name}</option>`);
+                        });
+                        if (response.data.active_role) {
+                            $roleSelect.val(response.data.roles.find(r => r.name === response.data.active_role)?.id || '');
+                        }
+                    }
+
+                    // پر کردن انبارهای خریدار
+                    var $buyerAnbarSelect = $('#buyer_anbar');
+                    $buyerAnbarSelect.empty().append('<option value="">انتخاب کنید</option>');
+                    if (response.data.anbars && response.data.anbars.length > 0) {
+                        $.each(response.data.anbars, function(index, anbar) {
+                            $buyerAnbarSelect.append(`<option value="${anbar.id}" postalcode="${anbar.postal_code}">${anbar.name}</option>`);
+                        });
+                    } else {
+                        $buyerAnbarSelect.append('<option value="">بدون انبار</option>');
+                    }
+
+                    var selectedSellType = $('input[name="rdbSellType"]:checked').val();
+                    if (selectedSellType === '1' && response.data.roles && response.data.roles.length > 0) {
+                        $('#cmbRoleOfSellerOthersBox').show();
+                    } else {
+                        $('#cmbRoleOfSellerOthersBox').hide();
+                    }
+
+                    $('#SpnSuccess').show().text('کاربر یافت شد: ' + response.data.name).css('color', 'forestgreen');
+                    setTimeout(function() { $('#SpnSuccess').hide(); }, 3000);
+
+                    toggleBuyerInfoFields();
+                } else {
+                    $('#SpnSuccess').show().text(response.message).css('color', 'red');
+                    $('#nameofbuyer input').val('');
+                    $('#usermobile input').val('');
+                    $('#cmbRoleOfSellerOthers').empty().append('<option value="">انتخاب کنید</option>');
+                    $('#buyer_anbar').empty().append('<option value="">بدون انبار</option>');
+                    $('#cmbRoleOfSellerOthersBox').hide();
+                    setTimeout(function() { $('#SpnSuccess').hide(); }, 3000);
+                    toggleBuyerInfoFields();
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX error:', status, error);
+                $('#SpnSuccess').show().text('خطا در ارتباط با سرور').css('color', 'red');
+                $('#nameofbuyer input').val('');
+                $('#usermobile input').val('');
+                $('#cmbRoleOfSellerOthers').empty().append('<option value="">انتخاب کنید</option>');
+                $('#buyer_anbar').empty().append('<option value="">بدون انبار</option>');
+                $('#cmbRoleOfSellerOthersBox').hide();
+                setTimeout(function() { $('#SpnSuccess').hide(); }, 3000);
+                toggleBuyerInfoFields();
+            }
+        });
+    }
+
+    // تابع برای جمع‌آوری و ارسال داده‌های فرم
+    function sendFormData() {
+        var formData = {
+            sell_type: $('input[name="rdbSellType"]:checked').val(),
+            invoice_number: $('input[name="soorathesab"]').val(),
+            invoice_date: $('input[name="cmbPlaceID"]').val(),
+            national_code: $('#NationalCodeOthers').val(),
+            buyer_role: $('#cmbRoleOfSellerOthers').val(),
+            buyer_name: $('#nameofbuyer input').val(),
+            buyer_mobile: $('#usermobile input').val(),
+            description: $('#DescriptionOthers').val(),
+            transfer_place: $('#chkTransferPlace').is(':checked'),
+            source_warehouse: $('#txtSourcePostalCode').val(),
+            destination_warehouse: $('#buyer_anbar').val(),
+            unknown_warehouse: $('#UnknownWherehouse').is(':checked'),
+            carrier_national_code: $('#carrierNationalCode').val(),
+            carrier_mobile: $('#carrierMobile').val(),
+            carrier_no_info: $('#carrierHasNoInfo').is(':checked'),
+            barname_status: $('input[name="rdbBarnameStatus"]:checked').val(),
+            barname_number: $('#BarNumber1').val(),
+            barname_serial: $('#BarSerial1').val(),
+            barname_date: $('#ISSUDATE1').val(),
+            shaba_number: $('#shabaNumber').val(),
+            tax_number: $('#TaxNumber').val(),
+            seller_anbar: $("#seleranbar").val(),
+            items: []
+        };
+
+        // جمع‌آوری داده‌های جدول
+        $('#basktTableEntegal tbody tr').each(function() {
+            var $row = $(this);
+            var item = {
+                stuff_id: $row.find('td[name="StuffID"]').text(),
+                count: $row.find('input[name="txtCount"]').val().replace(/,/g, ''),
+                price: $row.find('input[name="txtPrice"]').val().replace(/,/g, ''),
+                discount: $row.find('input[name="txtDiscount"]').val().replace(/,/g, ''),
+                extra: $row.find('input[name="tdOtherExtra"]').val().replace(/,/g, ''),
+                tax: $row.find('input[name="txtTax"]').val().replace(/,/g, ''),
+                final_price: $row.find('input[name="txtFinal"]').val().replace(/,/g, ''),
+                description: $row.find('input[name="tdDescription"]').val()
+            };
+            formData.items.push(item);
+        });
+
+        // اعتبارسنجی اولیه
+        if (!formData.sell_type) {
+            $('#SpnSuccess').show().text('لطفاً نوع فروش را انتخاب کنید').css('color', 'red');
+            setTimeout(function() { $('#SpnSuccess').hide(); }, 3000);
+            return;
+        }
+        if (!formData.national_code) {
+            $('#SpnSuccess').show().text('لطفاً کد ملی خریدار را وارد کنید').css('color', 'red');
+            setTimeout(function() { $('#SpnSuccess').hide(); }, 3000);
+            return;
+        }
+        if (formData.sell_type === '1' && !formData.buyer_role) {
+            $('#SpnSuccess').show().text('لطفاً نقش خریدار را انتخاب کنید').css('color', 'red');
+            setTimeout(function() { $('#SpnSuccess').hide(); }, 3000);
+            return;
+        }
+        if (formData.items.length === 0) {
+            $('#SpnSuccess').show().text('لطفاً حداقل یک کالا انتخاب کنید').css('color', 'red');
+            setTimeout(function() { $('#SpnSuccess').hide(); }, 3000);
+            return;
+        }
+        if (formData.transfer_place && !formData.destination_warehouse) {
+            $('#SpnSuccess').show().text('لطفاً انبار مقصد را انتخاب کنید').css('color', 'red');
+            setTimeout(function() { $('#SpnSuccess').hide(); }, 3000);
+            return;
+        }
+        if (formData.barname_status === '1' && (!formData.barname_number || !formData.barname_serial || !formData.barname_date)) {
+            $('#SpnSuccess').show().text('لطفاً تمام فیلدهای بارنامه را پر کنید').css('color', 'red');
+            setTimeout(function() { $('#SpnSuccess').hide(); }, 3000);
+            return;
+        }
+
+        // ارسال درخواست AJAX
+        $.ajax({
+            url: '/foreintrade/transfer/save/',
+            type: 'POST',
+            data: JSON.stringify(formData),
+            contentType: 'application/json',
+            headers: {
+                'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
+            },
+            success: function(response) {
+                console.log('Save response:', response);
+                if (response.status === 'success') {
+                    $('#SpnSuccess').show().text('داده‌ها با موفقیت ذخیره شدند').css('color', 'forestgreen');
+                    setTimeout(function() { 
+                        $('#SpnSuccess').hide(); 
+                        $('#TransferOwnershipModal').modal('hide');
+                        $('#basktTableEntegal tbody').empty();
+                        $('.item-checkbox').prop('checked', false);
+                        
+                    }, 3000);
+                } else {
+                    $('#SpnSuccess').show().text(response.message || 'خطا در ذخیره داده‌ها').css('color', 'red');
+                    setTimeout(function() { $('#SpnSuccess').hide(); }, 3000);
+                }
+                location.reload(); 
+            },
+            error: function(xhr, status, error) {
+                console.error('Save error:', status, error);
+                $('#SpnSuccess').show().text('خطا در ارتباط با سرور').css('color', 'red');
+                setTimeout(function() { $('#SpnSuccess').hide(); }, 3000);
+            }
+        });
+
+
+    }
+
+    $(document).ready(function () {
         // اینیشیالایز DataTable
         $('#example').DataTable({
             paging: true,
@@ -871,7 +1045,7 @@
             ordering: false,
             pageLength: 10,
             language: {
-                "sEmptyTable": "هیچ داده‌ای در جدول وجود ندارد",
+                "sEmptyTable": "هیچ داده‌ای وجود ندارد",
                 "sInfo": "نمایش _START_ تا _END_ از _TOTAL_ رکورد",
                 "sInfoEmpty": "نمایش 0 تا 0 از 0 رکورد",
                 "sInfoFiltered": "(فیلتر شده از _MAX_ رکورد)",
@@ -886,55 +1060,194 @@
                     "sNext": "بعدی",
                     "sPrevious": "قبلی"
                 }
-            },
-        });
-
-        // وقتی چک‌باکس تغییر کرد
-        $('.item-checkbox').on('change', function () {
-            var itemId = $(this).data('item-id');
-            if ($(this).is(':checked')) {
-                console.log('Selected item ID: ' + itemId);
-            } else {
-                console.log('Unselected item ID: ' + itemId);
             }
         });
 
-
-        // وقتی دکمه انتقال کلیک شد
-        $('#enteghal').on('click', function () {
-            var selectedItems = $('.item-checkbox:checked');
-
-            if (selectedItems.length === 0) {
-                alert('لطفاً ابتدا حداقل یک آیتم را انتخاب کنید.');
-                return;
+        // رویداد کلیک دکمه انتقال مالکیت
+        $('#openTransferModal').on('click', function(e) {
+            var selected = $('.item-checkbox:checked');
+            var selectedAnbar = $("#seleranbar").val();
+            if (!selectedAnbar || selectedAnbar === "0" || selectedAnbar === "") {
+                $('#SpnSuccess').show().text('لطفاً یک انبار معتبر انتخاب کنید').css('color', 'red');
+                setTimeout(function() { $('#SpnSuccess').hide(); }, 3000);
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
             }
-
-            // اگر آیتم انتخاب شده، مودال را نمایش بده
-            var enteghalModal = new bootstrap.Modal(document.getElementById('enteghalModal'));
-            enteghalModal.show();
-
-            // مثال: چاپ id آیتم‌های انتخاب شده در کنسول
-            var ids = [];
-            selectedItems.each(function () {
-                ids.push($(this).data('item-id'));
+            if (selected.length === 0) {
+                $('#SpnSuccess').show().text('لطفاً حداقل یک کالا انتخاب کنید').css('color', 'red');
+                setTimeout(function() { $('#SpnSuccess').hide(); }, 3000);
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+            $('#basktTableEntegal tbody').empty();
+            selected.each(function() {
+                var $cb = $(this);
+                var id = $cb.data('id');
+                var shenase = $cb.data('shenase');
+                var description = $cb.data('description');
+                var usable = $cb.data('usableamount');
+                var unit = $cb.closest('tr').find('td:eq(5)').text().trim();
+                var rowHtml = `
+                    <tr>
+                        <td style="display:none;">${unit}</td>
+                        <td name="StuffID" style="display:none;">${id}</td>
+                        <td style="text-align:center">${shenase}</td>
+                        <td style="text-align:center">${description}</td>
+                        <td name="tdInventory" style="text-align:center">${usable}</td>
+                        <td style="text-align:center">${unit}</td>
+                        <td name="tdCount" style="width: 140px;text-align:center">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" onkeyup="javascript: this.value = Comma(this.value);CalcFinalPrice(this,true);" data-fv-maxvalue1="true" maxvalue="${usable}" data-fv-minvalue1="true" minvalue="0.001" class="form-control" name="txtCount" value="0" data-fv-field="txtCount">
+                                </div>
+                                <small style="display: none;" class="help-block" data-fv-validator="maxvalue1" data-fv-for="txtCount" data-fv-result="NOT_VALIDATED">This value is not valid</small>
+                                <small style="display: none;" class="help-block" data-fv-validator="minvalue1" data-fv-for="txtCount" data-fv-result="NOT_VALIDATED">This value is not valid</small>
+                            </div>
+                        </td>
+                        <td name="tdPrice" style="width: 140px;">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" onkeyup="javascript: this.value = Comma(this.value);CalcFinalPrice(this,true);" data-fv-minvalue="true" minvalue="1" maxlength="15" value="0" class="form-control" name="txtPrice">
+                                </div>
+                            </div>
+                        </td>
+                        <td name="tdDiscount" style="width: 140px;">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" onkeyup="this.value = Comma(this.value);CalcFinalPrice(this,true);" data-fv-monywithspace="true" class="form-control" value="0" name="txtDiscount" data-fv-field="txtDiscount">
+                                </div>
+                                <small style="display: none;" class="help-block" data-fv-validator="monywithspace" data-fv-for="txtDiscount" data-fv-result="NOT_VALIDATED">This value is not valid</small>
+                            </div>
+                        </td>
+                        <td name="tdOtherExtra" style="width: 140px;">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" onkeyup="javascript: this.value = Comma(this.value);CalcFinalPrice(this,true);" class="form-control" value="0" name="tdOtherExtra">
+                                </div>
+                            </div>
+                        </td>
+                        <td name="tdTaxs" style="width: 140px;">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" onkeyup="javascript: this.value = Comma(this.value);CalcFinalPrice(this,true);" class="form-control" value="0" name="txtTax">
+                                </div>
+                            </div>
+                        </td>
+                        <td name="tdFinal" class="tdFinal" style="width: 140px;">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" onkeyup="javascript: this.value = Comma(this.value);" class="form-control" value="0" disabled="disabled" name="txtFinal">
+                                </div>
+                            </div>
+                        </td>
+                        <td name="tdDescription" style="width: 140px;">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" value="" name="tdDescription">
+                                </div>
+                            </div>
+                        </td>
+                        <td><button type="button" name="btnDelete" class="btn btn-xs btn-danger" onclick="deleteRow(this)"><i class="fa fa-remove"></i> حذف</button></td>
+                        <td name="tdstuffGroupID" style="display:none;"></td>
+                        <td name="tdPayeInfoID" style="display:none;"></td>
+                    </tr>
+                `;
+                $('#basktTableEntegal tbody').append(rowHtml);
             });
-            console.log('Items to transfer:', ids);
+            updateTotalBillAmount();
         });
 
+        // رویداد کلیک برای دکمه بررسی کد ملی
+        $('#btnCheckNationalCode').on('click', function() {
+            var nationalCode = $('#NationalCodeOthers').val().trim();
+            if (nationalCode) {
+                checkNationalCode(nationalCode);
+            } else {
+                $('#SpnSuccess').show().text('لطفاً کد ملی را وارد کنید').css('color', 'red');
+                setTimeout(function() { $('#SpnSuccess').hide(); }, 3000);
+            }
+        });
 
+        // رویداد Enter برای فیلد کد ملی
+        $('#NationalCodeOthers').on('keypress', function(e) {
+            if (e.which === 13) {
+                e.preventDefault();
+                var nationalCode = $(this).val().trim();
+                if (nationalCode) {
+                    checkNationalCode(nationalCode);
+                } else {
+                    $('#SpnSuccess').show().text('لطفاً کد ملی را وارد کنید').css('color', 'red');
+                    setTimeout(function() { $('#SpnSuccess').hide(); }, 3000);
+                }
+            }
+        });
+
+        // رویداد کلیک برای دکمه ارسال داده‌ها
+        $('#senddata').on('click', function() {
+            sendFormData();
+        });
+
+        // رویداد تغییر وضعیت بارنامه
+        $('input[name="rdbBarnameStatus"]').on('change', function() {
+            toggleBarnameFields();
+        });
 
         $('#chkTransferPlace').change(function () {
             if ($(this).is(':checked')) {
-                $('#placeBox').removeClass('hidden'); // نمایش
+                $('#placeBox').removeClass('hidden');
             } else {
-                $('#placeBox').addClass('hidden'); // مخفی
+                $('#placeBox').addClass('hidden');
             }
         });
 
+        $('#rdbHagAmal').prop('disabled', true).parent().addClass('text-muted');
 
+        function toggleBuyerInfoFields() {
+            var selectedValue = $('input[name="rdbSellType"]:checked').val();
+            console.log('Selected sell type:', selectedValue, 'Role select options:', $('#cmbRoleOfSellerOthers').children('option').length);
+            if (selectedValue === '1') {
+                if ($('#cmbRoleOfSellerOthers').children('option').length > 1) {
+                    $('#cmbRoleOfSellerOthersBox').show();
+                } else {
+                    $('#cmbRoleOfSellerOthersBox').hide();
+                }
+                $('#nameofbuyer').hide();
+                $('#usermobile').hide();
+                $('#mainPlaceBox').show();
+            } else if (selectedValue === '2') {
+                $('#cmbRoleOfSellerOthersBox').hide();
+                $('#nameofbuyer').show();
+                $('#usermobile').show();
+                $('#mainPlaceBox').hide();
+            } else {
+                $('#cmbRoleOfSellerOthersBox').hide();
+                $('#nameofbuyer').show();
+                $('#usermobile').show();
+                $('#mainPlaceBox').show();
+            }
+        }
 
+        toggleBuyerInfoFields();
+        $('input[name="rdbSellType"]').on('change', function() {
+            toggleBuyerInfoFields();
+        });
+
+        $("#seleranbar").on('change', function() {
+            var postalCode = $("#seleranbar option:selected").attr('postalcode') || '';
+            $("#txtSourcePostalCode").val(postalCode);
+            console.log("کد پستی انبار: ", postalCode);
+        });
+
+        // فراخوانی اولیه برای تنظیم وضعیت فیلدهای بارنامه
+        toggleBarnameFields();
     });
+
+
+    $('button[name="cancel"]').on('click', function() {
+        $('#TransferOwnershipModal').modal('hide');
+    });
+
 </script>
-
-
 {% endblock js %}

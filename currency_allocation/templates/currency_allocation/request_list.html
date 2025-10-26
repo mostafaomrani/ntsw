@@ -20,8 +20,7 @@
 {% endblock head %}
 {% block main %}
     <div class="container-fluid bg-white py-4">
-        <form methode="get"
-              action="{% url 'currency_allocation:create_request' %}"
+        <form methode="get" action="{% url 'currency_allocation:create_request' %}"
               class="mb-3">
             <div class="row">
                 <div class="col-12 col-md-6 col-lg-4">
@@ -128,7 +127,7 @@
                     {% for r in object_list %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
-                            <td>{{ r.main_data }}</td>
+                            <td>{{ r.main_data.registrations_number }}</td>
                             <td>{{ r.row }}</td>
                             <td>{{ r.get_status_display }}</td>
                             <td>

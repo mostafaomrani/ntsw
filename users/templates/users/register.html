@@ -5,12 +5,27 @@
   
 {% endblock title %}
 {% block head %}
-    <link rel="stylesheet"
-          href="{% static 'persianDatepicker/css/persianDatepicker-default.css' %}">
+    <link rel="stylesheet" href="{% static 'persianDatepicker/css/persianDatepicker-default.css' %}">
 {% endblock head %}
 {% block main %}
 <div class="container">
     <form method="post" enctype="multipart/form-data" novalidate class="needs-validation">
+
+      {% if form.errors %}
+        <div class="alert alert-danger">
+          <ul class="mb-0">
+            {% for field in form %}
+              {% for error in field.errors %}
+                <li>{{ field.label }}: {{ error }}</li>
+              {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+
         {% csrf_token %}
         <div>
           
@@ -19,16 +34,6 @@
             <div class="mb-3">
               <label for="id_national_code" class="form-label">{{ form.national_code.label }}*</label>
               {% render_field form.national_code class="form-control" %}
-            </div>
-
-            <div class="mb-3">
-              <label for="id_first_name" class="form-label">{{ form.first_name.label }}*</label>
-              {% render_field form.first_name class="form-control" %}
-            </div>
-
-            <div class="mb-3">
-              <label for="id_last_name" class="form-label">{{ form.last_name.label }}*</label>
-              {% render_field form.last_name class="form-control" %}
             </div>
 
             <div class="mb-3">

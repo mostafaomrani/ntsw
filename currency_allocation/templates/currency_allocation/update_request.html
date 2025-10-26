@@ -23,16 +23,37 @@
                 {% csrf_token %}
                 <div class="row">
                     {% input_box 'شماره ثبت سفارش' object.main_data.identifier True 'number' %}
+                    
                     <div class="w-100"></div>
                     {% input_box 'شماره پرونده' object.file_number True 'number' %}
                     {% input_box 'شماره ردیف' object.row True 'number' %}
                     {% input_box 'نسخه' ۱ True 'number' %}
-                    {% input_box 'ارز ثبت سفارش' object.main_data.financial.currency_type True 'text' %}
+                    
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">ارز ثبت سفارش<small class="text-danger">*</small></span>
+                            <input value="دلار آمریکا" class="form-control" type="text" disabled="" name="" id="" value={{ object.main_data.financial.currency_type }}>
+                            <span class="tooltip-custom" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="ارز تعیین شده در پرونده ثبت سفارش را نمایش می دهد.">
+                                <i class="fa fa-2x fa-question-circle no-margin success" style="font-size: 20px; color: rgb(244, 180, 0);"></i>
+                                <div class="tooltip-animation"></div>
+                            </span>
+                        </div>
+                    </div>
+
+                    {% comment %} {% input_box 'ارز ثبت سفارش' object.main_data.financial.currency_type True 'text' %} {% endcomment %}
+
+                    
                     <div class="col-12 col-md-6 col-lg-4">
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="basic-addon2">{{ form.request_amount_by_main_data_currency.label }}<small class="text-danger">*</small></span>
                             {% render_field form.request_amount_by_main_data_currency class="form-control" %}
                             <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                            <span class="tooltip-custom" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="مبلغ درخواست تخصیص ارز بر حسب ارز ثبت سفارش را مشخص می‌کند که توسط کاربر وارد می‌شود. مجموع مبلغ درخواست‌های تخصیص ارز یک ثبت سفارش نمی‌تواند از مبلغ کل ثبت سفارش بیشتر شود.">
+                                <i class="fa fa-2x fa-question-circle no-margin success" style="font-size: 20px; color: rgb(244, 180, 0);"></i>
+                                <div class="tooltip-animation"></div>
+                            </span>
                         </div>
                     </div>
                     <div class="w-100"></div>
@@ -41,6 +62,11 @@
                             <span class="input-group-text" id="basic-addon2">{{ form.currency.label }}<small class="text-danger">*</small></span>
                             {% render_field form.currency class="form-control p-0" placeholder="جستجو کنید" %}
                             <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                            <span class="tooltip-custom" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="انوع ارز تخصیص را مشخص می‌کند. این ارز می‌تواند با ارز ثبت سفارش متفاوت باشد. در حال حاضر اگر تأمین ارز از منابع بانک مرکزی صورت گیرد، نوع ارز تأمین نمی‌تواند متفاوت با نوع ارز تخصیص باشد.">
+                                <i class="fa fa-2x fa-question-circle no-margin success" style="font-size: 20px; color: rgb(244, 180, 0);"></i>
+                                <div class="tooltip-animation"></div>
+                            </span>
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-4">
@@ -48,6 +74,11 @@
                             <span class="input-group-text" id="basic-addon2">{{ form.request_amount.label }}<small class="text-danger">*</small></span>
                             {% render_field form.request_amount class="form-control disabled" %}
                             <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                            <span class="tooltip-custom" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="معادل مبلغ درخواست به ارز ثبت سفارش بر حسب ارز درخواست را مشخص می‌کند و محاسبه آن به صورت خودکار صورت می‌گیرد. این مبلغ در زمان ایجاد درخواست به صورت موقت به نرخ روز ایجاد محاسبه می‌شود. اما این مبلغ در زمان تأیید نهایی بانک مرکزی به نرخ همان روز (تاریخ تخصیص) قطعی می‌شود. به عبارت دیگر مبلغ درخواست به ارز ثبت سفارش ثابت و برابر با مقداری که کاربر وارد کرده است، باقی می‌ماند؛ اما در زمان تخصیص مبلغ درخواست مجدد محاسبه می‌شود.">
+                                <i class="fa fa-2x fa-question-circle no-margin success" style="font-size: 20px; color: rgb(244, 180, 0);"></i>
+                                <div class="tooltip-animation"></div>
+                            </span>
                         </div>
                     </div>
                     <div class="w-100"></div>
@@ -56,6 +87,11 @@
                             <span class="input-group-text" id="basic-addon2">{{ form.transaction_type.label }}<small class="text-danger">*</small></span>
                             {% render_field form.transaction_type class="form-control p-0" placeholder="جستجو کنید" %}
                             <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                            <span class="tooltip-custom" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="شیوه پرداخت به فروشنده خارجی را مشخص می‌کند: - پیش‌پرداخت: همان حواله ارزی است که در آن پرداخت وجه به فروشنده پیش از دریافت اسناد حمل صورت می‌گیرد؛ - حساب‌باز: پرداخت وجه مدتی پس از دریافت اسناد حمل صورت می‌گیرد، بدون آن که فروشنده سندی مالی حاکی از بدهی خریدار دریافت کند؛ - دیداری: می‌تواند برات دیداری یا اعتبار اسنادی دیداری باشد که در آن پرداخت وجه به فروشنده بلافاصله پس از دریافت اسناد حمل صورت می‌گیرد؛ - مدت‌دار: می‌تواند برات مدت‌دار یا اعتبار اسنادی مدت‌دار باشد که در آن پرداخت وجه مدتی مشخص پس از دریافت اسناد حمل صورت می‌گیرد، اما فروشنده هنگام مبادله اسناد حمل سندی حاکی از بدهی خریدار دریافت می‌کند. ">
+                                <i class="fa fa-2x fa-question-circle no-margin success" style="font-size: 20px; color: rgb(244, 180, 0);"></i>
+                                <div class="tooltip-animation"></div>
+                            </span>
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-4">
@@ -63,6 +99,11 @@
                             <span class="input-group-text" id="basic-addon2">{{ form.undertaking.label }}<small class="text-danger">*</small></span>
                             {% render_field form.undertaking class="form-control p-0" placeholder="جستجو کنید" %}
                             <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                            <span class="tooltip-custom" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="مشخص می‌کند چه کسی پرداخت ارز به فروشنده خارجی را متعهد شده است: - خریدار: در شیوه‌های پرداخت حواله، حساب‌باز، برات دیداری و برات مدت‌دار تعهد پرداخت با خریدار است؛ - بانک: در شیوه‌های پرداخت اعتبار اسنادی دیداری و اعتبار اسنادی مدت‌دار تعهد پرداخت با بانک عامل است.">
+                                <i class="fa fa-2x fa-question-circle no-margin success" style="font-size: 20px; color: rgb(244, 180, 0);"></i>
+                                <div class="tooltip-animation"></div>
+                            </span>
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-4">
@@ -70,6 +111,11 @@
                             <span class="input-group-text" id="basic-addon2">{{ form.facility_location.label }}<small class="text-danger">*</small></span>
                             {% render_field form.facility_location class="form-control p-0" placeholder="جستجو کنید" %}
                             <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                            <span class="tooltip-custom" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="در صورتی که برای پرداخت به فروشنده خارجی، تسهیلات دریافت شده باشد، محل تسهیلات را مشخص می‌کند؛ در غیر این صورت باید مقدار «بدون تسهیلات» انتخاب شود.">
+                                <i class="fa fa-2x fa-question-circle no-margin success" style="font-size: 20px; color: rgb(244, 180, 0);"></i>
+                                <div class="tooltip-animation"></div>
+                            </span>
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-4">
@@ -77,6 +123,11 @@
                             <span class="input-group-text" id="basic-addon2">{{ form.repayment_deadline.label }}<small class="text-danger">*</small></span>
                             {% render_field form.repayment_deadline class="form-control p-0" placeholder="جستجو کنید" %}
                             <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                            <span class="tooltip-custom" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="مهلت خریدار برای پرداخت وجه را مشخص می‌کند و به صورت خودکار بر اساس مقادیر انتخاب شده در فیلدهای قبلی، مقداردهی می‌شود.">
+                                <i class="fa fa-2x fa-question-circle no-margin success" style="font-size: 20px; color: rgb(244, 180, 0);"></i>
+                                <div class="tooltip-animation"></div>
+                            </span>
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-4">
@@ -84,6 +135,11 @@
                             <span class="input-group-text" id="basic-addon2">{{ form.supply_currency_place.label }}<small class="text-danger">*</small></span>
                             {% render_field form.supply_currency_place class="form-control p-0" placeholder="جستجو کنید" %}
                             <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                            <span class="tooltip-custom" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="مشخص می‌کند ارز پرداختی به فروشنده خارجی از چه محلی تأمین می‌شود. این فیلد نباید با فیلد محل تأمین ارز ثبت سفارش در تناقض باشد. در صورتی که تأمین ارز از منابع بانک مرکزی صورت گیرد، اعم از آن که نرخ ترجیحی یا آزاد داشته باشد، باید گزینه «بانک مرکزی» انتخاب شود.">
+                                <i class="fa fa-2x fa-question-circle no-margin success" style="font-size: 20px; color: rgb(244, 180, 0);"></i>
+                                <div class="tooltip-animation"></div>
+                            </span>
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-4">
@@ -91,6 +147,11 @@
                             <span class="input-group-text" id="basic-addon2">{{ form.currency_rate.label }}<small class="text-danger">*</small></span>
                             {% render_field form.currency_rate class="form-control p-0" placeholder="جستجو کنید" %}
                             <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                            <span class="tooltip-custom" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="مشخص می‌کند ارز با چه نرخی خریداری می‌شود. تنها در صورتی که محل تأمین ارز «بانک مرکزی» انتخاب شده باشد، امکان انتخاب «آزاد» و «ترجیحی» وجود دارد. برای سایر محل‌های تأمین ارز، به صورت خودکار مقدار «آزاد» انتخاب می‌شود.">
+                                <i class="fa fa-2x fa-question-circle no-margin success" style="font-size: 20px; color: rgb(244, 180, 0);"></i>
+                                <div class="tooltip-animation"></div>
+                            </span>
                         </div>
                     </div>
                     <div class="w-100"></div>
@@ -99,6 +160,11 @@
                             <span class="input-group-text" id="basic-addon2">{{ form.request_type.label }}<small class="text-danger">*</small></span>
                             {% render_field form.request_type class="form-control p-0" placeholder="جستجو کنید" %}
                             <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                            <span class="tooltip-custom" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="هدف از دریافت ارز را مشخص می‌کند؛ قرار است این مبلغ برای چه بخشی از هزینه‌های واردات صرف شود؟ برای پرداخت مبالغ قید شده در پیش‌فاکتور، باید یکی از گزینه‌های «پیش‌پرداخت»، «میان‌پرداخت» یا «اصل» و برای پرداخت هزینه‌های تبدیل و انتقال ارز باید «کارمزد» انتخاب شود. گزینه «سود» تنها در مواردی که از تسهیلات استفاده می‌شود، قابل انتخاب است.">
+                                <i class="fa fa-2x fa-question-circle no-margin success" style="font-size: 20px; color: rgb(244, 180, 0);"></i>
+                                <div class="tooltip-animation"></div>
+                            </span>
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-4">
@@ -106,6 +172,11 @@
                             <span class="input-group-text" id="basic-addon2">{{ form.duration_per_month.label }}<small class="text-danger">*</small></span>
                             {% render_field form.duration_per_month class="form-control" %}
                             <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                            <span class="tooltip-custom" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="به صورت پیش‌فرض باید مقدار 0 درج شود. تنها در صورت استفاده از نوع معامله دیداری با دریافت تسهیلات از بانک خارجی (ریفاینانس) و نوع درخواست اصل یا نوع معامله مدت‌دار بدون دریافت تسهیلات (یوزانس) و نوع درخواست اصل، ممکن است نیاز به درج مقداری دیگر باشد؛ برای درج مقدار مناسب در این شرایط، باید از بانک عامل راهنمایی گرفته شود..">
+                                <i class="fa fa-2x fa-question-circle no-margin success" style="font-size: 20px; color: rgb(244, 180, 0);"></i>
+                                <div class="tooltip-animation"></div>
+                            </span>
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-4">
@@ -113,13 +184,24 @@
                             <span class="input-group-text" id="request-expire-data">{{ form.expire_date.label }}<small class="text-danger">*</small></span>
                             {% render_field form.expire_date class="form-control" %}
                             <small class="invalid-feedback">پر کردن این فیلد الزامی است</small>
+                            <span class="tooltip-custom" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="مهلت خرید ارز بر حسب روز را مشخص می‌کند. در حالت عادی (با مدت به ماه 0) آخرین مهلت خرید ارز برابر، تاریخ تخصیص ارز به اضافه مهلت انقضاست.">
+                                <i class="fa fa-2x fa-question-circle no-margin success" style="font-size: 20px; color: rgb(244, 180, 0);"></i>
+                                <div class="tooltip-animation"></div>
+                            </span>
                         </div>
                     </div>
                     <div class="col-12">
                         <label>
                             {{ form.request_update }}
-                            درخواست تمدید دارد
+                            درخواست تمدید دارد               
+                            <span class="tooltip-custom" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="اگر کاربر نیاز به تمدید مهلت خرید ارز داشته باشد تیک تمدید را انتخاب می کند. درصورتیکه درخواست تمدید تائید گردد تاریخ تخصیص ارز بروزرسانی می گردد و طبع آن مهلت خرید ارز از روز تائید نهایی تمدید محاسبه می گردد.">
+                                <i class="fa fa-2x fa-question-circle no-margin success" style="font-size: 20px; color: rgb(244, 180, 0);"></i>
+                                <div class="tooltip-animation"></div>
+                            </span>
                         </label>
+
                     </div>
                     <div class="col-12 col-md-8 mx-auto">
                         <div class="mt-4">
@@ -242,7 +324,159 @@
             </form>
         </div>
     </div>
+
+        <style>
+            .tooltip-inner {
+                max-width: 300px; 
+                width: auto;      
+                font-size: 12px;  
+                background-color: #f9fa7e;
+                color: #000 !important;
+                font-family: IRANSansX !important;
+            }
+            .tooltip-custom {
+                border: 1px solid gainsboro;
+                padding-top: 5px;
+                align-items: center;
+                border: 1px solid #ccc;
+                border-right-color: rgb(204, 204, 204);
+                border-bottom-left-radius: 4px;
+                border-bottom-right-radius: 0;
+                border-right-color: #fff;
+                border-top-left-radius: 4px;
+                border-top-right-radius: 0;
+                padding-right: 7px;
+                padding-left: 7px;
+            }
+            .tooltip-animation {
+                animation: introjspulse 3s ease-out;
+                animation-iteration-count: infinite;
+                background-color: #d8baba;
+                background-size: 100% 100%;
+                border: 10px solid #9292925c;
+                border-radius: 50rem;
+                height: 30px;
+                opacity: .3;
+                position: absolute;
+                width: 30px;
+                z-index: 1;
+                top: 1px;
+                left: 2px;
+            }   
+
+            .input-group-text {
+                padding: 8px;
+            }
+            input:read-only:not([type="file"], [type="checkbox"], [type="radio"]), textarea:read-only {
+                background-color: #ffff002e !important;
+                cursor: no-drop;
+            }
+
+
+
+            /* Standard keyframes */
+            @keyframes introjspulse {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+
+            25% {
+                transform: scale(0);
+                opacity: 0.1;
+            }
+
+            50% {
+                transform: scale(0.1);
+                opacity: 0.3;
+            }
+
+            75% {
+                transform: scale(0.5);
+                opacity: 0.5;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 0;
+            }
+            }
+
+            /* Webkit */
+            @-webkit-keyframes introjspulse {
+            0% {
+                -webkit-transform: scale(0);
+                opacity: 0;
+            }
+
+            25% {
+                -webkit-transform: scale(0);
+                opacity: 0.1;
+            }
+
+            50% {
+                -webkit-transform: scale(0.1);
+                opacity: 0.3;
+            }
+
+            75% {
+                -webkit-transform: scale(0.5);
+                opacity: 0.5;
+            }
+
+            100% {
+                -webkit-transform: scale(1);
+                opacity: 0;
+            }
+            }
+
+            /* Mozilla */
+            @-moz-keyframes introjspulse {
+            0% {
+                -moz-transform: scale(0);
+                opacity: 0;
+            }
+
+            25% {
+                -moz-transform: scale(0);
+                opacity: 0.1;
+            }
+
+            50% {
+                -moz-transform: scale(0.1);
+                opacity: 0.3;
+            }
+
+            75% {
+                -moz-transform: scale(0.5);
+                opacity: 0.5;
+            }
+
+            100% {
+                -moz-transform: scale(1);
+                opacity: 0;
+            }
+            }
+    </style>
 {% endblock main %}
+
 {% block js %}
+
+    <script src="/static/bootstrap-5.2.3/js/bootstrap.bundle.js"></script>
+
     <script src="{% static 'currency_allocation/update_request.js' %}"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            });
+        })
+    </script>
+
+
+
+
 {% endblock js %}

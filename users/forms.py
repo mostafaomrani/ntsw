@@ -8,14 +8,10 @@ from django.core.validators import RegexValidator
 
 class RegisterForm(UserCreationForm):
     birthday = forms.CharField(label='تاریخ تولد')
-    first_name = forms.CharField(label='نام', max_length=150, required=True)
-    last_name = forms.CharField(label='نام‌خانوادگی', max_length=150, required=True)
 
     class Meta:
         model = CustomUser
         fields = (
-            'first_name',  # اضافه شد
-            'last_name',   # اضافه شد
             'national_code',
             'birthday',
             'username',
@@ -40,10 +36,10 @@ class RegisterForm(UserCreationForm):
 
     def clean_birthday(self):
         data = self.cleaned_data.get('birthday')
-        r = '\d{2,4}\/\d{1,2}\/\d{1,2}'
-        if not re.search(r, data):
-            raise ValidationError(
-                "فرمت تاریخ تولد اشتباه است. فرمت تاریخ باید به صورت YYYY/MM/DD باشد.")
+        # r = '\d{2,4}\/\d{1,2}\/\d{1,2}'
+        # if not re.search(r, data):
+        #     raise ValidationError(
+        #         "فرمت تاریخ تولد اشتباه است. فرمت تاریخ باید به صورت YYYY/MM/DD باشد.")
         return data
 
 

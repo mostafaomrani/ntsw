@@ -23,14 +23,8 @@
         <div class="row">
             <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
                 <form id="frmSearch" novalidate="novalidate" class="fv-form fv-form-bootstrap">
-                    <div class="row mb-4">
-  <div class="col-12">
-    <div class="card">
-      <div class="card-header">
-        <h5 class="mb-0"><i class="fa fa-search"></i> نوار ابزار</h5>
-      </div>
-      <div class="card-body">
-        <div class="row">
+                  
+<div class="row">
           <!-- نوع سند -->
           <div class="col-md-3 mb-3">
             <div class="input-group">
@@ -188,270 +182,90 @@
               </button>
             </div>
           </div>
-          </div>
-
-
-
+          </div> 
         </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-                    <!-- جدول نتایج جستجو -->
                     
                     
-                    <div class="row mt-4">
-                        <div class="col-12">
-                            <div class="table-responsive">
-                                <table id="example" class="display">
-                                    <thead>
-                                        <tr>
-                                            <th>ردیف</th>
-                                            <th>شماره سند</th>
-                                            <th>تاریخ سند</th>
-                                            <th>تاریخ ثبت</th>
-                                            <th>نوع سند</th>
-                                            <th>خریدار</th>
-                                            <th>مبدأ</th>
-                                            <th>مقصد</th>
-                                            <th>شماره بارنامه</th>
-                                            <th>شرح سند</th>
-                                            <th>وضعیت</th>
-                                            <th>عملیات</th>
-                                            <th>جزئیات</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                      {% for item in document_trade_list %}
-                                        <tr 
-                                            {% if item.status == 'approved' %}
-                                                style="background-color: #d4edda;"
-                                            {% elif item.status == 'rejected' %}
-                                                style="background-color: #801515; color: white;"
-                                            {% endif %}
-                                        >
-                                            <td>{{ forloop.counter }}</td>
-                                            <td>{{ item.document_number }}</td>
-                                            <td>{{ item.document_date|to_jalali }}</td>
-                                            <td>{{ item.register_date|to_jalali }}</td>
-                                            <td>{{ item.document_type }}</td>
-                                            <td>{{ item.seller }}</td>
-                                            <td>{{ item.origin }}</td>
-                                            <td>{{ item.destination }}</td>
-                                            <td>{{ item.bill_number }}</td>
-                                            <td>{{ item.description }}</td>
-                                            <td>{{ item.get_status_display }}</td>
-                                            <td class="allbtn">
-                                                {% if item.status == 'pending' %}
-                                                <a data-bs-toggle="modal" data-bs-target="#NonApprovalModal{{ item.id }}" name="notAcceptIncomingDoc" class="btn btn-danger btn-xs margin-right-5 margin-top-5">
-                                                    <i class="fa fa-close"></i>عدم تایید
-                                                </a>
-                                                <a data-bs-toggle="modal" data-bs-target="#okStuffTransferModal{{ item.id }}" name="OKRegister" class="btn btn-success btn-xs margin-right-5 margin-top-5">
-                                                    <i class="fa fa-check"></i>تایید خرید
-                                                </a>
-                                                <a name="BtnPrintFactor" class="btn btn-info btn-xs search margin-right-5 margin-top-5">
-                                                    <i class="fa fa-check"></i>چاپ فاکتور
-                                                </a>
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="table-responsive">
+                    <table id="example" class="display">
+                        <thead>
+                            <tr>
+                                <th>ردیف</th>
+                                <th>شماره سند</th>
+                                <th>تاریخ سند</th>
+                                <th>تاریخ ثبت</th>
+                                <th>نوع سند</th>
+                                <th>خریدار</th>
+                                <th>مبدأ</th>
+                                <th>مقصد</th>
+                                <th>شماره بارنامه</th>
+                                <th>شرح سند</th>
+                                <th>وضعیت</th>
+                                <th>عملیات</th>
+                                <th>جزئیات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in document_trade_list %}
+                            <tr
+                                {% if item.status == 'approved' %}
+                                    style="background-color: #d4edda;"
+                                {% elif item.status == 'rejected' %}
+                                    style="background-color: #801515; color: white;"
+                                {% endif %}
+                            >
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ item.document_number }}</td>
+                                <td>{{ item.document_date|to_jalali }}</td>
+                                <td>{{ item.register_date|to_jalali }}</td>
+                                <td>{{ item.document_type }}</td>
+                                <td>{{ item.buyer }} ({{ item.buyer.username|default:"-" }})</td>
+                                <td>
+                                  {% if item.seller_anbar %}
+                                      {{ item.seller_anbar.name|default:"-" }}
+                                  {% else %}
+                                      انبار موقت
+                                  {% endif %}
+                                </td>
+                                <td>
+                                  {% if item.anbar %}
+                                      {{ item.anbar.name|default:"-" }}
+                                  {% else %}
+                                      انبار موقت
+                                  {% endif %}
+                                </td>
+                                <td>{{ item.bill_number }}</td>
+                                <td>{{ item.description }}</td>
+                                <td>
+                                    {% if item.status == 'approved' %}
+                                    <p style="color:green;margin: 0;"> {{ item.get_status_display }} </p>
+                                    {% else %}
+                                    <p style="margin: 0;"> {{ item.get_status_display }} </p>
+                                    {% endif %}
+                                </td>
+                                <td class="allbtn">
+                                    
+                                        <p style="width: 100%"> --- </p>
+                              
+                                </td>
+                                <td>
+                                    <a style="font-size: 9px; color: white;" name="BtnPrintFactor"
+                                        class="btn btn-info btn-xs search margin-right-5 margin-top-5">
+                                        <i class="fa fa-check"></i>چاپ فاکتور
+                                    </a>
+                                </td>
+                            </tr>
 
-                                                {% elif item.status == 'rejected' %}
+                          
+                            {% endfor %}
+                        </tbody>
+                    </table>
 
-                                                {% elif item.status == 'approved' %}
-                                                    <a name="BtnPrintFactor" class="btn btn-info btn-xs search margin-right-5 margin-top-5">
-                                                        <i class="fa fa-check"></i>چاپ فاکتور
-                                                    </a>
-                                                {% endif %}
-                                            </td>
-                                            <td>
-                                                <a style="font-size: 9px;color: white;" name="BtnPrintFactor" class="btn btn-info btn-xs search margin-right-5 margin-top-5">
-                                                    <i class="fa fa-check"></i>چاپ فاکتور
-                                                </a>
-                                            </td>
-                                        </tr>
-
-
-                                        <!-- Modal -->
-                                        <div class="modal fade" id="okStuffTransferModal{{ item.id }}" tabindex="-1" aria-labelledby="okStuffTransferModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog custom-xs">
-                                            <div class="modal-content fv-form fv-form-bootstrap">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="okStuffTransferModalLabel">تایید خرید</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <form id="FrmOkStuffeTransfer" novalidate>
-                                                <!-- اطلاعات نقش -->
-                                                <h6 class="row-title before-primary">اطلاعات نقش</h6>
-                                                <hr>
-                                                <div class="row mb-3">
-                                                    <div class="col-md-6">
-                                                    <div class="form-check">
-                                                        <input type="checkbox" class="form-check-input" id="changeDocRole" name="changeDocRole">
-                                                        <label class="form-check-label" for="changeDocRole">تغییر نقش سند</label>
-                                                    </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                    <div class="input-group">
-                                                        <span class="input-group-text"><span class="danger">*</span> انتخاب نقش</span>
-                                                        <select class="form-control" id="selectRole" name="selectRole" disabled>
-                                                        <option value="">انتخاب کنید</option>
-                                                        <option value="53404">فرایندشیمی صدرا - تولید کننده</option>
-                                                        <option value="164863">فرایندشیمی صدرا - واردکننده</option>
-                                                        </select>
-                                                    </div>
-                                                    </div>
-                                                </div>
-
-                                                <!-- اطلاعات مقصد -->
-                                                <h6 class="row-title before-primary">اطلاعات مقصد</h6>
-                                                <hr>
-                                                <div class="row mb-3">
-                                                    <div class="col-md-6">
-                                                    <div class="input-group">
-                                                        <span class="input-group-text"><span class="danger">*</span> انبار</span>
-                                                        <select class="form-control" name="placeCombo" id="placeCombo23" required>
-                                                        <option value="">انتخاب کنید</option>
-                                                        <option value="119883">فرآیند شیمی صدرا (5189151875)</option>
-                                                        </select>
-                                                        <button type="button" class="btn btn-default"><i class="fa fa-plus"></i></button>
-                                                    </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                    <div class="input-group">
-                                                        <span class="input-group-text">تاریخ تحویل</span>
-                                                        <input type="text" id="DeliveryDate" name="DeliveryDate" class="date form-control persianDatePicker2">
-                                                    </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row mb-3">
-                                                    <div class="col-md-6 form-check">
-                                                    <input type="checkbox" class="form-check-input" id="UnKnownWhereHouse" name="UnKnownWhereHouse">
-                                                    <label class="form-check-label" for="UnKnownWhereHouse">انبار موقت (عدم ارسال به سامانه جامع انبار)</label>
-                                                    </div>
-                                                </div>
-
-                                                <!-- اطلاعات حمل -->
-                                                <h6 class="row-title before-primary">اطلاعات حمل</h6>
-                                                <hr>
-                                                <div class="row mb-3">
-                                                    <div class="col-md-6">
-                                                    <div class="input-group">
-                                                        <span class="input-group-text">شماره بارنامه</span>
-                                                        <input type="text" class="form-control" name="WayBillNumber" id="WayBillNumber" disabled>
-                                                        <button type="button" class="btn btn-blue"><i class="fa fa-search"></i></button>
-                                                    </div>
-                                                    </div>
-                                                    <div class="col-md-6 form-check">
-                                                    <input type="checkbox" class="form-check-input" id="HasWayBill" name="HasWayBill">
-                                                    <label class="form-check-label" for="HasWayBill">بدون بارنامه</label>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row mb-3">
-                                                    <div class="col-md-6">
-                                                    <div class="input-group">
-                                                        <span class="input-group-text">سریال بارنامه</span>
-                                                        <input type="text" class="form-control" name="WayBillSerial" id="WayBillSerial" disabled>
-                                                    </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                    <div class="input-group">
-                                                        <span class="input-group-text">تاریخ بارنامه</span>
-                                                        <input type="text" class="form-control persianDatePicker1" name="WayBillDate" id="WayBillDate" disabled>
-                                                    </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row mb-3">
-                                                    <div class="col-md-6">
-                                                    <div class="input-group">
-                                                        <span class="input-group-text"><span class="danger">*</span> کد ملی حمل کننده / راننده</span>
-                                                        <input type="text" class="form-control" name="carrierNationalCode" id="carrierNationalCode" required>
-                                                    </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                    <div class="input-group">
-                                                        <span class="input-group-text"><span class="danger">*</span> شماره همراه حمل کننده / راننده</span>
-                                                        <input type="text" class="form-control" name="carrierMobile" id="carrierMobile" required>
-                                                    </div>
-                                                    </div>
-                                                </div>
-
-                                                <!-- اطلاعات انبارداری -->
-                                                <h6 class="row-title before-primary">اطلاعات انبارداری</h6>
-                                                <hr>
-                                                <div class="form-check mb-3">
-                                                    <input type="checkbox" class="form-check-input" id="InfoExistinWherehouse" name="InfoExistinWherehouse">
-                                                    <label class="form-check-label" for="InfoExistinWherehouse">اطلاعات این سند قبلا در سامانه انبار ثبت شده است</label>
-                                                </div>
-
-                                                <div class="d-flex justify-content-end">
-                                                    <button type="button" class="btn btn-success">ثبت</button>
-                                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">انصراف</button>
-                                                </div>
-
-                                                </form>
-                                            </div>
-                                            </div>
-                                        </div>
-                                        </div>
-
-
-
-
-                                        <!-- Modal برای FrmNonApproval -->
-                                        <div class="modal fade" id="NonApprovalModal{{ item.id }}" tabindex="-1" aria-labelledby="NonApprovalModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-lg"> <!-- اندازه کوچک -->
-                                            <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="NonApprovalModalLabel">عدم تایید سند</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <form id="FrmNonApproval" action="#" method="post" novalidate="novalidate" class="fv-form fv-form-bootstrap">
-                                                <input name="__RequestVerificationToken" type="hidden" value="pQqU6piqlQESxLi9bS-O9LA-2KfsZ1hSOv9emqM6ATMPzvbp7ZMNdi9wVR_P1o3sXemBKZ1BLodS0zfzai3vEAv_0LI1">
-
-                                                <h6 class="text-center text-danger mb-2">قبل از عدم تائید سند با فروشنده هماهنگی لازم را انجام دهید</h6>
-                                                <hr>
-
-                                                <div class="mb-3">
-                                                    <label for="reasonType" class="form-label"><span class="text-danger">*</span> علت عدم تائید</label>
-                                                    <select class="form-control" name="reasonType" id="reasonType" required>
-                                                    <option selected value="">انتخاب کنید</option>
-                                                    <option value="0">از فروشنده خرید نداشته ام</option>
-                                                    <option value="1">از فروشنده خرید داشته ام ولی سند قابل تشخیص نیست</option>
-                                                    <option value="2">از فروشنده خرید داشته ام ولی اطلاعات سند اشتباه است</option>
-                                                    <option value="3">از فروشنده خرید داشته ام ولی از خرید منصرف شدم</option>
-                                                    <option value="4">سایر</option>
-                                                    </select>
-                                                </div>
-
-                                                <div class="mb-3">
-                                                    <label for="reasonDesc" class="form-label">شرح علت</label>
-                                                    <input type="text" id="reasonDesc" name="reasonDesc" class="form-control">
-                                                </div>
-
-                                                <div class="d-flex justify-content-end">
-                                                    <button type="button" class="btn btn-success">ثبت</button>
-                                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">انصراف</button>
-                                                </div>
-                                                </form>
-                                            </div>
-                                            </div>
-                                        </div>
-                                        </div>
-
-
-                                        {% endfor %}
-
-                                    </tbody>
-                                </table>
-
-                            </div>
-                        </div>
-                    </div>
+                </div>
+            </div>
+        </div>
 
 
 

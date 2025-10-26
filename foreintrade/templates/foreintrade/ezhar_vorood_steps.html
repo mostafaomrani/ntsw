@@ -1,0 +1,820 @@
+{% extends "base.html" %} 
+{% load static %} 
+{% load date_filters %} 
+{% load widget_tweaks %} 
+{% load ui_template_tag %}
+
+{% block title %}
+اظهار ورود کالا
+{% endblock title %}
+
+{% block breadcrumbs %}
+{% breadcrumbs ' عملیات تجارت داخلی ' '#' 'اظهار ورود کالا' '#' %}
+{% endblock breadcrumbs %}
+
+{% block page-title %}
+اظهار ورود کالا 
+{% endblock page-title %}
+
+
+{% block main %} 
+{% if messages %} 
+{% for message in messages %}
+  <div class="text-center alert alert-{{ message.tags }}">{{ message|safe }}</div>
+{% endfor %}
+{% endif %}
+
+
+<link rel="stylesheet" href="{% static 'persianDatepicker/css/persianDatepicker-default.css' %}">
+<link rel='stylesheet' href='https://cdn.datatables.net/2.3.4/css/dataTables.dataTables.css' media='all' />
+
+<div class="container-fluid">
+  <nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+      <button
+        class="nav-link active button-breadcrumbs py-3 border-bottom border-top"
+        id="nav-home-tab"
+        data-bs-toggle="tab"
+        data-bs-target="#nav-home"
+        type="button"
+        role="tab"
+        aria-controls="nav-home"
+        aria-selected="true"
+      >
+        <span class="outline-badge">1</span> اظهار ورود کالا
+      </button>
+      <button
+        class="nav-link button-breadcrumbs py-3 border-bottom border-top ps-5"
+        id="nav-profile-tab"
+        data-bs-toggle="tab"
+        data-bs-target="#nav-profile"
+        type="button"
+        role="tab"
+        aria-controls="nav-profile"
+        aria-selected="false"
+        disabled
+      >
+        <span class="outline-badge">2</span> بارگذاری شناسه رهگیری
+      </button>
+      <button
+        class="nav-link button-breadcrumbs py-3 border-bottom border-top ps-5"
+        id="nav-profile3-tab"
+        data-bs-toggle="tab"
+        data-bs-target="#nav-profile3"
+        type="button"
+        role="tab"
+        aria-controls="nav-profile3"
+        aria-selected="false"
+      >
+        <span class="outline-badge">3</span> نهایی سازی اظهار
+      </button>
+    </div>
+  </nav>
+  <div class="tab-content" id="nav-tabContent">
+    <div
+      class="tab-pane fade show active"
+      id="nav-home"
+      role="tabpanel"
+      aria-labelledby="nav-home-tab"
+    >
+      <div class="container-fluid bg-white">
+        <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+          <form
+            id="frmRequestSearch"
+            class="fv-form fv-form-bootstrap"
+            novalidate="novalidate"
+          >
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <div class="input-group">
+                  <span class="input-group-text bg-light"> انبار </span>
+                  <select
+                    name="anbar"
+                    id="anbar"
+                    class="form-control"
+                  >
+                    <option value="" selected="selected">انتخاب کنید</option>
+                    {% for anbar in user_anbars %}
+                    <option value="{{ anbar.id }}" postalcode="{{ anbar.postal_code }}">
+                        {{ anbar.name }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-md-4 mb-3">
+                <div class="input-group" style="margin-top: 10px">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="chkTransferPlace" />
+                      <span class="text">
+                        انبار موقت (عدم ارسال به سامانه جامع انبار)
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4 mb-3">
+                <div class="input-group">
+                  <span class="input-group-text bg-light">تاریخ سند</span>
+                  <input
+                    name="sanaddate"
+                    id="sanaddate"
+                    class="form-control persianDatePicker1"
+                  />
+                </div>
+              </div>
+
+              <div class="col-md-12 mb-3">
+                <div class="input-group">
+                  <span
+                    class="input-group-text bg-light"
+                    style="width: 216px !important"
+                    >شرح سند</span
+                  >
+                  <input
+                    type="text"
+                    name="descriptionkala"
+                    id="descriptionkala"
+                    placeholder="شرح سند"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-3 mb-3">
+                  <div class="input-group">
+                    <span class="input-group-text bg-light"> نوع سند </span>
+                    <select name="typeofsanad" id="typeofsanad" class="form-control">
+                      <option value="" selected="selected">انتخاب کنید</option>
+                      <option value="اظهار موجودی اولیه">اظهار موجودی اولیه</option>
+                      <option value="اظهار خرید / دریافت">اظهار خرید / دریافت</option>
+                      <option value="اظهار واردات">اظهار واردات</option>
+                      <option value="انبارگردانی(افزایشی)">انبارگردانی(افزایشی)</option>
+                      <option value="بدون موجودی اولیه">بدون موجودی اولیه</option>
+                      <option value="اظهار برگشت از فروش">اظهار برگشت از فروش</option>
+                      <option value="ورود کالای تفکیک/تجمیع/بسته بندی">
+                        ورود کالای تفکیک/تجمیع/بسته بندی
+                      </option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-md-3 showezharkharid">
+                  <div class="input-group">
+                    <span class="input-group-text bg-light"> نام فروشنده </span>
+                    <input
+                      name="foroshande"
+                      id="foroshande"
+                      class="form-control"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-3 showezharkharid">
+                  <div class="input-group">
+                    <span class="input-group-text bg-light"
+                      >کد / شناسه ملی
+                    </span>
+                    <input name="melli" id="melli" class="form-control" />
+                  </div>
+                </div>
+                <div class="col-md-3 showezharkharid">
+                  <div class="input-group">
+                    <span class="input-group-text bg-light">تلفن همراه </span>
+                    <input name="mobile" id="mobile" class="form-control" />
+                  </div>
+                </div>
+
+                <div class="col-md-3 showezharvaredat">
+                  <div class="input-group">
+                    <span class="input-group-text bg-light">
+                      شماره ثبت سفارش
+                    </span>
+                    <input
+                      name="shomaresabtsefaresh"
+                      id="shomaresabtsefaresh"
+                      class="form-control"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-3 showezharvaredat">
+                  <div class="input-group">
+                    <span class="input-group-text bg-light">
+                      شماره منشاء ارز
+                    </span>
+                    <input
+                      name="manshaarz"
+                      id="manshaarz"
+                      class="form-control"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-3 showezharvaredat">
+                  <div class="input-group">
+                    <span class="input-group-text bg-light"> شماره کوتاژ </span>
+                    <input name="kootaj" id="kootaj" class="form-control" />
+                  </div>
+                </div>
+
+                <div class="col-md-3 showezharbargashtforosh">
+                  <div class="input-group">
+                    <span class="input-group-text bg-light">
+                      شماره سند فروش
+                    </span>
+                    <input
+                      name="shomaresanadforosh"
+                      id="shomaresanadforosh"
+                      class="form-control"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-12 mb-3">
+                <button type="button" id="addkala" class="btn btn-success me-2">
+                  <i class="fa fa-plus"></i> افزودن کالا
+                </button>
+              </div>
+            </div>
+
+            <!-- جدول نتایج جستجو -->
+            <div class="row">
+              <div class="col-12">
+                <div class="table-responsive">
+                  <table id="example" class="display">
+                    <thead>
+                      <tr>
+                        <th>ردیف</th>
+                        <th>گروه کالا</th>
+                        <th>طبقه کالا</th>
+                        <th>شناسه کالا</th>
+                        <th>شرح کالا</th>
+                        <th>واحد اندازه گیری</th>
+                        <th>تعداد / مقدار</th>
+                        <th>مبلغ واحد(ریال)</th>
+                        <th>ویرایش</th>
+                        <th>حذف</th>
+                        <th>مشمول رهگیری</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="row mt-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-end">
+                <button type="button" id="btnSelectNext" name="btnSelectNext"
+                    class="btn btn-primary btnSelectNext">
+                    <i class="fa fa-step-backward me-2"></i>  بعدی
+                </button>
+            </div>
+        </div>
+      </div>
+
+
+    </div>
+
+    <div
+      class="tab-pane fade"
+      id="nav-profile"
+      role="tabpanel"
+      aria-labelledby="nav-profile2-tab"
+    >
+      <div class="container-fluid">
+        <div class="p-3 bg-white"></div>
+      </div>
+    </div>
+
+    <div
+      class="tab-pane fade"
+      id="nav-profile3"
+      role="tabpanel"
+      aria-labelledby="nav-profile3-tab"
+    >
+      <div class="container-fluid">
+        <div class="p-3 bg-white">
+
+
+            <!-- جدول نتایج جستجو -->
+            <div class="row">
+              <div class="col-12">
+                <div class="table-responsive">
+                  <table id="example1" class="display">
+                    <thead>
+                      <tr>
+                        <th>ردیف</th>
+                        <th>گروه کالا</th>
+                        <th>طبقه کالا</th>
+                        <th>شناسه کالا</th>
+                        <th>شرح کالا</th>
+                        <th>واحد اندازه گیری</th>
+                        <th>تعداد / مقدار</th>
+                        <th>مبلغ واحد(ریال)</th>
+                        <th>ویرایش</th>
+                        <th>حذف</th>
+                        <th>مشمول رهگیری</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+
+                <div class="d-flex justify-content-end">
+                      <button type="button" id="senddata" name="senddata"
+                          class="btn btn-success">
+                          <i class="fa fa-plus"></i>  ثبت
+                      </button>
+                  </div>
+
+
+              </div>
+
+            </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal افزودن کالا -->
+<div
+  class="modal fade"
+  id="addKalaModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="addKalaModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addKalaModalLabel">
+          <i class="fa fa-plus"></i> افزودن کالا
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div
+          id="searchtypr"
+          class="col-sm-12 col-xs-12 col-lg-12 col-md-12"
+          style="border: 1px solid #d9d9d9;padding: 0px 11px 10px 10px;"
+        >
+          
+
+        <div style="padding: 0px 11px 10px 10px;">
+
+            <div class="row" style="font-size: 15px">
+              <div class="panel-heading" style="color: #333;background-color: #f5f5f5;border-color: #ddd;height: 29px;border-top: 1px solid #d2d2d2;margin-bottom: 37px;"></div>
+              <div class="col-md-3">
+                <input
+                  type="radio"
+                  id="groupsearchstuff"
+                  name="selectsearchtype"
+                  value="1"
+                  checked="checked"
+                />
+                <span>انتخاب با گروه کالا</span>
+              </div>
+
+              <div class="col-md-3">
+                <input
+                  type="radio"
+                  id="codesearchstuffe"
+                  name="selectsearchtype"
+                  value="2"
+                />
+                <span>انتخاب با شناسه کالا</span>
+              </div>
+            </div>
+
+            <br>
+
+            
+            <div class="row shenaseselect">
+              <div class="col-6">
+                  <div class="form-group has-success">
+                      <div class="input-group">
+                          <span class="input-group-text bg-light">شناسه کالا</span>
+                          <input name="shenasekala1" class="form-control" placeholder="شناسه کالا">
+                      </div>
+                      <small style="display: none;" class="help-block" data-fv-validator="stringLength" data-fv-for="txtstuffcode1" data-fv-result="VALID">لطفا یک مقدار با طول صحیح وارد فرمایید</small>
+                  </div>
+              </div>
+              <div class="col-6">
+                  <div class="form-group">
+                      <div class="input-group">
+                          <button type="button" style="width: 100%;height: 36px;" name="btnstuffidselect" id="btnstuffidselect" class="btn btn-blue">جستجو</button>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-6 showforshenase">
+                  <div class="form-group has-success">
+                      <div class="input-group">
+                          <span class="input-group-text bg-light"> گروه کالا </span>
+                          <input name="goroohkala" class="form-control" placeholder=" گروه کالا ">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-6 showforshenase">
+                  <div class="form-group has-success">
+                      <div class="input-group">
+                          <span class="input-group-text bg-light"> طبقه کالا </span>
+                          <input name="tabaghekala" class="form-control" placeholder=" طبقه کالا ">
+                      </div>
+                  </div>
+              </div>
+
+
+              <div class="col-12 showforshenase">
+                  <div class="form-group has-success">
+                      <div class="input-group">
+                          <span class="input-group-text bg-light"> شرح کالا </span>
+                          <input name="description" class="form-control" placeholder=" شرح کالا ">
+                      </div>
+                  </div>
+              </div>
+
+
+              <div class="col-6 showforshenase">
+                  <div class="form-group has-success">
+                      <div class="input-group">
+                          <span class="input-group-text bg-light"> واحد اندازه گیری </span>
+                          <input name="unit" class="form-control" placeholder=" مبلغ اندازه گیری ">
+                      </div>
+                  </div>
+              </div>
+
+              <div class="col-6 showforshenase">
+                  <div class="form-group has-success">
+                      <div class="input-group">
+                          <span class="input-group-text bg-light"> تعداد/مقدار </span>
+                          <input name="tedad" class="form-control" placeholder=" تعداد/مقدار ">
+                      </div>
+                  </div>
+              </div>
+
+
+                 <div class="col-6 showforshenase">
+                  <div class="form-group has-success">
+                      <div class="input-group">
+                          <span class="input-group-text bg-light"> مبلغ واحد(ریال)</span>
+                          <input name="vahed" class="form-control" placeholder=" مبلغ واحد(ریال)">
+                      </div>
+                  </div>
+              </div>
+
+
+              
+          </div>
+
+
+            
+
+      
+
+              
+
+        
+            
+        </div>
+
+       
+
+
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+           بستن
+        </button>
+        <button type="button" class="btn btn-success add-kala"> ثبت و تمام </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<style>
+.shenaseselect .col-6 ,.shenaseselect .col-12{
+	margin-bottom: 22px !important;
+}
+.showforshenase{
+  display:none;
+}
+#searchtypr span {
+	font-size: 13px;
+	font-weight: normal;
+}
+</style>
+{% endblock main %} 
+
+
+
+{% block js %}
+<script>
+// اینیشیالایز DataTable
+$("#example").DataTable({
+  paging: true,
+  searching: true,
+  info: true,
+  ordering: false,
+  pageLength: 10,
+  language: {
+    sEmptyTable: "هیچ داده‌ای در جدول وجود ندارد",
+    sInfo: "نمایش _START_ تا _END_ از _TOTAL_ رکورد",
+    sInfoEmpty: "نمایش 0 تا 0 از 0 رکورد",
+    sInfoFiltered: "(فیلتر شده از _MAX_ رکورد)",
+    sLengthMenu: "نمایش _MENU_ رکورد",
+    sLoadingRecords: "در حال بارگذاری...",
+    sProcessing: "در حال پردازش...",
+    sSearch: "جستجو:",
+    sZeroRecords: "رکوردی مطابق جستجوی شما پیدا نشد",
+    oPaginate: {
+      sFirst: "اولین",
+      sLast: "آخرین",
+      sNext: "بعدی",
+      sPrevious: "قبلی",
+    },
+  },
+});
+
+$("#example1").DataTable({
+  paging: true,
+  searching: true,
+  info: true,
+  ordering: false,
+  pageLength: 10,
+  language: {
+    sEmptyTable: "هیچ داده‌ای در جدول وجود ندارد",
+    sInfo: "نمایش _START_ تا _END_ از _TOTAL_ رکورد",
+    sInfoEmpty: "نمایش 0 تا 0 از 0 رکورد",
+    sInfoFiltered: "(فیلتر شده از _MAX_ رکورد)",
+    sLengthMenu: "نمایش _MENU_ رکورد",
+    sLoadingRecords: "در حال بارگذاری...",
+    sProcessing: "در حال پردازش...",
+    sSearch: "جستجو:",
+    sZeroRecords: "رکوردی مطابق جستجوی شما پیدا نشد",
+    oPaginate: {
+      sFirst: "اولین",
+      sLast: "آخرین",
+      sNext: "بعدی",
+      sPrevious: "قبلی",
+    },
+  },
+});
+
+// مدیریت کلیک روی دکمه "بعدی"
+$('.btnSelectNext').on('click', function () {
+  var anbar = $("#anbar").val();
+  var typeofsanad = $("#typeofsanad").val();
+  var table = $("#example").DataTable();
+  var rowCount = table.rows().count();
+
+  if (!anbar) {
+    alert('لطفاً انبار را انتخاب کنید!');
+    $("#anbar").focus();
+    return;
+  }
+  if (!typeofsanad) {
+    alert('لطفاً نوع سند را انتخاب کنید!');
+    $("#typeofsanad").focus();
+    return;
+  }
+  if (rowCount === 0) {
+    alert('لطفاً حداقل یک کالا اضافه کنید!');
+    $("#addkala").focus();
+    return;
+  }
+
+  $('.nav-tabs .nav-link').eq(2).tab('show');
+});
+
+// مدیریت نمایش/مخفی کردن فیلدهای خاص بر اساس نوع سند
+$(document).ready(function () {
+  $('.persianDatePicker1, .persianDatePicker2').each(function () {
+    $(this).persianDatepicker({
+      format: 'YYYY/MM/DD',
+      autoClose: true,
+      toolbox: {
+        calendarSwitch: {
+          enabled: false
+        }
+      }
+    });
+  });
+
+  function toggleFields() {
+    const selectedValue = $("#typeofsanad").val();
+    $(".showezharkharid, .showezharvaredat, .showezharbargashtforosh").hide();
+    switch (selectedValue) {
+      case "اظهار خرید / دریافت":
+        $(".showezharkharid").show();
+        break;
+      case "اظهار واردات":
+        $(".showezharvaredat").show();
+        break;
+      case "اظهار برگشت از فروش":
+        $(".showezharbargashtforosh").show();
+        break;
+    }
+  }
+
+  toggleFields();
+  $("#typeofsanad").on("change", toggleFields);
+
+  $("#addkala").on("click", function () {
+    $("#addKalaModal").modal("show");
+  });
+
+  $('input[name="selectsearchtype"]').on("change", function () {
+    if ($(this).val() === "1") {
+      $(".groupselect").show();
+      $(".shenaseselect").hide();
+    } else if ($(this).val() === "2") {
+      $(".groupselect").hide();
+      $(".shenaseselect").show();
+    }
+  });
+
+  if ($('input[name="selectsearchtype"]:checked').val() === "1") {
+    $(".groupselect").show();
+    $(".shenaseselect").hide();
+  } else if ($('input[name="selectsearchtype"]:checked').val() === "2") {
+    $(".groupselect").hide();
+    $(".shenaseselect").show();
+  }
+
+  $("#btnstuffidselect").on("click", function () {
+    var shenase_id = $('input[name="shenasekala1"]').val();
+    if (!shenase_id) {
+      alert("لطفاً شناسه کالا را وارد کنید.");
+      return;
+    }
+
+    $.ajax({
+      url: "{% url 'foreintrade:check_shenase' %}",
+      type: "GET",
+      data: {
+        shenase: shenase_id
+      },
+      success: function (response) {
+        if (response.error) {
+          alert(response.error);
+        } else {
+          $('.shenaseselect .showforshenase').show();
+          $('input[name="goroohkala"]').val(response.shenase_category_title).prop('disabled', true);
+          $('input[name="tabaghekala"]').val(response.shenase_category_title).prop('disabled', true);
+          $('input[name="description"]').val(response.description).prop('disabled', true);
+          $('input[name="unit"]').val(response.unit).prop('disabled', true);
+        }
+      },
+      error: function (xhr) {
+        alert("شناسه کالا یافت نشد!");
+      }
+    });
+  });
+
+  var formData 
+  // مدیریت کلیک روی دکمه "ثبت و تمام" در مودال
+  $(".add-kala").on("click", function (e) {
+    e.preventDefault();
+
+    formData = {
+      shenasekala1: $('input[name="shenasekala1"]').val() || "",
+      goroohkala: $('input[name="goroohkala"]').val() || "",
+      tabaghekala: $('input[name="tabaghekala"]').val() || "",
+      description: $('input[name="description"]').val() || "",
+      unit: $('input[name="unit"]').val() || "",
+      tedad: $('input[name="tedad"]').val() || "",
+      vahed: $('input[name="vahed"]').val() || "",
+      typeofsanad: $("#typeofsanad").val() || "",
+      anbar: $("#anbar").val() || ""
+    };
+
+    if (!formData.shenasekala1) {
+      alert("لطفاً شناسه کالا را وارد کنید.");
+      $('input[name="shenasekala1"]').focus();
+      return;
+    }
+    if (!formData.tedad) {
+      alert("لطفاً تعداد/مقدار را وارد کنید.");
+      $('input[name="tedad"]').focus();
+      return;
+    }
+    if (!formData.vahed) {
+      alert("لطفاً مبلغ واحد را وارد کنید.");
+      $('input[name="vahed"]').focus();
+      return;
+    }
+    if (!formData.typeofsanad) {
+      alert("لطفاً نوع سند را انتخاب کنید.");
+      $("#typeofsanad").focus();
+      return;
+    }
+    if (!formData.anbar) {
+      alert("لطفاً انبار را انتخاب کنید.");
+      $("#anbar").focus();
+      return;
+    }
+
+  
+    var table1 = $("#example").DataTable();
+    var rowCount1 = table1.rows().count() + 1;
+    table1.row.add([
+      rowCount1,
+      formData.goroohkala || "-",
+      formData.tabaghekala || "-",
+      formData.shenasekala1 || "-",
+      formData.description || "-",
+      formData.unit || "-",
+      formData.tedad || "-",
+      formData.vahed || "-",
+      '<button class="btn btn-warning btn-sm edit-row">ویرایش</button>',
+      '<button class="btn btn-danger btn-sm delete-row">حذف</button>',
+      "خیر"
+    ]).draw();
+
+    var table2 = $("#example1").DataTable();
+    var rowCount2 = table2.rows().count() + 1;
+    table2.row.add([
+      rowCount2,
+      formData.goroohkala || "-",
+      formData.tabaghekala || "-",
+      formData.shenasekala1 || "-",
+      formData.description || "-",
+      formData.unit || "-",
+      formData.tedad || "-",
+      formData.vahed || "-",
+      '<button class="btn btn-warning btn-sm edit-row">ویرایش</button>',
+      '<button class="btn btn-danger btn-sm delete-row">حذف</button>',
+     "خیر"
+    ]).draw();
+
+    $("#addKalaModal").modal("hide");
+    $('.shenaseselect input').val('');
+    $('.shenaseselect .showforshenase').hide();
+
+
+  });
+
+  $("#senddata").on("click", function (e) {
+    e.preventDefault();
+    $.ajax({
+      url: "{% url 'foreintrade:add_kala' %}", 
+      type: "POST",
+      data: JSON.stringify(formData),
+      contentType: "application/json",
+      headers: {
+        "X-CSRFToken": "{{ csrf_token }}"
+      },
+      success: function (response) {
+        if (response.success) {
+          alert(response.message || "داده‌ها با موفقیت ذخیره شدند!");
+          $("#frmRequestSearch")[0].reset();
+          $("#example").DataTable().clear().draw();
+          $("#example1").DataTable().clear().draw();
+          $('.nav-tabs .nav-link').eq(0).tab('show'); 
+        } else {
+          alert("خطا: " + response.error);
+        }
+      },
+      error: function (xhr) {
+        alert("خطایی در ارسال داده‌ها رخ داد: " + xhr.statusText);
+      }
+    });
+  });
+
+  // تابع Comma برای فرمت اعداد
+  function Comma(Num) {
+    Num += "";
+    Num = Num.replace(",", "");
+    Num = Num.replace(",", "");
+    var x = Num.split(".");
+    var x1 = x[0];
+    var x2 = x.length > 1 ? "." + x[1] : "";
+    var rgx = /(\d+)(\d{3})/;
+    while (rgx.test(x1)) x1 = x1.replace(rgx, "$1" + "," + "$2");
+    return x1 + x2;
+}
+});
+</script>
+{% endblock js %}

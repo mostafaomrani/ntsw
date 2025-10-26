@@ -1,4 +1,4 @@
-<a href="{% url 'dashboard:business_role_dashboard' %}"
+<a href="/dashboard/role"
    class="d-flex align-items-center link-body-emphasis text-decoration-none border-bottom text-black border-bottom py-2 ps-3 mt-5 border-top">
     <i class="menu-icon fa fa-home"></i>
     <span class="ps-2">صفحه اصلی</span></a>
@@ -39,15 +39,15 @@
         <div class="collapse dropdown-container" id="dashboard-collapse">
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
                 <li class="saidbar-dropdown-item">
-                    <a href="#"
+                    <a href="{% url 'shenase:shenase_add' %}"  
                        class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">ثبت کالای جدید</span></a>
                 </li>
                 <li class="saidbar-dropdown-item">
-                    <a href="#"
+                    <a href="{% url 'shenase:shenase_list' %}"  
                        class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">فهرست کالاهای وارداتی</span></a>
                 </li>
                 <li class="saidbar-dropdown-item">
-                    <a href="#"
+                    <a href="{% url 'shenase:shenase_in_trasactions' %}"
                        class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span class="icon"></span><span class="sidebar-text">درخواست‌های در گردش</span></a>
                 </li>
                 <li class="saidbar-dropdown-item">

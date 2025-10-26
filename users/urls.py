@@ -6,6 +6,7 @@ from .views import (
     SelectVerificationMod,
     SendResetCodeView,
     ResetPasswordView,
+    CheckNationalCodeView
 )
 
 from django.contrib.auth.views import LoginView, LogoutView
@@ -24,4 +25,7 @@ urlpatterns = [
     path('send-reset-code/', SendResetCodeView.as_view(), name='send_reset_code'),
     path('reset-password/<str:username>/',
          ResetPasswordView.as_view(), name='password_reset_confirm'),
+    
+    # مسیر جدید برای بررسی کد ملی
+    path('check-national-code/', CheckNationalCodeView.as_view(), name='check_national_code'),
 ]

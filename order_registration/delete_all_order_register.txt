@@ -1,0 +1,26 @@
+-- پایین‌ترین سطح
+DELETE FROM currency_origin_determining_withoutcurrencytransferladingbill;
+DELETE FROM currency_origin_determining_ladingbill;
+DELETE FROM currency_origin_determining_ware;
+DELETE FROM currency_origin_determining_withoutcurrencytransferware;
+
+-- سطح بالاتر
+DELETE FROM currency_origin_determining_banking;
+DELETE FROM currency_origin_determining_withoutcurrencytransfer;
+
+-- جدول ware
+DELETE FROM order_registration_ware;
+
+-- جدول‌های فرزند customsandshipping
+DELETE FROM order_registration_customsandshipping_destination_custom;
+DELETE FROM order_registration_customsandshipping_entrance_edge;
+DELETE FROM order_registration_customsandshipping_shipping_type;
+
+-- جدول میانی customsandshipping
+DELETE FROM order_registration_customsandshipping;
+
+-- جدول فرزند مستقیم currency_allocation_currencyrequest
+DELETE FROM currency_allocation_currencyrequest;
+
+-- حالا پاک کردن جدول اصلی maindata
+DELETE FROM order_registration_maindata;

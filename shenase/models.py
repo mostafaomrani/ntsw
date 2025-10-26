@@ -1,7 +1,8 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 
 
-
+User = get_user_model()
 
 class Shenase(models.Model):
     shenase_category_id = models.CharField(max_length=100, blank=True, null=True)
@@ -16,7 +17,8 @@ class Shenase(models.Model):
     unit = models.CharField(max_length=100, blank=True, null=True)
     isic = models.CharField(max_length=100, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='shenases', blank=True, null=True)
+    
     class Meta:
         db_table = "shenase"
 
@@ -83,9 +85,62 @@ class HS(models.Model):
 class ISIC(models.Model):
     syllabus = models.ForeignKey(Syllabus, on_delete=models.CASCADE, related_name="isic_list")
     name = models.CharField(max_length=255, verbose_name="نام")
+    code = models.CharField(max_length=50, unique=True, verbose_name="کد isic")
+
 
     class Meta:
         db_table = "isic"
 
     def __str__(self):
         return self.name
+
+
+
+class RequiredField(models.Model):
+    title = models.CharField(max_length=255, verbose_name="عنوان")
+    ValueName = models.CharField(max_length=255, verbose_name="نام انگلیسی")
+    syllabus = models.ForeignKey(Syllabus, on_delete=models.CASCADE, related_name="isic_list")
+
+
+
+    class Meta:
+        db_table = "shenase_required_field"
+
+    def __str__(self):
+        return self.title
+
+
+
+class OptionalField(models.Model):
+    title = models.CharField(max_length=255, verbose_name="عنوان")
+    ValueName = models.CharField(max_length=255, verbose_name="نام انگلیسی")
+    syllabus = models.ForeignKey(Syllabus, on_delete=models.CASCADE, related_name="isic_list")
+
+
+
+    class Meta:
+        db_table = "shenase_optional_field"
+
+    def __str__(self):
+        return self.title
+
+
+
+class ShenaseFieldValues(models.Model):
+    id = models.AutoField(primary_key=True, verbose_name="شناسه")
+    shenase_field = models.ForeignKey(
+        RequiredField,
+        on_delete=models.CASCADE,
+        related_name="field_values",
+        verbose_name="فیلد الزامی"
+    )
+    title = models.CharField(max_length=255, verbose_name="عنوان")
+    en_title = models.CharField(max_length=255, verbose_name="عنوان انگلیسی")
+
+    class Meta:
+        db_table = "shenase_field_values"
+        verbose_name = "مقدار فیلد شناسه"
+        verbose_name_plural = "مقادیر فیلدهای شناسه"
+
+    def __str__(self):
+        return f"{self.title} ({self.en_title})"

@@ -1,0 +1,646 @@
+{% extends "base.html" %}
+{% load static %}
+{% load date_filters %}
+{% load widget_tweaks %}
+{% load ui_template_tag %}
+{% block title %}
+ثبت اظهار
+{% endblock title %}
+{% block breadcrumbs %}
+{% breadcrumbs 'عملیات تولید' '#' 'ثبت اظهار' '#' %}
+{% endblock breadcrumbs %}
+{% block page-title %}
+ثبت اظهار
+{% endblock page-title %}
+{% block main %}
+{% if messages %}
+{% for message in messages %}
+<div class="text-center alert alert-{{ message.tags }}">{{ message|safe }}</div>
+{% endfor %}
+{% endif %}
+
+
+<link rel="stylesheet" href="{% static 'persianDatepicker/css/persianDatepicker-default.css' %}">
+<link rel='stylesheet' href='https://cdn.datatables.net/2.3.4/css/dataTables.dataTables.css' media='all' />
+
+
+<div class="container-fluid">
+  <nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+      <button
+        class="nav-link active button-breadcrumbs py-3 border-bottom border-top"
+        id="nav-home-tab"
+        data-bs-toggle="tab"
+        data-bs-target="#nav-home"
+        type="button"
+        role="tab"
+        aria-controls="nav-home"
+        aria-selected="true"
+      >
+        <span class="outline-badge">1</span> اظهار ورود کالا
+      </button>
+      <button
+        class="nav-link button-breadcrumbs py-3 border-bottom border-top ps-5"
+        id="nav-profile-tab"
+        data-bs-toggle="tab"
+        data-bs-target="#nav-profile"
+        type="button"
+        role="tab"
+        aria-controls="nav-profile"
+        aria-selected="false"
+      >
+        <span class="outline-badge">2</span> بارگذاری شناسه رهگیری
+      </button>
+      <button
+        class="nav-link button-breadcrumbs py-3 border-bottom border-top ps-5"
+        id="nav-profile3-tab"
+        data-bs-toggle="tab"
+        data-bs-target="#nav-profile3"
+        type="button"
+        role="tab"
+        aria-controls="nav-profile3"
+        aria-selected="false"
+      >
+        <span class="outline-badge">3</span> نهایی سازی اظهار
+      </button>
+    </div>
+  </nav>
+  <div class="tab-content" id="nav-tabContent">
+    <div
+      class="tab-pane fade show active"
+      id="nav-home"
+      role="tabpanel"
+      aria-labelledby="nav-home-tab"
+    >
+      <div class="container-fluid bg-white">
+        <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+          <form
+            id="frmRequestSearch"
+            class="fv-form fv-form-bootstrap"
+            novalidate="novalidate"
+          >
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <div class="input-group">
+                  <span class="input-group-text bg-light"> انبار </span>
+                  <select
+                    name="status"
+                    data-handler="RegionHandler"
+                    data-function="GetAllRequestStatusList"
+                    class="form-control"
+                  >
+                    <option value="" selected="selected">انتخاب کنید</option>
+                    {% for anbar in user_anbars %}
+                    <option value="{{ anbar.id }}" postalcode="{{ anbar.postal_code }}">
+                        {{ anbar.name }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-md-4 mb-3">
+                <div class="input-group" style="margin-top: 10px">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="chkTransferPlace" />
+                      <span class="text">
+                       انبار موقت (عدم ارسال به سامانه جامع انبار) 
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4 mb-3">
+                <div class="input-group">
+                  <span class="input-group-text bg-light">تاریخ سند</span>
+                  <input
+                    name="anbar"
+                    id="anbar"
+                    class="form-control persianDatePicker1"
+                  />
+                </div>
+              </div>
+
+              <div class="col-md-12 mb-3">
+                <div class="input-group">
+                  <span
+                    class="input-group-text bg-light"
+                    style="width: 216px !important"
+                    >شرح سند</span
+                  >
+                  <input
+                    type="text"
+                    name="toDate"
+                    placeholder="شرح سند"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <div class="input-group">
+                    <span class="input-group-text bg-light">  صاحب برند/مجوز  </span>
+                    <select name="status" id="status" class="form-control"  disabled>
+                      <option value="" selected="selected">انتخاب کنید</option>
+                       <option value="4">اظهار موجودی اولیه</option>
+                      <option value="5">اظهار خرید / دریافت</option>
+                      <option value="6">اظهار واردات</option>
+                      <option value="7">انبارگردانی(افزایشی)</option>
+                      <option value="10">بدون موجودی اولیه</option>
+                      <option value="12">اظهار برگشت از فروش</option>
+                      <option value="17">
+                        ورود کالای تفکیک/تجمیع/بسته بندی
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div class="col-md-4 mb-3">
+                    <div class="input-group" style="margin-top: 10px">
+                    <div class="checkbox">
+                        <label>
+                        <input type="checkbox" id="ckhClothing" name="ckhClothing"/>
+                        <span class="text">
+                       تولید حق العمل کاری 
+                        </span>
+                        </label>
+                    </div>
+                    </div>
+                </div>
+
+              </div>
+
+              <div class="col-md-12 mb-3">
+                <button type="button" id="addkala" class="btn btn-success me-2">
+                  <i class="fa fa-plus"></i> افزودن کالا
+                </button>
+              </div>
+            </div>
+
+            <!-- جدول نتایج جستجو -->
+            <div class="row">
+              <div class="col-12">
+                <div class="table-responsive">
+                  <table id="example" class="display">
+                    <thead>
+                      <tr>
+                        <th>ردیف</th>
+                        <th>گروه کالا</th>
+                        <th>طبقه کالا</th>
+                        <th>شناسه کالا</th>
+                        <th>شرح کالا</th>
+                        <th>واحد اندازه گیری</th>
+                        <th>تعداد / مقدار</th>
+                        <th>مبلغ واحد(ریال)</th>
+                        <th>ویرایش</th>
+                        <th>حذف</th>
+                        <th>مشمول رهگیری</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="tab-pane fade"
+      id="nav-profile"
+      role="tabpanel"
+      aria-labelledby="nav-profile2-tab"
+    >
+      <div class="container-fluid">
+        <div class="p-3 bg-white">
+
+            <div class="row">
+              <div class="col-12">
+                <p class="alert alert-warning" style="border-right: 4px solid #aa8202;">
+                  کاربر گرامی برای گروه کالاهای لوارم خانگی و اقلام دیجیتال فایل نمونه جدید را دانلود و سپس اقدام با بارگذاری نمایید. 
+                </p>
+                <div class="table-responsive">
+                  <table id="example3" class="display">
+                    <thead>
+                      <tr>
+                        <th>ردیف</th>
+                        <th>گروه رهگیری</th>
+                        <th>تعداد کالا</th>
+                        <th>تعداد کالاهای تایید شده</th>
+                        <th>فایل نمونه</th>
+                        <th>بارگذاری فایل</th>
+                        <th>فایل شناسه های رهگیری</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <td> 1 </td>
+                      <td> لوازم یدکی مشمول رهگیری </td>
+                      <td> 0 </td>
+                      <td> 0 </td>
+                      <td> <a style="color: white;" href="{% static 'images/Choose_TrackingCodeV5.xlsm' %}" class="btn btn-info"> فایل نمونه  <i class="fa fa-download" aria-hidden="true"></i> </a> </td>
+                      <td> <a style="color: white;width: 130px;" class="btn btn-blue"> انتخاب فایل <i class="fa fa-folder" aria-hidden="true"></i> </a> </td>
+                      <td> </td>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="tab-pane fade"
+      id="nav-profile3"
+      role="tabpanel"
+      aria-labelledby="nav-profile3-tab"
+    >
+      <div class="container-fluid">
+        <div class="p-3 bg-white">
+
+                 <!-- جدول نتایج جستجو -->
+            <div class="row">
+              <div class="col-12">
+                <div class="table-responsive">
+                  <table id="example1" class="display">
+                    <thead>
+                      <tr>
+                        <th>ردیف</th>
+                        <th>گروه کالا</th>
+                        <th>طبقه کالا</th>
+                        <th>شناسه کالا</th>
+                        <th>شرح کالا</th>
+                        <th>واحد اندازه گیری</th>
+                        <th>تعداد / مقدار</th>
+                        <th>مبلغ واحد(ریال)</th>
+                        <th>ویرایش</th>
+                        <th>حذف</th>
+                        <th>مشمول رهگیری</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal افزودن کالا -->
+<div
+  class="modal fade"
+  id="addKalaModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="addKalaModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addKalaModalLabel">
+          <i class="fa fa-plus"></i> افزودن کالا
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div
+          id="searchtypr"
+          class="col-sm-12 col-xs-12 col-lg-12 col-md-12"
+          style="width: 100%; text-align: right"
+        >
+          <div class="row" style="margin-right: 39px; font-size: 15px">
+            <div class="col-md-2">
+              <input
+                type="radio"
+                id="groupsearchstuff"
+                name="selectsearchtype"
+                value="1"
+                checked="checked"
+              />
+              <span class="text">انتخاب با گروه کالا</span>
+            </div>
+
+            <div class="col-md-2">
+              <input
+                type="radio"
+                id="codesearchstuffe"
+                name="selectsearchtype"
+                value="2"
+              />
+              <span class="text">انتخاب با شناسه کالا</span>
+            </div>
+          </div>
+
+          <br>
+
+          <div class="row">
+            <div class="col-md-3 mb-3">
+              <div class="input-group">
+                <span class="input-group-text bg-light"> گروه کالا </span>
+                <select name="status" id="status" class="form-control">
+                  <option value="" selected="selected">انتخاب کنید</option>
+                  <option value="97">مواد شیمیایی آلی و معدنی</option>
+                  <option value="98">ملزومات پزشکی و آزمایشگاهی</option>
+                  <option value="99">مواد غذایی</option>
+                  <option value="100">ابزارآلات و تجهیزات کارگاهی</option>
+                  <option value="101">تجهیزات حمل و نقل ریلی و کابلی</option>
+                  <option value="102">ملزومات خدمات</option>
+                  <option value="103">
+                    ملزومات صنایع زراعی، باغبانی و جنگل داری
+                  </option>
+                  <option value="104">محصولات شیمیایی خطرناک</option>
+                  <option value="256">
+                    ملزومات ورزشی، بازی، سرگرمی و شکار
+                  </option>
+                  <option value="257">مواد اولیه معدنی</option>
+                  <option value="258">تجهیزات اندازه گیری و شناسایی</option>
+                  <option value="259">
+                    تجهیزات ابزار دقیق و کنترل و اتوماسیون صنعتی
+                  </option>
+                  <option value="260">
+                    کانی های غیر فلزی، خاک ها و سنگ ها
+                  </option>
+                  <option value="261">پوست و چرم</option>
+                  <option value="262">
+                    فلزات، آلیاژ هاز فلزی، کانی های فلزی و محصولات واسط
+                  </option>
+                  <option value="263">سوخت ها، روغن ها و حامل های انرژی</option>
+                  <option value="264">
+                    مصالح عمومی ساختمان و اقلام پیش ساخته
+                  </option>
+                  <option value="265">محصولات سلولزی</option>
+                  <option value="266">
+                    وسایل نقلیه دریایی، تجهیزات ناوبری، اسکله ای، سکو ها و حوضچه
+                    ها
+                  </option>
+                  <option value="267">
+                    اقلام دامپزشکی و ملزومات نگهداری و پرورش حیوانات
+                  </option>
+                  <option value="268">قطعات لوازم خانگی</option>
+                  <option value="269">صنایع پایین دست پتروشیمی</option>
+                  <option value="270">شناسه عمومی خدمات</option>
+                  <option value="271">
+                    وسایل نقلیه هوایی و تجهیزات ناوبری و فرودگاهی
+                  </option>
+                  <option value="272">خوراک دام و طیور و آبزیان</option>
+                  <option value="273">
+                    پوشش ها، چسب ها، کامپوزیت ها و مواد پیشرفته
+                  </option>
+                  <option value="274">
+                    مواد اولیه و تجهیزات بسته بندی داروها و فرآورده های بیولوژیک
+                  </option>
+                  <option value="276">
+                    دارو، فرآورده هاي بيولوژيك و مكمل هاي دارويي و غذايي
+                  </option>
+                  <option value="277">
+                    زيورآلات، اوراق بهادار و اشياي قيمتي
+                  </option>
+                  <option value="19188">مواد آرايشي و بهداشتي</option>
+                  <option value="19189">
+                    تجهيزات و ملزومات آرايشي و بهداشتي
+                  </option>
+                  <option value="19190">
+                    ملزومات عمران و راه سازي و تجهيزات ويژه تخريب با مكانيزم
+                    انفجاري
+                  </option>
+                  <option value="19191">البسه و تجهيزات ورزشي و شكار</option>
+                  <option value="19192">صنايع دستي، هنري و ادوات موسيقي</option>
+                  <option value="19193">فرآورده هاي گياهي و حيواني</option>
+                  <option value="19194">شناسه عمومی کالا</option>
+                  <option value="19195">محصولات انتشاري</option>
+                  <option value="19197">
+                    صنايع دستي و هنري و ادوات موسيقي
+                  </option>
+                  <option value="19199">موجودات زنده</option>
+                  <option value="19200">
+                    مواد اوليه و تجهيزات بسته بندي داروها و فرآورده هاي بيولوژيك
+                  </option>
+                  <option value="19201">
+                    دارو، فرآورده هاي بيولوژيك و مكمل هاي دارويي دامپزشكي
+                  </option>
+                  <option value="19202">قطعات خاص مشترك صنايع</option>
+                  <option value="96">ابزار آلات دستی</option>
+                  <option value="95">مصالح ساختمانی</option>
+                  <option value="93">دکوراسیون، مبلمان و اثاثیه</option>
+                  <option value="91">تاسیسات گرمایش و سرمایش ساختمانی</option>
+                  <option value="90">کالای مشمول سامانه انبار</option>
+                  <option value="89">ملزومات خاص صنایع</option>
+                  <option value="87">تجهیزات لوله کشی و شیرآلات</option>
+                  <option value="86">
+                    ملزومات آتش نشانی و امداد و نجات و بهداشت حرفه ای
+                  </option>
+                  <option value="85">برق و مخابرات</option>
+                  <option value="84">ملزومات عمومی صنایع</option>
+                  <option value="83">قطعات جنرال</option>
+                  <option value="82">مقاطع چوبی</option>
+                  <option value="81">نهاده های دامی</option>
+                  <option value="80">لوازم التحریر</option>
+                  <option value="79">مبلمان و ملزومات اداری</option>
+                  <option value="9">دخانیات</option>
+                  <option value="40">لوازم یدکی و قطعات مصرفی خودرو</option>
+                  <option value="7">محصولات کشاورزی</option>
+                  <option value="4">تلفن همراه و تبلت</option>
+                  <option value="70">سایر تجهیزات سیم کارت خور</option>
+                  <option value="8">فرآورده های نفت، گاز و پتروشیمی</option>
+                  <option value="10">پوشاک</option>
+                  <option value="41">اسباب بازی</option>
+                  <option value="49">لوازم خانگی</option>
+                  <option value="51">
+                    داروها و فراورده های دامی (غیرفعال)
+                  </option>
+                  <option value="55">خودروهای سواری</option>
+                  <option value="59">اجزا و ملحقات پوشاک</option>
+                  <option value="60">کفش</option>
+                  <option value="61">پارچه</option>
+                  <option value="62">منسوجات خانگی</option>
+                  <option value="63">خودروهای تجاری (حمل بار)</option>
+                  <option value="64">خودروهای تجاری (حمل مسافر)</option>
+                  <option value="65">موتورسیکلت و دوچرخه موتوردار</option>
+                  <option value="66">ماشین آلات راه سازی</option>
+                  <option value="67">وسایل نقلیه خاص</option>
+                  <option value="69">ماشین آلات کشاورزی</option>
+                  <option value="72">دوچرخه های پدالی (بدون موتور)</option>
+                  <option value="78">ملزومات تاسیسات</option>
+                  <option value="88">مواد نساجی و الیاف</option>
+                  <option value="75">محصولات آرایشی و بهداشتی</option>
+                  <option value="76">اقلام دیجیتال</option>
+                  <option value="77">مقاطع فلزی</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          لغو
+        </button>
+        <button type="button" class="btn btn-success">افزودن به جدول</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock main %} {% block js %}
+
+<script>
+  // اینیشیالایز DataTable
+  $("#example").DataTable({
+    paging: true,
+    searching: true,
+    info: true,
+    ordering: false,
+    pageLength: 10,
+    language: {
+      sEmptyTable: "هیچ داده‌ای در جدول وجود ندارد",
+      sInfo: "نمایش _START_ تا _END_ از _TOTAL_ رکورد",
+      sInfoEmpty: "نمایش 0 تا 0 از 0 رکورد",
+      sInfoFiltered: "(فیلتر شده از _MAX_ رکورد)",
+      sLengthMenu: "نمایش _MENU_ رکورد",
+      sLoadingRecords: "در حال بارگذاری...",
+      sProcessing: "در حال پردازش...",
+      sSearch: "جستجو:",
+      sZeroRecords: "رکوردی مطابق جستجوی شما پیدا نشد",
+      oPaginate: {
+        sFirst: "اولین",
+        sLast: "آخرین",
+        sNext: "بعدی",
+        sPrevious: "قبلی",
+      },
+    },
+  });
+
+  $("#example1").DataTable({
+    paging: true,
+    searching: true,
+    info: true,
+    ordering: false,
+    pageLength: 10,
+    language: {
+      sEmptyTable: "هیچ داده‌ای در جدول وجود ندارد",
+      sInfo: "نمایش _START_ تا _END_ از _TOTAL_ رکورد",
+      sInfoEmpty: "نمایش 0 تا 0 از 0 رکورد",
+      sInfoFiltered: "(فیلتر شده از _MAX_ رکورد)",
+      sLengthMenu: "نمایش _MENU_ رکورد",
+      sLoadingRecords: "در حال بارگذاری...",
+      sProcessing: "در حال پردازش...",
+      sSearch: "جستجو:",
+      sZeroRecords: "رکوردی مطابق جستجوی شما پیدا نشد",
+      oPaginate: {
+        sFirst: "اولین",
+        sLast: "آخرین",
+        sNext: "بعدی",
+        sPrevious: "قبلی",
+      },
+    },
+  });
+
+  $("#example3").DataTable({
+    paging: true,
+    searching: true,
+    info: true,
+    ordering: false,
+    pageLength: 10,
+    language: {
+      sEmptyTable: "هیچ داده‌ای در جدول وجود ندارد",
+      sInfo: "نمایش _START_ تا _END_ از _TOTAL_ رکورد",
+      sInfoEmpty: "نمایش 0 تا 0 از 0 رکورد",
+      sInfoFiltered: "(فیلتر شده از _MAX_ رکورد)",
+      sLengthMenu: "نمایش _MENU_ رکورد",
+      sLoadingRecords: "در حال بارگذاری...",
+      sProcessing: "در حال پردازش...",
+      sSearch: "جستجو:",
+      sZeroRecords: "رکوردی مطابق جستجوی شما پیدا نشد",
+      oPaginate: {
+        sFirst: "اولین",
+        sLast: "آخرین",
+        sNext: "بعدی",
+        sPrevious: "قبلی",
+      },
+    },
+  });
+
+  // مدیریت نمایش/مخفی کردن فیلدهای خاص بر اساس نوع سند
+  $(document).ready(function () {
+
+    $('.persianDatePicker1, .persianDatePicker2').each(function () {
+            $(this).persianDatepicker({
+                format: 'YYYY/MM/DD',
+                autoClose: true,
+                toolbox: {
+                    calendarSwitch: {
+                        enabled: false
+                    }
+                }
+            });
+        });
+
+    function toggleFields() {
+      const selectedValue = $("#status").val();
+      $(".showezharkharid, .showezharvaredat, .showezharbargashtforosh").hide();
+      switch (selectedValue) {
+        case "5":
+          $(".showezharkharid").show();
+          break;
+        case "6":
+          $(".showezharvaredat").show();
+          break;
+        case "12":
+          $(".showezharbargashtforosh").show();
+          break;
+      }
+    }
+
+    toggleFields();
+    $("#status").on("change", toggleFields);
+
+    // باز کردن مودال با کلیک روی افزودن کالا
+    $("#addkala").on("click", function () {
+      $("#addKalaModal").modal("show");
+    });
+
+    // مدیریت radio buttons در مودال
+    $('input[name="selectsearchtype"]').on("change", function () {
+      if ($(this).val() === "1") {
+        $("#grpsearch").removeClass("hidden").show();
+        $("#cdsearch").hide();
+      } else {
+        $("#cdsearch").show();
+        $("#grpsearch").addClass("hidden").hide();
+      }
+    });
+  });
+
+  // تابع Comma برای فرمت اعداد
+  function Comma(Num) {
+    Num += "";
+    Num = Num.replace(",", "");
+    Num = Num.replace(",", "");
+    var x = Num.split(".");
+    var x1 = x[0];
+    var x2 = x.length > 1 ? "." + x[1] : "";
+    var rgx = /(\d+)(\d{3})/;
+    while (rgx.test(x1)) x1 = x1.replace(rgx, "$1" + "," + "$2");
+    return x1 + x2;
+  }
+</script>
+
+{% endblock js %}
+

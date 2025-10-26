@@ -133,21 +133,20 @@
                                     style="width: 41px;">کد پستی</th>
                                 <th class="sorting_disabled coLocation" rowspan="1" colspan="1" style="width: 214px;">
                                     محل فعالیت</th>
-                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 265px;">حذف</th>
                                 <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 306px;">جزییات</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for trade in trade_roles %}
                             <tr>
+
                                 <td>{{ forloop.counter }}</td>
                                 <td>{{ trade.action_name}}</td>
                                 <td>{{ trade.activity_domain }}</td>
                                 <td>{{ trade.activity_type }}</td>
-                                <td>{{ trade.valid_until|to_jalali }}</td>
-                                <td>{{ trade.issued_at|to_jalali }}</td>
-                                <td>{{ trade.qualification_status }}</td>
-                                <td>{{ trade.qualification_status }}</td>
+                                <td>{{ trade.phone }}</td>
+                                <td>{{ trade.postal_code }}</td>
+                                <td>{{ trade.address }}</td>
                                 <td>{{ trade.qualification_status }}</td>
                             </tr>
                             {% empty %}
@@ -200,7 +199,8 @@
                     <div class="m-2">
                         <button class="btn  btn-primary btn-maya" data-bs-toggle="modal"
                             data-bs-target="#exampleModal">بروزرسانی اطلاعات</button> 
-                        
+
+                            
                         {% if request.user.active_role.code == 'br' and not request.user.has_business_card %}
                         <!-- Modal -->
                         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -287,12 +287,113 @@
                 </table>
             </div>
         </div>
+        
         <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab" tabindex="0">
-            استعلام مجوز فعالیت مناطق آزاد</div>
+        
+             <div class="p-3">
+                <div class="d-md-flex">
+                    <div class="m-2">
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn  btn-primary btn-maya me-2">استعلام مجوز منطقه آزاد و ویژه</button>                       
+                    </div>
+                </div>
+                <table class="table table-striped table-hover table-bordered text-center mt-3">
+                    <thead class="text-white" style="background:rgb(2, 65, 88);">
+                        <tr>
+                            <th>شناسه صنفی</th>
+                            <th>کد اقتصادی</th>
+                            <th>نام منطقه</th>
+                            <th>عنوان فعالیت</th>
+                            <th>تاریخ صدور مجوز</th>
+                            <th>تاریخ اعتبار مجوز</th>
+                            <th> توضیحات </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+
+        </div>
+
+
         <div class="tab-pane fade" id="pills-marz" role="tabpanel" aria-labelledby="pills-moredi-tab" tabindex="0">
-            استعلام مبادلات مرزی و گمرکی</div>
+        
+            
+              <div class="p-3">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-6">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1" style="font-size: 12px;width: 179px;"> نوع استعلام مرزی و گمرکی </span>
+                                    <select name="userRoleActivityID" class="form-control" required>
+                                            <option value="">انتخاب کنید</option>
+                                            <option value="تعاونی مرزنشین" statuss="1">تعاونی مرزنشین</option>
+                                            <option value="صلاحیت ملوانی" statuss="1">صلاحیت ملوانی</option>
+                                            <option value="صلاحیت کوله بری" statuss="1">صلاحیت کوله بری</option>
+                                            <option value="صلاحیت کارگزار کوله بر" statuss="1">صلاحیت کارگزار کوله بر</option>
+                                            <option value="صلاحیت پیله وری" statuss="1">صلاحیت پیله وری</option>
+                                            <option value="صلاحیت شرکت حمل امور گمرکی" statuss="1">صلاحیت شرکت حمل امور گمرکی</option>
+                                            <option value="خرده فروش مرزنشین" statuss="1">خرده فروش مرزنشین</option>
+                                            <option value="صلاحیت مالک لنج" statuss="1">صلاحیت مالک لنج</option>                                        
+                                        </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                 <button class="btn  btn-primary btn-maya" type="button">
+                                    استعلام
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        
+        </div>
+
         <div class="tab-pane fade" id="pills-moredi" role="tabpanel" aria-labelledby="pills-moredi-tab" tabindex="0">
-            استعلام مجوز موردی</div>
+          
+
+
+            <div class="dashboard-page" style="margin-top: 15px;box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 3px;">
+                <div class="bg-white p-3 shadow-sm border-start border-navy border-4 alerdata">
+                    <div class="well bordered-left bordered-themeprimary">
+                        <p style="color: red;">
+                            <strong class="fa fa-circle" style="color: #024158;"></strong>&nbsp;&nbsp;
+                           کاربر گرامی ، در صورتی که پیش از این اطلاعات مجوز موردی خود را در سامانه ثبتارش بارگذاری کرده اید ، برای احراز صلاحیت مجوز موردی خود از کلید "استعلام مجوز موردی - دریافتی از دفتر مقررات صادرات و واردات" استفاده نمایید
+                        </p>
+                        <p style="color: red;">
+                            <strong class="fa fa-circle" style="color: #024158;"></strong>&nbsp;&nbsp;
+                            در غیر اینصورت، پس از انتخاب نوع مجوز موردی از کلید "استعلام مجوز موردی" استفاده نمایید
+                    </div>
+                </div>
+
+                <style>
+                    li::marker {
+                        font-size: 20px;
+
+                    }
+                </style>
+            </div>
+
+
+
+
+        </div>
+
         <div class="tab-pane fade" id="pills-dakheli" role="tabpanel" aria-labelledby="pills-dakheli-tab" tabindex="0">
 
             <div class="p-3">
@@ -422,7 +523,7 @@
                                     <div class="input-group mb-3">
                                         <span class="input-group-text"><span class="text-danger">*</span> کد پستی محل
                                             فعالیت</span>
-                                        <input type="text" name="postalCodeStr" class="form-control" maxlength="10"
+                                        <input type="text" name="postalCodeStr" id="postalCodeStr" class="form-control" maxlength="10"
                                             required>
                                     </div>
                                 </div>
@@ -431,7 +532,7 @@
                                 <div class="col-md-8">
                                     <div class="input-group mb-3">
                                         <span class="input-group-text">آدرس</span>
-                                        <input type="text" name="addressPostalCodeStr" class="form-control">
+                                        <input type="text" readonly name="addressPostalCodeStr" id="addressPostalCodeStr" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -554,7 +655,11 @@
                                 <td>{{ trade.phone }}</td>
                                 <td>{{ trade.postal_code }}</td>
                                 <td>{{ trade.address }}</td>
-                                <td><button type="button" name="btnDelete" class="btn btn-danger btn-xs"><i class="fa fa-remove"></i> حذف نقش</button></td>
+                                <td>
+                                    <button type="button" name="btnDelete" class="btn btn-danger btn-xs btn-delete-role" data-role-id="{{ trade.id }}">
+                                        <i class="fa fa-remove"></i> حذف نقش
+                                    </button>
+                                </td>
                                 <td>
                                     <button type="button" name="btnAddLicense" class="btn btn-info btn-xs margin-top-5 edit"><i class="fa fa-edit"></i> مشاهده / ویرایش</button>
                                     <button type="button" name="PrinRoleData" class="btn btn-purple btn-xs margin-top-5 edit"> <i class="fa fa-print"></i>چاپ اطلاعات نقش</button>
@@ -606,10 +711,85 @@
 
     span.input-group-text {
         padding: 13px;
-        padding: 7px 25px;
+        padding: 0px 8px;
         font-size: 12px;
         min-width: 145px;
     }
 </style>
 
 {% endblock main %}
+
+{% block js %}
+<script>
+$(document).ready(function() {
+    $('#postalCodeStr').on('input', function() {
+        var postalCode = $(this).val().trim();
+        // بررسی طول کد پستی
+        if (postalCode.length === 10) {
+            $.ajax({
+                url: '{% url "upload_qualifications:get_address_by_postal_code" %}', // URL ویوی Django
+                type: 'POST',
+                data: {
+                    postal_code: postalCode,
+                    csrfmiddlewaretoken: '{{ csrf_token }}' // توکن CSRF برای درخواست POST
+                },
+                success: function(response) {
+                    if (response.success) {
+                        // قرار دادن آدرس دریافت‌شده در فیلد addressPostalCodeStr
+                        $('#addressPostalCodeStr').val(response.address || 'آدرس یافت نشد');
+                    } else {
+                        $('#addressPostalCodeStr').val('خطا: ' + response.error);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    $('#addressPostalCodeStr').val('خطا در ارتباط با سرور استعلام کد پستی');
+                    console.error('AJAX Error:', error);
+                }
+            });
+        } else {
+            $('#addressPostalCodeStr').val('');
+        }
+    });
+
+
+
+    // کد برای حذف نقش
+    $('.btn-delete-role').on('click', function() {
+        var roleId = $(this).data('role-id');
+        var row = $(this).closest('tr'); // ردیف جدول مربوط به دکمه
+
+        if (confirm('آیا مطمئن هستید که می‌خواهید این نقش را حذف کنید؟')) {
+            $.ajax({
+                url: '{% url "upload_qualifications:delete_trader_role" %}',
+                type: 'POST',
+                data: {
+                    role_id: roleId,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    if (response.success) {
+                        // حذف ردیف از جدول
+                        row.remove();
+                        alert(response.message);
+                        // اگر جدول خالی شد، پیام "هیچ استعلامی یافت نشد" نمایش داده شود
+                        if ($('#pills-dakheli tbody tr').length === 0) {
+                            $('#pills-dakheli tbody').append('<tr><td colspan="9">هیچ استعلامی یافت نشد</td></tr>');
+                        }
+                    } else {
+                        alert('خطا: ' + response.error);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert('خطا در ارتباط با سرور');
+                    console.error('AJAX Error:', error);
+                }
+            });
+        }
+    });
+
+
+
+});
+</script>
+{% endblock js %}
+

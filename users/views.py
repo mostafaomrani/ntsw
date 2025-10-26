@@ -7,34 +7,81 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from django.utils import timezone
 from datetime import timedelta
-
-
 from persiantools.jdatetime import JalaliDate
 from persiantools import digits
-
 from decouple import config
 import uuid
-
 from extensions.utils import send_sms, generate_random_number
 from .forms import RegisterForm, UsernameForm, PasswordResetForm
-from .models import VerificationCode
-
+from .models import VerificationCode,CustomUser, Role,TraderRole
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import JsonResponse
+import re
+from anbar.models import Anbar
 
 
 User = get_user_model()
 
+class CheckNationalCodeView(View):
+    def post(self, request):
+        national_code = request.POST.get('national_code')
+        if not national_code or not re.match(r'^\d{10}$', national_code):
+            return JsonResponse({
+                'status': 'error',
+                'message': 'کد ملی نامعتبر است.'
+            }, status=400)
+
+        try:
+            user = CustomUser.objects.get(national_code=national_code)
+            # roles = [{'id': index + 1, 'name': role.title} for index, role in enumerate(user.roles.all())]
+            roles = [
+                {
+                    'id': index + 1,
+                    'name': role.title + ' (' + TraderRole.objects.filter(user=user, role=role).first().activity_type + ')' if TraderRole.objects.filter(user=user, role=role).exists() else role.title,
+                }
+                for index, role in enumerate(user.roles.all())
+            ]
+            active_role = user.active_role.title if user.active_role else None
+            
+            anbars = Anbar.objects.filter(user=user).values('id', 'name', 'postal_code')
+            return JsonResponse({
+                'status': 'success',
+                'data': {
+                    'first_name': user.first_name or '',
+                    'last_name': user.last_name or '',
+                    'name': user.get_full_name() or user.username,
+                    'mobile': user.mobile or '',
+                    'roles': roles,
+                    'active_role': active_role,
+                    'anbars': list(anbars)
+                }
+            })
+        except ObjectDoesNotExist:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'کاربری با این کد ملی یافت نشد.'
+            }, status=404)
+        except Exception as e:
+            return JsonResponse({
+                'status': 'error',
+                'message': f'خطایی رخ داد: {str(e)}'
+            }, status=500)
+            
 
 class RegisterView(CreateView):
     form_class = RegisterForm
     template_name = 'users/register.html'
+    # print(111111)
+
 
     def form_valid(self, form):
+        print(333333333)
         user = form.save(commit=False)
         user.is_active = False
         user.username = form.cleaned_data.get('national_code')
-        user.first_name = form.cleaned_data.get('first_name')
-        user.last_name = form.cleaned_data.get('last_name')
-        user.username = form.cleaned_data.get('national_code')
+        # user.first_name = form.cleaned_data.get('first_name')
+        # user.last_name = form.cleaned_data.get('last_name')
+        # user.username = form.cleaned_data.get('national_code')
         birthday = form.cleaned_data.get('birthday')
         birthday_list = birthday.split('/')
         user.birth_date = JalaliDate(int(birthday_list[0]), int(
@@ -42,8 +89,6 @@ class RegisterView(CreateView):
 
         from users.models import Role  # اگه نقش‌ها توی مدل جدا تعریف شدن
         user.active_role = Role.objects.get(code='br') 
-
-
         user.save()
         return redirect('users:select_verification_mod', user_uuid=str(user.uuid))
 
@@ -92,8 +137,7 @@ class VerifyPhoneView(FormView):
     def post(self, request, user_uuid, *args, **kwargs):
         uuid_str = request.POST.get('uuid')
         verification_cod_uuid = uuid.UUID(uuid_str)
-        verification = get_object_or_404(
-            VerificationCode, uuid=verification_cod_uuid)
+        verification = get_object_or_404(VerificationCode, uuid=verification_cod_uuid)
         code = request.POST.get('verification_code')
         code = digits.fa_to_en(code)
         code = code.strip()

@@ -16,18 +16,47 @@ class DocumentTradeOperation(models.Model):
         ('approved', 'تایید شده'),
         ('rejected', 'باطل شده'),
     ]
+    
+    OPERATION_TYPE_CHOICES = [
+        ('output_transfer', 'انتقال خروجی'),
+        ('input_transfer', 'انتقال ورودی'),
+        ('production_operation', 'عملیات تولید'),
+    ]
+
+    UNIT_CHOICES = [
+        ("ton", "تن"),
+        ("kg", "کیلوگرم"),
+        ("liter", "لیتر"),
+        ("sheet", "ورق"),
+        ("cubic_meter", "مترمکعب"),
+        ("pcs", "عدد"),
+        ("meter", "متر"),
+        ("square_meter", "متر مربع"),
+    ]
 
     document_number = models.CharField(max_length=50, verbose_name="شماره سند")
     document_date = models.DateField(verbose_name="تاریخ سند")
+    delivery_date = models.DateField(verbose_name="تاریخ تحویل")
     register_date = models.DateField(verbose_name="تاریخ ثبت")
     document_type = models.CharField(max_length=100, verbose_name="نوع سند")
-    seller = models.CharField(max_length=255, verbose_name="فروشنده")
+    # seller = models.CharField(max_length=255, verbose_name="فروشنده")
     origin = models.CharField(max_length=100, verbose_name="مبدأ")
     destination = models.CharField(max_length=100, verbose_name="مقصد")
     bill_number = models.CharField(max_length=50, verbose_name="شماره بارنامه")
     description = models.TextField(blank=True, verbose_name="شرح سند")
+    usable_amount = models.CharField(max_length=50, verbose_name="مقدار قابل استفاده")
+    actual_amount = models.CharField(max_length=50, verbose_name="مقدار واقعی")
+    count_sell = models.CharField(max_length=50, verbose_name="مقدار فروش")
+    shenase = models.ForeignKey(Shenase, on_delete=models.CASCADE, verbose_name="شناسه کالا")
+    unit = models.CharField(max_length=20, choices=UNIT_CHOICES, verbose_name="واحد اندازه‌گیری")
     
-    # فیلد وضعیت با choices
+    operation_type = models.CharField(
+        max_length=20,
+        choices=OPERATION_TYPE_CHOICES,
+        default='output_transfer',
+        verbose_name="نوع"
+    )
+    
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
@@ -40,10 +69,35 @@ class DocumentTradeOperation(models.Model):
         on_delete=models.CASCADE,
         verbose_name="انبار"
     )
+    
+    seller_anbar = models.ForeignKey(
+        "anbar.Anbar",
+        on_delete=models.CASCADE,
+        verbose_name="انبار فروشنده",
+    )
+
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,  
         on_delete=models.CASCADE,
         verbose_name="کاربر"
+    )
+    
+    seller = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        db_column='seller',
+        null=True, 
+        blank=True,
+        verbose_name="فروشنده"
+    )
+    
+    buyer = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        db_column='buyer',
+        null=True, 
+        blank=True,
+        verbose_name="خریدار"
     )
 
     class Meta:
@@ -53,8 +107,6 @@ class DocumentTradeOperation(models.Model):
 
     def __str__(self):
         return f"{self.document_number} - {self.seller}"
-
-
 
 
 class AnbarItem(models.Model):

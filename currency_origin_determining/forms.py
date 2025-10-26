@@ -25,8 +25,15 @@ class SelectMainDataForm(forms.ModelForm):
             status='r',
             financial__currency_operation_type='b'
         )
-        self.fields['main_data'].label = 'کد ثبت سفارش'
-
+        # self.fields['main_data'].label = 'کد ثبت سفارش'
+        
+        
+        # این خط مهمه: نمایش فیلد registrations_number به جای __str__
+        self.fields['main_data'].label_from_instance = (
+            lambda obj: str(obj.registrations_number) if obj.registrations_number else f"بدون شماره ({obj.identifier})"
+        )
+        
+                
 
 class BankingForm(forms.ModelForm):
     class Meta:

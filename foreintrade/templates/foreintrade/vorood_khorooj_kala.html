@@ -17,6 +17,7 @@
 {% endblock page-title %}
 
 {% block main %}
+<link rel="stylesheet" href="{% static 'persianDatepicker/css/persianDatepicker-default.css' %}">
 <link rel='stylesheet' href='https://cdn.datatables.net/2.3.4/css/dataTables.dataTables.css' media='all' />
 
 <div class="container-fluid">
@@ -30,7 +31,7 @@
                         <div class="col-12">
                             <div class="row">
                                 <!-- دکمه‌های عملیاتی -->
-                                <div class="col-md-3 mb-3">
+                                <div class="col-md-5 mb-3">
                                     <div class="input-group">
                                         <a href="{% url 'foreintrade:register_foreintrade_khorooj_kala' %}" type="button" class="btn btn-primary me-2"
                                             id="btnDeclareInitailInventory" name="btnDeclareInitailInventory"><i
@@ -38,6 +39,8 @@
                                         <button type="button" class="btn btn-success me-2" id="ImpotrtFromExcemFile"
                                             name="ImpotrtFromExcemFile"><i class="fa fa-plus-square"></i> ثبت سند با
                                             فایل اکسل</button>
+                                             <button type="button" class="btn btn-success me-2" id="ImpotrtFromExcemFile"
+                                            name="ImpotrtFromExcemFile"><i class="fa fa-plus-square"></i> ثبت سند کالاهای رهگیری دار با فایل اکسل</button>
                                     </div>
                                 </div>
 
@@ -155,27 +158,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Tiger Nixon</td>
-                                            <td>System Architect</td>
-                                            <td>Edinburgh</td>
-                                            <td>61</td>
-                                            <td>2011-04-25</td>
-                                            <td>$320,800</td>
-                                            <td>$320,800</td>
-                                            <td>$320,800</td>
-                                            <td>
-
-
-                                                <a id="ViewPlaceInventory" name="ViewPlaceInventory"
-                                                    class="btn btn-blue  margin-top-5 btn-xs margin-left-5">
-                                                    <i class="fa fa-search margin-top-2"></i> جزئیات </a>
-                                                <a name="updateAnbar"
-                                                    class="btn btn-danger btn-xs search margin-left-5 margin-top-5">
-                                                    <i class="fa fa-remove margin-top-2"></i> ابطال </a>
-
-                                            </td>
-                                        </tr>
+                                        
 
                                     </tbody>
 
@@ -245,17 +228,13 @@
 {% endblock main %}
 
 {% block js %}
-<!-- بارگذاری jQuery و DataTables -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.datatables.net/2.3.4/js/dataTables.js"></script>
-<!-- بارگذاری Persian Datepicker (در صورت نیاز) -->
 
 
 
 
 <script>
     $(document).ready(function () {
-
+        $('select').selectize()
 
         // اینیشیالایز DataTable
         $('#example').DataTable({
@@ -283,6 +262,19 @@
             },
 
         });
+
+        $('.persianDatePicker1, .persianDatePicker2').each(function () {
+            $(this).persianDatepicker({
+                format: 'YYYY/MM/DD',
+                autoClose: true,
+                toolbox: {
+                    calendarSwitch: {
+                        enabled: false
+                    }
+                }
+            });
+        });
+
 
     });
 </script>

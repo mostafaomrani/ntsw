@@ -141,7 +141,7 @@ class CurrencyRequest(DevelopedModel):
         'مبلغ درخواست به ارز ثبت سفارش')
     currency = models.ForeignKey(
         "dashboard.Currency",
-        verbose_name='ارز درخواستی', on_delete=models.PROTECT
+        verbose_name='ارز درخواست', on_delete=models.PROTECT
     )
     request_amount = models.FloatField('مبلغ در خواست')
     transaction_type = models.ForeignKey(

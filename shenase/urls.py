@@ -26,4 +26,5 @@ urlpatterns = [
     path('json/<str:type>/', ShenaseDataView.as_view(), name='shenase_json_id'), 
     path('json/one/<str:id>/', ShenaseOneDataView.as_view(), name='shenase_json_id_one'), 
 
+    path('edit-field/', views.edit_field, name='shenase_edit_field'),
 ]

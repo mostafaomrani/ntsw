@@ -125,18 +125,26 @@
         <button class="btn btn-top" type="button" id="go-top" onclick="topFunction()">
             <i class="fa fa-arrow-circle-up" aria-hidden="true"></i>
         </button>
-        <script src="{% static 'bootstrap-5.2.3/js/bootstrap.bundle.js' %}"></script>
+
+        {% comment %} <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> {% endcomment %}
         <script src="{% static 'js/jquery.min.js' %}"></script>
+        <script src="{% static 'persianDatepicker/js/persianDatepicker.min.js' %}"></script>
+        <script src="https://cdn.datatables.net/2.3.4/js/dataTables.js"></script>
+        <script src="{% static 'bootstrap-5.2.3/js/bootstrap.bundle.js' %}"></script>
         <script src="{% static 'overseas_supplier/anseki-plain-modal/plain-modal.min.js' %}"></script>
-        <script src="{% static 'selectize-master/js/selectize.min.js' %}"></script>
         <script src="{% static 'bootstrap-datepicker/js/bootstrap-datepicker.min.js' %}"></script>
-        <script src="{% static 'bootstrap-datepicker/locales/bootstrap-datepicker.fa.min.js' %}"
-                charset="UTF-8"></script>
+        <script src="{% static 'bootstrap-datepicker/locales/bootstrap-datepicker.fa.min.js' %}"  charset="UTF-8"></script>
         <script src="{% static 'js/dashboard-main.js' %}"></script>
-        {% block js %}
-        {% endblock js %}
+        <script src="{% static 'selectize-master/js/selectize.min.js' %}"></script>
+        
+        
 
         <script>
+            {% comment %} $(document).ready(function () {
+                $('select').selectize()
+            }) {% endcomment %}
+
+            
             $("#save_tajer_role").click(function () {
                 $(".show_register_form_tajer").show(); 
                 $(".show_tajer_role_list").hide()
@@ -150,6 +158,11 @@
 
             
         </script>
+
+
+        {% block js %}
+            
+        {% endblock js %}
 
     </body>
 </html>

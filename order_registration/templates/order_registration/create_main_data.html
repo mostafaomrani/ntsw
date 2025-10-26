@@ -57,6 +57,20 @@
             </div>
         </div>
         <form method="post" class="needs-validation main-data-form" novalidate>
+            {% if form.errors %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>خطا در ثبت‌نام:</strong>
+            <ul class="mb-0">
+                {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                    <li>{{ field }}: {{ error }}</li>
+                {% endfor %}
+                {% endfor %}
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endif %}
+
             {% csrf_token %}
             <div class="row">
                 <div class="col-12 mb-3 mt-4">

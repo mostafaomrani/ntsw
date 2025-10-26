@@ -5,25 +5,30 @@
 {% load ui_template_tag %}
 
 {% block title %}
-اظهار برآورد کالا
+اظهار تولید
 {% endblock title %}
 
 {% block breadcrumbs %}
-{% breadcrumbs 'عملیات تولید' '#' 'اظهار برآورد کالا' '#' %}
+{% breadcrumbs 'عملیات تولید' '#' 'اظهار تولید' '#' %}
 {% endblock breadcrumbs %}
 
 {% block page-title %}
-اظهار برآورد کالا
+اظهار تولید
 {% endblock page-title %}
 
 {% block main %}
+
+
+
+<link rel="stylesheet" href="{% static 'persianDatepicker/css/persianDatepicker-default.css' %}">
+<link rel='stylesheet' href='https://cdn.datatables.net/2.3.4/css/dataTables.dataTables.css' media='all' />
+
 <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
-    <form id="frmSearchProductRevenue" class="fv-form fv-form-bootstrap" novalidate="novalidate">
-        <div class="row">
+    <form id="frmRequestSearch" class="fv-form fv-form-bootstrap" novalidate="novalidate">
+        <div class="row ">
             <!-- دکمه‌های عملیاتی -->
-            <div class="col-md-12 mb-3 box-bordered-bottom-dashed">
-                <button type="button" class="btn btn-primary me-2" id="BtnNew" name="BtnNew"><i
-                        class="fa fa-plus-square"></i> ثبت اظهار جدید</button>
+            <div class="col-md-12 mb-3 box-bordered-bottom-dashed ">
+                <a href="{% url 'production_operations:product_ezhar_tolid_kala' %}" class="btn btn-primary me-2" id="NewFactor"><i class="fa fa-plus-square"></i> ثبت اظهار جدید </a>
                 <div class="dropdown d-inline-block me-2">
                     <button class="btn btn-success dropdown-toggle" type="button" id="ImpotrtFromExcemFile"
                         data-bs-toggle="dropdown" aria-expanded="false">
@@ -31,23 +36,31 @@
                     </button>
                     <ul class="dropdown-menu child" aria-labelledby="ImpotrtFromExcemFile">
                         <li><a class="dropdown-item" href="#" id="ImportExcelProduction"><i
-                                    class="fa fa-file-excel"></i> اظهار تولید جدید</a></li>
-                        <li><a class="dropdown-item" href="#" id="ImportExcelDocument"><i class="fa fa-file-excel"></i>
-                                ثبت سند با فایل اکسل</a></li>
+                                    class="fa fa-file-excel"></i> اظهار تولید</a></li>
+                        <li><a class="dropdown-item" href="#" id="ImportExcelTracking"><i class="fa fa-file-excel"></i>
+                                تولید شناسه رهگیری</a></li>
                     </ul>
                 </div>
-                <button class="btn btn-purple me-2" id="btnCopyLastYearSellsToNewYear"><i class="fa fa-plus-square"></i>
-                    ثبت اسناد مشابه سال قبل</button>
-                <button class="btn btn-warning me-2" id="btnProductionPlanSellsFinalConfirmation"><i
-                        class="fa fa-check-square"></i> بررسی و تایید سیستمی اسناد</button>
-                <button class="btn btn-primary me-2" id="btnRecalculateQuota"><i class="fa fa-repeat"></i> محاسبه و
-                    ارسال مجدد سهمیه</button>
+
+                <button class="btn btn-purple">
+                        <i class="fa fa-plus-square"></i> ثبت اسناد مشابه سال قبل
+                    </button>
+
+                    <button class="btn btn-warning">
+                        <i class="fa fa-check-square"></i> بررسی و تایید سیستمی اسناد
+                    </button>
+                    
+                    <button class="btn btn-primary">
+                        <i class="fa fa-repeat"></i> محاسبه و ارسال مجدد سهمیه
+                    </button>
+
             </div>
             <!-- وضعیت سند -->
             <div class="col-md-4 mb-3">
                 <div class="input-group">
                     <span class="input-group-text bg-light">وضعیت سند</span>
-                    <select id="statusId" name="statusId" class="form-control select-status">
+                    <select name="status" data-handler="RegionHandler" data-function="GetAllRequestStatusList"
+                        class="form-control select-status ajaxSelect">
                         <option value="0" selected="selected">همه</option>
                         <option value="8">پیش نویس</option>
                         <option value="7">ثبت اولیه</option>
@@ -62,7 +75,7 @@
             <div class="col-md-4 mb-3">
                 <div class="input-group">
                     <span class="input-group-text bg-light">نوع سند</span>
-                    <select id="DocType" name="DocType" class="form-control select-status">
+                    <select id="requestType" name="requestType" class="form-control select-status">
                         <option value="">همه</option>
                         <option value="23">برنامه تولید</option>
                         <option value="24">برنامه تولید (افزایش ظرفیت با توسعه ماشین آلات)</option>
@@ -71,37 +84,50 @@
                         <option value="56">نیاز اجزا و قطعات</option>
                         <option value="58">نیاز ماشین آلات معدنی و راهسازی</option>
                         <option value="59">نیاز سهمیه اتوبوس</option>
-                        <option value="60">نیاز ماشین آلات کشاورزی و ساختمانی</option>
+                            <option value="60">نیاز ماشین آلات کشاورزی و ساختمانی</option>
                     </select>
                 </div>
             </div>
+        
+
+            
             <!-- از تاریخ - تا تاریخ -->
             <div class="col-md-4 mb-3">
                 <div class="input-group">
-                    <span class="input-group-text bg-light">از تاریخ - تا تاریخ</span>
-                    <input type="text" id="startDate" placeholder="از تاریخ" autocomplete="off" style="width: 50%"
-                        name="startDate" class="persianDatePicker1 form-control max-date1 pwt-datepicker-input-element">
-                    <input type="text" id="endDate" placeholder="تا تاریخ" autocomplete="off" style="width: 50%"
-                        name="endDate" class="persianDatePicker1 form-control max-date1 pwt-datepicker-input-element">
+                    <span class="input-group-text bg-light" style="width: 216px !important;">از تاریخ - تا تاریخ</span>
+                    <input type="text" name="fromDate" placeholder="از تاریخ"
+                        class="form-control persianDatePicker1"
+                        style="width: 50%" autocomplete="off">
+                    <input type="text" name="toDate" placeholder="تا تاریخ"
+                        class="form-control persianDatePicker1"
+                        style="width: 50%" autocomplete="off">
                 </div>
             </div>
-            <!-- سال -->
+
+
+                <!-- سال -->
             <div class="col-md-4 mb-3">
                 <div class="input-group">
                     <span class="input-group-text bg-light">سال</span>
-                    <select id="yearFilter" name="yearFilter" class="form-control select-status">
-                        <option value="" selected="selected">همه</option>
-                        <option value="1404">1404</option>
+                    <select name="WhereHouse" id="WhereHouse" data-handler="InternalTradeHandler"
+                        data-function="GetRolePlacesByUserRoleIDForContractors_WithTempStore_Direct"
+                        class="form-control ajaxSelect">
+                        <option value="" selected="selected">انتخاب کنید</option>
                         <option value="1403">1403</option>
+                        <option value="1404">1404</option>
                     </select>
                 </div>
             </div>
-            <!-- ماه -->
+
+
+                <!-- ماه -->
             <div class="col-md-4 mb-3">
                 <div class="input-group">
                     <span class="input-group-text bg-light">ماه</span>
-                    <select id="monthFilter" name="monthFilter" class="form-control select-status">
-                        <option value="" selected="selected">همه</option>
+                    <select name="WhereHouse" id="WhereHouse" data-handler="InternalTradeHandler"
+                        data-function="GetRolePlacesByUserRoleIDForContractors_WithTempStore_Direct"
+                        class="form-control ajaxSelect">
+                        <option value="" selected="selected">انتخاب کنید</option>
                         <option value="1">فروردین</option>
                         <option value="2">اردیبهشت</option>
                         <option value="3">خرداد</option>
@@ -117,36 +143,71 @@
                     </select>
                 </div>
             </div>
-            <!-- شماره سند -->
+
+
+            <!-- متن جستجو -->
             <div class="col-md-4 mb-3">
                 <div class="input-group">
                     <span class="input-group-text bg-light">شماره سند</span>
-                    <input id="searchTerm" type="text" class="form-control search-box only-number" maxlength="10">
+                    <input type="text" name="searchTerm"  class="form-control">
                 </div>
             </div>
             <!-- دکمه‌های جستجو و لغو -->
-            <div class="col-md-12 mb-4">
-                <button type="button" id="btnSearch" name="btnSearch" class="btn btn-primary me-2"><i
-                        class="fa fa-search"></i> جستجو</button>
-                <button type="button" id="btnSearchLeft" name="btnSearchLeft" class="btn btn-warning me-2"><i
+            <div class="col-md-4 mb-3">
+                <button type="button" name="search" class="btn btn-primary me-2"><i class="fa fa-search"></i>
+                    جستجو</button>
+                <button style="height: 33px;" type="button" id="CancelSearch" name="CancelSearch" class="btn btn-warning me-2"><i
                         class="fa fa-remove"></i> لغو فیلتر</button>
             </div>
         </div>
+
+
+
+
+
+        <!-- جدول نتایج جستجو -->
+        <div class="row">
+            <div class="col-12">
+                <div class="table-responsive">
+                    <table id="example" class="display">
+                        <thead>
+                            <tr>
+                                <th>ردیف</th>
+                                <th>شماره سند</th>
+                                <th>تاریخ تولید</th>
+                                <th>تاریخ ثبت</th>
+                                <th>انبار</th>
+                                <th>نوع سند</th>
+                                <th>وضعیت سند</th>
+                                <th>شرح تولید</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                          
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
     </form>
 </div>
 
 <style>
+    .btn-purple, .btn-purple:focus {
+	background-color: #7e3794 !important;
+	border-color: #7e3794;
+	color: #fff;
+}
     .input-group-text.bg-light {
         width: 120px;
-    }
-
-    .btn-purple {
-        background-color: #6f42c1 !important;
-        color: #fff;
-    }
-
-    .btn-purple:hover {
-        background-color: #5a32a3 !important;
     }
 
     .btn-purple-csm {
@@ -185,56 +246,37 @@
         margin-bottom: 10px;
     }
 
-    .only-number {
-        /* محدود کردن ورودی به اعداد */
-        -webkit-appearance: none;
-        -moz-appearance: textfield;
+    .tooltip-success .tooltip-inner {
+        background-color: #28a745;
+        color: white;
     }
 
-    .only-number::-webkit-outer-spin-button,
-    .only-number::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
+    .hidden {
+        display: none !important;
     }
 
-    .col-md-12.mb-4 {
-	display: flex;
-	justify-content: end;
-}
+    div.dt-container div.dt-layout-row div.dt-layout-cell.dt-layout-start {
+        margin-right: initial !important;
+    }
+
+    div.dt-container div.dt-layout-row div.dt-layout-cell.dt-layout-end {
+        margin-left: initial !important;
+    }
 </style>
-
-
-
 
 {% endblock main %}
 
-
 {% block js %}
-<!-- بارگذاری jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- بارگذاری Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<!-- بارگذاری Persian Datepicker -->
-<script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
+
 
 <script>
     $(document).ready(function () {
-        // مدیریت Persian DatePicker
-        $('.persianDatePicker1').each(function () {
-            $(this).persianDatepicker({
-                format: 'YYYY/MM/DD',
-                autoClose: true,
-                toolbox: {
-                    calendarSwitch: {
-                        enabled: false
-                    }
-                }
-            });
-        });
+        $('select').selectize()
 
-        // محدود کردن ورودی شماره سند به اعداد
-        $('.only-number').on('input', function () {
-            this.value = this.value.replace(/[^0-9]/g, '');
+        // فعال‌سازی Tooltip
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+            new bootstrap.Tooltip(tooltipTriggerEl);
         });
 
         // باز کردن خودکار منوی دراپ‌داون با کلیک
@@ -257,34 +299,29 @@
         });
 
         // رویداد کلیک برای دکمه جستجو
-        $('#btnSearch').on('click', function () {
+        $('button[name="search"]').on('click', function () {
             alert('جستجو غیرفعال است. لطفاً منطق جستجو را پیاده‌سازی کنید.');
         });
 
         // رویداد کلیک برای لغو فیلتر
-        $('#btnSearchLeft').on('click', function () {
-            $('#frmSearchProductRevenue')[0].reset();
+        $('#CancelSearch').on('click', function () {
+            $('#frmRequestSearch')[0].reset();
             $('.persianDatePicker1').persianDatepicker('clear');
         });
 
-        // رویداد کلیک برای ثبت اظهار جدید
-        $('#BtnNew').on('click', function () {
-            alert('ثبت اظهار جدید غیرفعال است. لطفاً منطق را پیاده‌سازی کنید.');
+        // رویداد کلیک برای استعلام از سامانه بهین یاب
+        $('#Behinyab').on('click', function () {
+            alert('استعلام از سامانه بهین یاب غیرفعال است. لطفاً منطق را پیاده‌سازی کنید.');
         });
 
-        // رویداد کلیک برای ثبت اسناد مشابه سال قبل
-        $('#btnCopyLastYearSellsToNewYear').on('click', function () {
-            alert('ثبت اسناد مشابه سال قبل غیرفعال است. لطفاً منطق را پیاده‌سازی کنید.');
+        // رویداد کلیک برای تولید شناسه رهگیری
+        $('#ReserveTrackings').on('click', function () {
+            alert('تولید شناسه رهگیری غیرفعال است. لطفاً منطق را پیاده‌سازی کنید.');
         });
 
-        // رویداد کلیک برای بررسی و تایید سیستمی اسناد
-        $('#btnProductionPlanSellsFinalConfirmation').on('click', function () {
-            alert('بررسی و تایید سیستمی اسناد غیرفعال است. لطفاً منطق را پیاده‌سازی کنید.');
-        });
-
-        // رویداد کلیک برای محاسبه و ارسال مجدد سهمیه
-        $('#btnRecalculateQuota').on('click', function () {
-            alert('محاسبه و ارسال مجدد سهمیه غیرفعال است. لطفاً منطق را پیاده‌سازی کنید.');
+        // رویداد کلیک برای راهنمای سریع
+        $('#HelpButton').on('click', function () {
+            alert('راهنمای سریع غیرفعال است. لطفاً منطق startJSHelp را پیاده‌سازی کنید.');
         });
 
         // رویداد کلیک برای آیتم‌های منوی دراپ‌داون
@@ -325,6 +362,51 @@
                 alert('لطفاً یک فایل انتخاب کنید');
             }
         });
+
+
+
+
+        // اینیشیالایز DataTable
+        $('#example').DataTable({
+            paging: true,
+            searching: true,
+            info: true,
+            ordering: false,
+            pageLength: 10,
+            language: {
+                "sEmptyTable": "هیچ داده‌ای در جدول وجود ندارد",
+                "sInfo": "نمایش _START_ تا _END_ از _TOTAL_ رکورد",
+                "sInfoEmpty": "نمایش 0 تا 0 از 0 رکورد",
+                "sInfoFiltered": "(فیلتر شده از _MAX_ رکورد)",
+                "sLengthMenu": "نمایش _MENU_ رکورد",
+                "sLoadingRecords": "در حال بارگذاری...",
+                "sProcessing": "در حال پردازش...",
+                "sSearch": "جستجو:",
+                "sZeroRecords": "رکوردی مطابق جستجوی شما پیدا نشد",
+                "oPaginate": {
+                    "sFirst": "اولین",
+                    "sLast": "آخرین",
+                    "sNext": "بعدی",
+                    "sPrevious": "قبلی"
+                }
+            },
+
+        });
+
+        
+         $('.persianDatePicker1').each(function() {
+            $(this).persianDatepicker({
+                format: 'YYYY/MM/DD',
+                autoClose: true,
+                toolbox: {
+                    calendarSwitch: {
+                        enabled: false
+                    }
+                }
+            });
+        });
+
+
     });
 </script>
 {% endblock js %}
